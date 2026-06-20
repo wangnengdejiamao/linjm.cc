@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jiamao Lin · 林佳茂 — Magnetic Cataclysmic Variables</title>
+<meta name="description" content="Jiamao Lin (林佳茂), astronomer at Sun Yat-sen University. Magnetic cataclysmic variables, polars, white dwarfs, and automated cyclotron spectral fitting.">
+<meta name="author" content="Jiamao Lin">
+<meta property="og:title" content="Jiamao Lin · 林佳茂">
+<meta property="og:description" content="Magnetic cataclysmic variables, polars, and cyclotron spectroscopy at Sun Yat-sen University.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://linjm.cc">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-name">Jiamao&nbsp;Lin<span class="brand-cn"> 林佳茂</span></span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#research">Research</a>
+    <a href="#cyclotron">Cyclotron</a>
+    <a href="#spectrum">Spectrum lab</a>
+    <a href="#publications">Publications</a>
+    <a href="#about">About</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- ============================ HERO ============================ -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Astronomer · Sun Yat-sen University</p>
+      <h1>Jiamao&nbsp;Lin<span class="cn">林佳茂</span></h1>
+      <p class="lede">
+        I study <strong>magnetic cataclysmic variables</strong> — binary stars where a
+        strongly magnetized white dwarf pulls gas from a companion and channels it down
+        magnetic field lines. I measure their fields by modelling the
+        <strong>cyclotron humps</strong> their hot, gyrating electrons stamp onto the spectrum.
+      </p>
+      <div class="hero-links">
+        <a class="btn btn-primary" href="#cyclotron">See the physics →</a>
+        <a class="btn" href="mailto:linjm66@mail2.sysu.edu.cn">Email</a>
+        <a class="btn" href="https://orcid.org/0009-0008-9942-620X" target="_blank" rel="noopener">ORCID</a>
+        <a class="btn" href="https://github.com/" target="_blank" rel="noopener" id="ghLink">GitHub</a>
+      </div>
+      <ul class="hero-facts">
+        <li><span class="num" data-count="10">10</span><span class="lab">MG — 240&nbsp;MG fields</span></li>
+        <li><span class="num" data-count="4">4</span><span class="lab">DESI/LAMOST polars modelled</span></li>
+        <li><span class="num" data-count="7">7</span><span class="lab">yr of ZTF photometry searched</span></li>
+      </ul>
+    </div>
+    <div class="hero-figure" aria-hidden="true">
+      <canvas id="heroOrbit"></canvas>
+    </div>
+  </section>
+
+  <!-- ========================== RESEARCH ========================== -->
+  <section id="research" class="section">
+    <div class="section-head">
+      <h2>Research</h2>
+      <p>How do you weigh the magnetic field of a star you cannot resolve? You read it off the light.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <div class="card-ico">⬡</div>
+        <h3>Polars (AM&nbsp;Her stars)</h3>
+        <p>Cataclysmic variables in which the white-dwarf field is strong enough
+        (10–240&nbsp;MG) to lock the binary into synchronous rotation and suppress the
+        accretion disk entirely. Gas free-falls along field lines onto the magnetic pole.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">∿</div>
+        <h3>Cyclotron spectroscopy</h3>
+        <p>At the accretion shock, hot electrons gyrate and radiate at harmonics of the
+        cyclotron frequency, <em>ν<sub>c</sub>&nbsp;=&nbsp;eB/2πm<sub>e</sub>c</em>. The
+        spacing of the resulting humps is a direct, model-light field measurement.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">⟲</div>
+        <h3>Automated spectral fitting</h3>
+        <p>I fit a Koester white-dwarf photosphere, a hot-spot blackbody, and an isothermal
+        constant-Λ cyclotron component <em>simultaneously</em>, using profiled χ²(B) curves to
+        expose competing harmonic assignments instead of hiding them.</p>
+      </article>
+      <article class="card">
+        <div class="card-ico">◷</div>
+        <h3>Time-domain follow-up</h3>
+        <p>I mine 6–7&nbsp;yr of ZTF photometry for orbital periods and aliases — finding,
+        for instance, a rare short-period eclipsing-polar candidate below the period gap.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ====================== CYCLOTRON ANIMATION ==================== -->
+  <section id="cyclotron" class="section">
+    <div class="section-head">
+      <h2>Cyclotron emission in a polar</h2>
+      <p>A live, schematic model of the accretion geometry behind every field I measure.
+      Gas streams from the donor, threads onto the dipole, and lights up the magnetic
+      pole; the beamed cyclotron flux is modulated as the white dwarf rotates.</p>
+    </div>
+
+    <div class="cyc-stage">
+      <div class="cyc-canvas-wrap">
+        <canvas id="cycCanvas" role="img"
+          aria-label="Animation of a magnetized white dwarf accreting from a red-dwarf donor, with cyclotron emission beamed from the magnetic pole."></canvas>
+        <div class="cyc-legend">
+          <span><i class="dot dot-wd"></i>White dwarf</span>
+          <span><i class="dot dot-donor"></i>Donor (M&nbsp;dwarf)</span>
+          <span><i class="dot dot-stream"></i>Accretion stream</span>
+          <span><i class="dot dot-field"></i>Field lines</span>
+          <span><i class="dot dot-cyc"></i>Cyclotron beam</span>
+        </div>
+      </div>
+
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>Spin / orbital phase φ</span><b id="cycPhase">0.00</b></div>
+          <div class="readout-row"><span>Field strength B</span><b id="cycB">56.8 MG</b></div>
+          <div class="readout-row"><span>Viewing modulation</span><b id="cycFlux">—</b></div>
+        </div>
+
+        <div class="lc-wrap">
+          <h4>Cyclotron light curve</h4>
+          <canvas id="lcCanvas" role="img" aria-label="Phase-folded cyclotron light curve traced as the white dwarf rotates."></canvas>
+          <p class="cap">Flux vs. phase, traced live as the pole rotates toward and away from us — the same beaming signature I search for in ZTF data.</p>
+        </div>
+
+        <div class="cyc-controls">
+          <label>Speed
+            <input type="range" id="cycSpeed" min="0" max="3" step="0.1" value="1">
+          </label>
+          <label>Magnetic colatitude β
+            <input type="range" id="cycBeta" min="5" max="85" step="1" value="55">
+          </label>
+          <button class="btn btn-sm" id="cycPause" aria-pressed="false">Pause</button>
+        </div>
+      </aside>
+    </div>
+    <p class="cap cap-wide">Schematic, not to scale — geometry and timing are illustrative of the AM&nbsp;Her mechanism, not a fit to a specific system.</p>
+  </section>
+
+  <!-- ======================= SPECTRUM LAB ========================= -->
+  <section id="spectrum" class="section">
+    <div class="section-head">
+      <h2>Cyclotron spectrum lab</h2>
+      <p>Drag the field strength and watch the harmonic humps slide across the optical
+      band — this sliding is exactly what pins down <em>B</em>. The harmonics sit at
+      λ<sub>n</sub>&nbsp;≈&nbsp;107.1&nbsp;/&nbsp;(n·B[MG])&nbsp;µm.</p>
+    </div>
+
+    <div class="spec-stage">
+      <div class="spec-canvas-wrap">
+        <canvas id="specCanvas" role="img"
+          aria-label="Interactive optical spectrum showing cyclotron harmonic humps on a white-dwarf continuum."></canvas>
+      </div>
+      <aside class="spec-side">
+        <div class="spec-readout">
+          <div class="readout-row"><span>Field B</span><b id="specBval">40 MG</b></div>
+          <div class="readout-row"><span>Electron kT</span><b id="specTval">5 keV</b></div>
+          <div class="readout-row"><span>View angle θ</span><b id="specThetaval">70°</b></div>
+          <div class="readout-row"><span>Visible harmonics</span><b id="specHarm">—</b></div>
+        </div>
+        <div class="spec-controls">
+          <label>Magnetic field B (MG)
+            <input type="range" id="specB" min="10" max="120" step="0.5" value="40">
+          </label>
+          <label>Electron temperature kT (keV)
+            <input type="range" id="specT" min="1" max="20" step="0.5" value="5">
+          </label>
+          <label>Viewing angle θ to field (°)
+            <input type="range" id="specTheta" min="10" max="90" step="1" value="70">
+          </label>
+        </div>
+        <div class="spec-presets">
+          <p>Load a real target from my survey:</p>
+          <div class="preset-row">
+            <button class="chip" data-b="56.8" data-p="105.3">J0005+2941</button>
+            <button class="chip" data-b="64.4" data-p="717.4">J0022+1340</button>
+            <button class="chip" data-b="51.1" data-p="143.8">J0035+4333</button>
+            <button class="chip" data-b="29.3" data-p="80.4">J0749+3654</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <p class="cap cap-wide">Schematic constant-Λ harmonic model on a Rayleigh–Jeans-like WD continuum; intended to build intuition for hump spacing, not to reproduce a published fit.</p>
+  </section>
+
+  <!-- ======================= PUBLICATIONS ========================= -->
+  <section id="publications" class="section">
+    <div class="section-head">
+      <h2>Publications</h2>
+      <p>Selected work. (More to be added — see note below.)</p>
+    </div>
+    <ol class="pub-list">
+      <li class="pub">
+        <div class="pub-year">2026</div>
+        <div class="pub-body">
+          <h3>Magnetic-field constraints for four magnetic cataclysmic variables from
+          simultaneous continuum and cyclotron modelling</h3>
+          <p class="pub-authors"><strong>J. Lin</strong>, W. Guo, Y. Sun, C. Li, W. Hou</p>
+          <p class="pub-venue">Astronomy &amp; Astrophysics (submitted)</p>
+          <p class="pub-abs">Joint continuum–cyclotron fitting of four DESI/LAMOST polar
+          candidates yields a robust 56.8&nbsp;MG field for J0005+2941 — a rare eclipsing-polar
+          candidate below the period gap — and explicit branch constraints for the rest.</p>
+          <div class="pub-tags"><span>polars</span><span>cyclotron</span><span>white dwarfs</span><span>ZTF</span></div>
+        </div>
+      </li>
+      <li class="pub pub-placeholder">
+        <div class="pub-year">—</div>
+        <div class="pub-body">
+          <h3>Your other papers go here</h3>
+          <p class="pub-note">I kept this list to work I could verify, so nothing is
+          mis-cited. Send me the DOIs / author orders for your double-white-dwarf search,
+          the open-cluster and white-dwarf-cluster studies, and the blue-straggler work,
+          and I'll drop them in.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- =========================== ABOUT ============================ -->
+  <section id="about" class="section section-about">
+    <div class="about-grid">
+      <div>
+        <h2>About</h2>
+        <p>I'm an astronomer at the School of Physics and Astronomy, <strong>Sun Yat-sen
+        University</strong> (Zhuhai), affiliated with the CSST Science Center for the
+        Guangdong–Hong&nbsp;Kong–Macau Greater Bay Area.</p>
+        <p>My work sits at the meeting point of wide-field spectroscopic surveys
+        (DESI, LAMOST), time-domain photometry (ZTF), and the detailed physics of
+        accretion onto magnetized white dwarfs. I care a lot about methods that report
+        their own uncertainties honestly — including the ambiguous cases.</p>
+        <p>Outside the four targets above, I work on white dwarfs in star clusters,
+        double-white-dwarf binaries, and blue stragglers.</p>
+      </div>
+      <div class="about-contact">
+        <h3>Contact</h3>
+        <ul class="contact-list">
+          <li><span>Email</span><a href="mailto:linjm66@mail2.sysu.edu.cn">linjm66@mail2.sysu.edu.cn</a></li>
+          <li><span>ORCID</span><a href="https://orcid.org/0009-0008-9942-620X" target="_blank" rel="noopener">0009-0008-9942-620X</a></li>
+          <li><span>Affiliation</span><span>Sun Yat-sen University, Zhuhai</span></li>
+          <li><span>Web</span><a href="https://linjm.cc">linjm.cc</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>© <span id="year">2026</span> Jiamao Lin · 林佳茂 — <a href="https://linjm.cc">linjm.cc</a></p>
+  <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
+</footer>
+
+<script src="js/starfield.js" defer></script>
+<script src="js/hero.js" defer></script>
+<script src="js/cyclotron.js" defer></script>
+<script src="js/spectrum.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
