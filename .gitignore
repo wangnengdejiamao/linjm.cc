@@ -1,5 +1,8 @@
 # Internal handoff / working docs — do not publish
 HANDOFF.md
 
+# Scratch / working files
+tmp/
+
 # macOS
 .DS_Store
