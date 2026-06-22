@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jiamao Lin · 林佳茂 — Magnetic Cataclysmic Variables</title>
-<meta name="description" content="Jiamao Lin (林佳茂), astronomer at Sun Yat-sen University. Magnetic cataclysmic variables, polars, white dwarfs, and automated cyclotron spectral fitting.">
+<title>Jiamao Lin · 林佳茂 — Astrophysics × AI Agents</title>
+<meta name="description" content="Jiamao Lin (林佳茂): astrophysicist and AI / agent engineer at Sun Yat-sen University. Magnetic cataclysmic variables and cyclotron spectroscopy, plus Astro Agent — an auditable LangGraph research agent.">
 <meta name="author" content="Jiamao Lin">
-<meta property="og:title" content="Jiamao Lin · 林佳茂">
-<meta property="og:description" content="Magnetic cataclysmic variables, polars, and cyclotron spectroscopy at Sun Yat-sen University.">
+<meta property="og:title" content="Jiamao Lin · 林佳茂 — Astrophysics × AI Agents">
+<meta property="og:description" content="White dwarfs, polars and cyclotron spectroscopy — and LLM-agent systems for science, including the open-source Astro Agent research pipeline.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://linjm.cc">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="css/styles.css?v=2">
+<link rel="stylesheet" href="css/styles.css?v=3">
 </head>
 <body>
 <canvas id="starfield" aria-hidden="true"></canvas>
@@ -27,6 +27,7 @@
     <a href="#cyclotron">Cyclotron</a>
     <a href="#spectrum">Spectrum lab</a>
     <a href="#diskbinary">Disk eclipse</a>
+    <a href="#astroagent">Astro Agent</a>
     <a href="#publications">Publications</a>
     <a href="#about">About</a>
   </nav>
@@ -40,7 +41,7 @@
   <!-- ============================ HERO ============================ -->
   <section class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Astronomer · Sun Yat-sen University</p>
+      <p class="eyebrow">Astrophysicist · AI / Agent Engineer · Sun Yat-sen University</p>
       <h1>Jiamao&nbsp;Lin<span class="cn">林佳茂</span></h1>
       <p class="lede">
         I study <strong>magnetic cataclysmic variables</strong> — binary stars where a
@@ -48,16 +49,23 @@
         magnetic field lines. I measure their fields by modelling the
         <strong>cyclotron humps</strong> their hot, gyrating electrons stamp onto the spectrum.
       </p>
+      <p class="hero-sub">
+        I also build <strong>LLM-agent systems for science</strong> — including
+        <a href="#astroagent">Astro&nbsp;Agent</a>, an open-source LangGraph pipeline that turns
+        survey data into auditable, paper-ready analysis.
+      </p>
       <div class="hero-links">
-        <a class="btn btn-primary" href="#cyclotron">See the physics →</a>
+        <a class="btn btn-primary" href="#astroagent">Explore Astro&nbsp;Agent →</a>
+        <a class="btn" href="#cyclotron">See the physics</a>
         <a class="btn" href="mailto:linjm66@mail2.sysu.edu.cn">Email</a>
         <a class="btn" href="https://orcid.org/0009-0008-9942-620X" target="_blank" rel="noopener">ORCID</a>
-        <a class="btn" href="https://github.com/" target="_blank" rel="noopener" id="ghLink">GitHub</a>
+        <a class="btn" href="https://github.com/wangnengdejiamao" target="_blank" rel="noopener" id="ghLink">GitHub</a>
       </div>
       <ul class="hero-facts">
-        <li><span class="num" data-count="10">10</span><span class="lab">MG — 240&nbsp;MG fields</span></li>
+        <li><span class="num" data-count="10">10</span><span class="lab">MG — 240&nbsp;MG fields measured</span></li>
         <li><span class="num" data-count="4">4</span><span class="lab">DESI/LAMOST polars modelled</span></li>
-        <li><span class="num" data-count="7">7</span><span class="lab">yr of ZTF photometry searched</span></li>
+        <li><span class="num" data-count="6">6</span><span class="lab">first / co-author papers</span></li>
+        <li><span class="num" data-count="100">100</span><span class="lab">★ Astro&nbsp;Agent · open source</span></li>
       </ul>
     </div>
     <div class="hero-figure" aria-hidden="true">
@@ -144,6 +152,24 @@
         <p>Flat-bottomed “square-wave” eclipses in which a misaligned circumbinary disk occults
         a low-mass binary (à la KH&nbsp;15D). Open-cluster membership turns these into age-dated
         probes of long-lived circumstellar dust.</p>
+      </article>
+      <article class="card">
+        <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle data-dot cx="10" cy="14" r="3"></circle>
+          <circle data-dot cx="10" cy="34" r="3"></circle>
+          <circle cx="24" cy="24" r="4"></circle>
+          <circle data-dot cx="38" cy="14" r="3"></circle>
+          <circle data-dot cx="38" cy="34" r="3"></circle>
+          <path d="M13 14h7l4 10"></path>
+          <path d="M13 34h7l4-10"></path>
+          <path d="M28 24l7-10"></path>
+          <path d="M28 24l7 10"></path>
+          <path data-glow d="M24 28v8"></path>
+        </svg>
+        <h3>AI agents for astronomy</h3>
+        <p>I build <strong>LLM-agent</strong> pipelines that wrap data retrieval, modelling and
+        evidence-auditing into a reviewable graph — RAG + knowledge graphs, tool-calling, and
+        domain-tuned models that refuse to publish a claim the evidence doesn't support.</p>
       </article>
     </div>
   </section>
@@ -315,6 +341,95 @@
     <p class="cap cap-wide">Schematic sharp-edge occultation model (P&nbsp;=&nbsp;36.71&nbsp;d, ~316&nbsp;Myr cluster UPK&nbsp;13); geometry illustrative, in the same class as KH&nbsp;15D and Bernhard-2.</p>
   </section>
 
+  <!-- ======================= ASTRO AGENT (AI) ===================== -->
+  <section id="astroagent" class="section">
+    <div class="section-head">
+      <h2>Astro&nbsp;Agent — an auditable research agent</h2>
+      <p>My open-source AI project (<a href="https://github.com/wangnengdejiamao/Astro_Agent" target="_blank" rel="noopener">github.com/wangnengdejiamao/Astro_Agent</a>):
+      a <strong>LangGraph state machine</strong> that resolves a target, pulls multi-survey data,
+      models it through <strong>three mandatory iterations</strong>, audits every claim against the
+      evidence, and — only when the QA gate clears — drafts an ApJ-style manuscript with peer-review
+      notes. <strong>Pick a run scenario</strong> and watch it flow through the graph, including the two
+      self-healing loops that keep it from publishing under-supported claims.</p>
+    </div>
+
+    <div class="cyc-stage">
+      <div class="cyc-canvas-wrap">
+        <canvas id="agentCanvas" role="img"
+          aria-label="Animated schematic of the Astro Agent LangGraph pipeline: a run flows from target resolution and data fetching through retrieval, three modelling iterations, a QA gate, drafting and peer review, with replan and reflexion self-healing loops."></canvas>
+        <div class="cyc-legend">
+          <span><i class="dot" style="background:#56b4e9"></i>Acquire / plan</span>
+          <span><i class="dot" style="background:#009e73"></i>Evidence gate</span>
+          <span><i class="dot" style="background:#e69f00"></i>Self-heal loop</span>
+          <span><i class="dot" style="background:#cc79a7"></i>Draft</span>
+          <span><i class="dot" style="background:#d55e00"></i>Halt</span>
+        </div>
+      </div>
+
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>Current node</span><b id="agNode">resolve</b></div>
+          <div class="readout-row"><span>Stage</span><b id="agStage">Acquire</b></div>
+          <div class="readout-row"><span>Modelling iteration</span><b id="agIter">0 / 3</b></div>
+          <div class="readout-row"><span>Run status</span><b id="agStatus" class="ag-status ag-run">running</b></div>
+        </div>
+
+        <div class="lc-wrap">
+          <h4>Run log · filesystem-as-memory</h4>
+          <div id="agLog" class="ag-log" aria-live="polite"></div>
+          <p class="cap">Each node writes a numbered JSON checkpoint — a human-readable provenance chain you can <code>diff</code> between runs.</p>
+        </div>
+
+        <div class="cyc-controls">
+          <div class="morph-presets">
+            <span class="ctl-label">Run scenario</span>
+            <div class="preset-row">
+              <button class="chip active" data-scenario="clear">Clear → paper</button>
+              <button class="chip" data-scenario="mismatch">Model mismatch → replan</button>
+              <button class="chip" data-scenario="reflexion">QC fail → reflexion</button>
+              <button class="chip" data-scenario="blocked">Insufficient data → halt</button>
+            </div>
+          </div>
+          <label>Speed
+            <input type="range" id="agSpeed" min="0" max="3" step="0.1" value="1">
+          </label>
+          <div class="toggle-row">
+            <button class="btn btn-sm" id="agPause" aria-pressed="false">Pause</button>
+            <button class="btn btn-sm" id="agStep">Step ▸</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <p class="cap cap-wide">Schematic of the real <code>analysis_agent</code> graph — node names mirror the implementation. The hard cap of three modelling iterations, two replans and two reflexion rewrites is exactly how the agent refuses to over-claim.</p>
+
+    <div class="cards ag-cards">
+      <article class="card">
+        <h3>Two cooperating layers</h3>
+        <p>A LangGraph <em>analysis_agent</em> orchestrates the workflow; an <em>astro_toolbox</em> of
+        20+ survey clients and modelling modules (SED, white-dwarf fitting, RV/period, kinematic
+        traceback, cluster membership) does the science. They talk only through structured JSON.</p>
+      </article>
+      <article class="card">
+        <h3>Retrieval built for jargon</h3>
+        <p>BM25 with a domain pre-tagger (46 instruments × 24 method families) beats generic dense
+        retrieval on method-transfer queries like <em>Lomb–Scargle</em> or <em>Bayestar2019</em> —
+        cheap, auditable, and shared by the RAG navigator and method scout.</p>
+      </article>
+      <article class="card">
+        <h3>Evidence-gated claims</h3>
+        <p>A per-target evidence pack lists which parameter claims are <em>supported</em> and which are
+        <em>blocked pending evidence</em>. With no spectra, the agent reports provisional Teff/radius
+        from SED+Gaia but blocks spectral type, log&nbsp;g, mass and composition.</p>
+      </article>
+      <article class="card">
+        <h3>PaperOrchestra drafting</h3>
+        <p>Manuscript writing is split into five deterministic sub-agents — outline, plotting,
+        literature review, section writing, refinement — producing <code>aastex631</code> LaTeX that a
+        QC checklist and a bounded reflexion loop hold to ApJ standards.</p>
+      </article>
+    </div>
+  </section>
+
   <!-- ======================= PUBLICATIONS ========================= -->
   <section id="publications" class="section">
     <div class="section-head">
@@ -325,9 +440,10 @@
       <li class="pub">
         <div class="pub-year">2026</div>
         <div class="pub-body">
-          <h3>A candidate low-mass disk-eclipsing binary in the ~316&nbsp;Myr open cluster UPK&nbsp;13</h3>
+          <span class="pub-role role-first">First &amp; corresponding author</span>
+          <h3>A Candidate Low-Mass Disk-Eclipsing Binary in the ~316&nbsp;Myr Open Cluster UPK&nbsp;13</h3>
           <p class="pub-authors"><strong>J. Lin</strong> et al.</p>
-          <p class="pub-venue">The Astrophysical Journal (accepted)</p>
+          <p class="pub-venue">The Astrophysical Journal (accepted) · partly assisted by Astro&nbsp;Agent</p>
           <p class="pub-abs">UPK&nbsp;13-c2 shows a flat-bottomed 36.71-day eclipse with a near-achromatic
           ~40% decrement from the optical through W1 and a mid-IR excess. A slow 2.5-day ingress
           rules out a white-dwarf occulter, favouring a late-K/early-M binary behind a misaligned
@@ -338,19 +454,21 @@
       <li class="pub">
         <div class="pub-year">2026</div>
         <div class="pub-body">
-          <h3>Magnetic-field constraints for four magnetic cataclysmic variables from
-          simultaneous continuum and cyclotron modelling</h3>
+          <span class="pub-role role-first">First &amp; corresponding author</span>
+          <h3>Constraining Magnetic Fields of Polars through Automated Cyclotron Spectral Fitting</h3>
           <p class="pub-authors"><strong>J. Lin</strong>, W. Guo, Y. Sun, C. Li, W. Hou</p>
-          <p class="pub-venue">Astronomy &amp; Astrophysics (submitted)</p>
-          <p class="pub-abs">Joint continuum–cyclotron fitting of four DESI/LAMOST polar
+          <p class="pub-venue">The Astrophysical Journal (under review)</p>
+          <p class="pub-abs">Simultaneous continuum + cyclotron fitting of DESI/LAMOST polar
           candidates yields a robust 56.8&nbsp;MG field for J0005+2941 — a rare eclipsing-polar
-          candidate below the period gap — and explicit branch constraints for the rest.</p>
-          <div class="pub-tags"><span>polars</span><span>cyclotron</span><span>white dwarfs</span><span>ZTF</span></div>
+          candidate below the period gap — and reports explicit harmonic-branch constraints rather
+          than hiding the ambiguous cases.</p>
+          <div class="pub-tags"><span>polars</span><span>cyclotron</span><span>white dwarfs</span><span>automated fitting</span></div>
         </div>
       </li>
       <li class="pub">
         <div class="pub-year">2025</div>
         <div class="pub-body">
+          <span class="pub-role role-first">First &amp; corresponding author</span>
           <h3>Discovery and characterization of ZTF&nbsp;J0112+5827: an 80.9-minute polar with
           strong cyclotron features</h3>
           <p class="pub-authors"><strong>J. Lin</strong> et al.</p>
@@ -362,13 +480,52 @@
           <div class="pub-tags"><span>polar</span><span>cyclotron</span><span>X-ray</span><span>Doppler tomography</span></div>
         </div>
       </li>
-      <li class="pub pub-placeholder">
-        <div class="pub-year">—</div>
+      <li class="pub">
+        <div class="pub-year">2025</div>
         <div class="pub-body">
-          <h3>More to come</h3>
-          <p class="pub-note">Verified entries only, to avoid mis-citation. Send DOIs / author
-          orders for your double-white-dwarf search, the cluster white-dwarf studies, and the
-          blue-straggler work and I'll add them.</p>
+          <span class="pub-role role-co">Co-author</span>
+          <h3>A magnetic white dwarf formed through a binary merger within 35 million years</h3>
+          <p class="pub-authors">et al., incl. <strong>J. Lin</strong></p>
+          <p class="pub-venue">The Astrophysical Journal Letters (accepted)</p>
+          <p class="pub-abs">A young, strongly magnetic white dwarf whose field and rotation point to a
+          recent double-degenerate merger origin.</p>
+          <div class="pub-tags"><span>magnetic white dwarf</span><span>binary merger</span></div>
+        </div>
+      </li>
+      <li class="pub">
+        <div class="pub-year">2025</div>
+        <div class="pub-body">
+          <span class="pub-role role-co">Co-author</span>
+          <h3>Spectroscopic Identification and Population Properties of Cataclysmic Variables
+          from DESI DR1</h3>
+          <p class="pub-authors">et al., incl. <strong>J. Lin</strong></p>
+          <p class="pub-venue">The Astrophysical Journal Supplement Series (accepted)</p>
+          <p class="pub-abs">A spectroscopically identified DESI DR1 sample of cataclysmic variables and
+          their population properties.</p>
+          <div class="pub-tags"><span>cataclysmic variables</span><span>DESI</span><span>spectroscopy</span></div>
+        </div>
+      </li>
+      <li class="pub">
+        <div class="pub-year">2021</div>
+        <div class="pub-body">
+          <span class="pub-role role-first">First author</span>
+          <h3>Extremal rotating black holes, scalar perturbation and superradiant stability</h3>
+          <p class="pub-authors"><strong>J.-M. Lin</strong>, M.-J. Luo, Z.-H. Zheng, L. Yin, J.-H. Huang</p>
+          <p class="pub-venue"><a href="https://doi.org/10.1016/j.physletb.2021.136392" target="_blank" rel="noopener">Physics Letters B 819, 136392 (2021)</a></p>
+          <p class="pub-abs">Analytic superradiant-stability conditions for four-dimensional extremal
+          Kerr and Kerr–Newman black holes under massive (and charged-massive) scalar perturbations —
+          e.g. an extremal Kerr black hole is superradiantly stable when ω&nbsp;&lt;&nbsp;μ/√3.</p>
+          <div class="pub-tags"><span>black holes</span><span>superradiance</span><span>Kerr–Newman</span><span>general relativity</span></div>
+        </div>
+      </li>
+      <li class="pub pub-placeholder">
+        <div class="pub-year">+</div>
+        <div class="pub-body">
+          <h3>Additional work</h3>
+          <p class="pub-note">A first-author methods paper in <em>College Physics</em> (digital
+          holographic interferometry for liquid-phase diffusion, accepted), plus further
+          third/fourth-author papers in <em>ApJ</em> and related journals. Full list and DOIs on
+          <a href="https://orcid.org/0009-0008-9942-620X" target="_blank" rel="noopener">ORCID</a>.</p>
         </div>
       </li>
     </ol>
@@ -379,25 +536,108 @@
     <div class="about-grid">
       <div>
         <h2>About</h2>
-        <p>I'm an astronomer at the School of Physics and Astronomy, <strong>Sun Yat-sen
-        University</strong> (Zhuhai), affiliated with the CSST Science Center for the
-        Guangdong–Hong&nbsp;Kong–Macau Greater Bay Area.</p>
-        <p>My work sits at the meeting point of wide-field spectroscopic surveys
-        (DESI, LAMOST), time-domain photometry (ZTF), and the detailed physics of
-        accretion onto magnetized white dwarfs. I care a lot about methods that report
-        their own uncertainties honestly — including the ambiguous cases.</p>
-        <p>Outside the four targets above, I work on white dwarfs in star clusters,
-        double-white-dwarf binaries, blue stragglers, and disk-eclipsing systems
-        like UPK&nbsp;13-c2.</p>
+        <p>I'm a Ph.D. candidate in physics &amp; astronomy at <strong>Sun Yat-sen
+        University</strong> (Zhuhai), advised by <strong>Prof. Chengyuan&nbsp;Li</strong> and
+        affiliated with the CSST Science Center for the Greater Bay Area — and an
+        <strong>AI application engineer</strong> at heart.</p>
+        <p>On the science side I model accretion onto magnetized white dwarfs from wide-field
+        surveys (DESI, LAMOST, ZTF), and I care a lot about methods that report their own
+        uncertainties honestly — including the ambiguous cases. On the engineering side I build
+        retrieval-augmented, tool-calling LLM agents that carry that same evidence-first
+        discipline into software.</p>
+        <ul class="about-highlights">
+          <li>Invited talks at <strong>Tsinghua University</strong>, the Chinese Academy of Sciences and the National Astronomical Observatory</li>
+          <li>Independent referee for <strong>RAA</strong> (Research in Astronomy and Astrophysics)</li>
+          <li>Contributor to the <strong>Einstein Probe</strong> white paper and a <strong>CSST</strong> key sub-project</li>
+        </ul>
       </div>
       <div class="about-contact">
         <h3>Contact</h3>
         <ul class="contact-list">
           <li><span>Email</span><a href="mailto:linjm66@mail2.sysu.edu.cn">linjm66@mail2.sysu.edu.cn</a></li>
+          <li><span>GitHub</span><a href="https://github.com/wangnengdejiamao" target="_blank" rel="noopener">wangnengdejiamao</a></li>
           <li><span>ORCID</span><a href="https://orcid.org/0009-0008-9942-620X" target="_blank" rel="noopener">0009-0008-9942-620X</a></li>
           <li><span>Affiliation</span><span>Sun Yat-sen University, Zhuhai</span></li>
           <li><span>Web</span><a href="https://linjm.cc">linjm.cc</a></li>
         </ul>
+      </div>
+    </div>
+
+    <div class="cv-block">
+      <h3 class="cv-h">Education</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <span class="tl-date">2022 — 2027 (expected)</span>
+          <h4>Ph.D., Physics — Sun Yat-sen University</h4>
+          <p>Direct master–Ph.D. track, School of Physics &amp; Astronomy; advisor Prof. Chengyuan&nbsp;Li.
+          Top of cohort. Honours: <em>Caixia Zhanchi</em> fellowship, university first-class scholarship,
+          outstanding student leader, first prize in the physics-experiment design competition.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">2018 — 2022</span>
+          <h4>B.Sc., Physics — South China Normal University</h4>
+          <p>GPA 3.95/5.0 (recommended for postgraduate admission). Calculus 100/100, Linear Algebra 99/100.
+          First-class scholarship; first prize in the physics-experiment design competition.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cv-block">
+      <h3 class="cv-h">Experience</h3>
+      <div class="timeline">
+        <div class="tl-item tl-ai">
+          <span class="tl-date">2025.10 — present</span>
+          <h4>Astro&nbsp;Agent — astronomy knowledge-graph &amp; analysis agent <span class="tl-tag">open source · 100+ ★</span></h4>
+          <p>Solo full-stack build. Domain knowledge base joining vector search, keyword search and
+          knowledge-graph queries; a retrieval → reasoning → tool-calling → result-verification agent
+          loop; domain adaptation of Qwen3 / Llama-7B with LoRA + Attn-Res. Helped produce a published paper.</p>
+        </div>
+        <div class="tl-item tl-ai">
+          <span class="tl-date">2026.02 — 2026.04</span>
+          <h4>AI Application Engineer — Jindu Life Sciences (津渡生科) <span class="tl-tag">for PKU Materials Science</span></h4>
+          <p>Built a knowledge-graph pipeline (literature parsing → chunk cleaning → LLM entity/relation
+          extraction → entity disambiguation → Neo4j triples), a dual-track RAG store (vector + multi-hop
+          graph), and a LangGraph ReAct Q&amp;A agent that verifies intermediate results before generating
+          and checking materials-experiment plans.</p>
+        </div>
+        <div class="tl-item tl-ai">
+          <span class="tl-date">2026.04 — 2026.05</span>
+          <h4>AI Application Engineer — Blue Moon Group (蓝月亮)</h4>
+          <p>Designed a “deterministic engine + LLM agent” hybrid for large-scale advertising-creative
+          (Juliang Qianchuan) analysis — pushing the analytics logic into a trusted compute backend to
+          eliminate quantitative hallucination, with self-contained interactive ECharts reports.
+          Cut monthly review effort by 95%+.</p>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">2023.03 — 2025.10</span>
+          <h4>Core algorithms — magnetic-field modelling &amp; large-scale time-series mining</h4>
+          <p>A “differential evolution + L-BFGS-B + DBSCAN” framework for white-dwarf magnetic-field
+          inversion; Numba- and multicore-accelerated spectral fitting for large samples; and SVM/CNN
+          classification over ~10⁸ ZTF light curves to surface rare-object candidates. Served a national
+          survey programme.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cv-block">
+      <h3 class="cv-h">Skills</h3>
+      <div class="skills-grid">
+        <div class="skill">
+          <h4>LLM · Agents · RAG</h4>
+          <p>Fine-tuning &amp; local deployment (Ollama, vLLM); LoRA + Attn-Res domain adaptation and
+          alignment; dual-track RAG (vector + keyword); LangGraph agents, ReAct loops and knowledge
+          graphs (Neo4j); prompt engineering.</p>
+        </div>
+        <div class="skill">
+          <h4>Programming &amp; engineering</h4>
+          <p>Python (expert) and PyTorch; MATLAB, Mathematica; parallel computing (Numba,
+          multiprocessing); FastAPI services; Git / GitHub.</p>
+        </div>
+        <div class="skill">
+          <h4>Algorithms &amp; data</h4>
+          <p>Global optimization (differential evolution, L-BFGS-B); CNN, SVM, DBSCAN, BP networks;
+          preprocessing &amp; feature engineering for massive time-series and high-dimensional spectra.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -409,11 +649,12 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/starfield.js?v=2" defer></script>
-<script src="js/hero.js?v=2" defer></script>
-<script src="js/cyclotron.js?v=2" defer></script>
-<script src="js/spectrum.js?v=2" defer></script>
-<script src="js/diskbinary.js?v=2" defer></script>
-<script src="js/main.js?v=2" defer></script>
+<script src="js/starfield.js?v=3" defer></script>
+<script src="js/hero.js?v=3" defer></script>
+<script src="js/cyclotron.js?v=3" defer></script>
+<script src="js/spectrum.js?v=3" defer></script>
+<script src="js/diskbinary.js?v=3" defer></script>
+<script src="js/astroagent.js?v=3" defer></script>
+<script src="js/main.js?v=3" defer></script>
 </body>
 </html>

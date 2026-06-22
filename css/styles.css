@@ -154,7 +154,7 @@ strong{color:#fff}
   background:radial-gradient(120% 120% at 50% 0%, #0a1326, #05080f);
   border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;position:relative;min-height:420px;
 }
-#cycCanvas,#diskCanvas{display:block;width:100%;height:100%}
+#cycCanvas,#diskCanvas,#agentCanvas{display:block;width:100%;height:100%}
 .cyc-legend{
   position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:.5rem 1rem;
   padding:.6rem .9rem;font-size:.74rem;color:var(--ink-soft);
@@ -255,3 +255,77 @@ input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;bac
   *{scroll-behavior:auto !important}
   .btn:hover,.card:hover,.card:hover .card-ico{transform:none}
 }
+
+/* =================================================================
+   AI / Astro Agent section, personal-intro (CV) blocks, pub roles.
+   Added v3 — reuses existing palette + .cyc-stage / .cards layout.
+   ================================================================= */
+
+/* hero: AI sub-line + let facts wrap to a second row */
+.hero-sub{font-size:clamp(.95rem,1.7vw,1.05rem);color:var(--ink-soft);max-width:42ch;margin:-0.6rem 0 1.8rem}
+.hero-sub a{font-weight:600}
+.hero-facts{flex-wrap:wrap;row-gap:1.1rem}
+
+/* inline code */
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
+  background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:.05em .4em;color:#cfe9ff}
+
+/* ---- Astro Agent run log (filesystem-as-memory) ---- */
+.ag-log{height:154px;overflow-y:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.72rem;line-height:1.5;border:1px solid var(--line);border-radius:8px;
+  background:#070b16;padding:.5rem .6rem;display:flex;flex-direction:column;gap:.18rem}
+.ag-log-row{display:flex;gap:.5rem;align-items:baseline;white-space:nowrap;overflow:hidden}
+.ag-num{color:var(--ink-dim);flex:none}
+.ag-name{color:var(--teal);flex:none;min-width:6em;font-weight:600}
+.ag-det{color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis}
+.ag-log-replan .ag-name,.ag-log-reflexion .ag-name{color:var(--amber)}
+.ag-log-blocked .ag-name{color:var(--vermillion)}
+.ag-log-done .ag-name{color:var(--green)}
+.ag-log::-webkit-scrollbar{width:8px}
+.ag-log::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+
+/* run-status pill inside the readout */
+.ag-status{font-variant-numeric:tabular-nums;padding:.04rem .5rem;border-radius:999px;
+  font-size:.8rem;border:1px solid transparent;white-space:nowrap}
+.ag-run{color:var(--teal);border-color:rgba(79,208,227,.4);background:rgba(79,208,227,.09)}
+.ag-loop{color:var(--amber);border-color:rgba(230,159,0,.4);background:rgba(230,159,0,.09)}
+.ag-ok{color:var(--green);border-color:rgba(0,158,115,.5);background:rgba(0,158,115,.12)}
+.ag-halt{color:var(--vermillion);border-color:rgba(213,94,0,.5);background:rgba(213,94,0,.12)}
+.ag-cards{margin-top:1.6rem}
+
+/* ---- publication author-role badges ---- */
+.pub-role{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:.18rem .55rem;border-radius:6px;margin-bottom:.55rem;border:1px solid var(--line)}
+.role-first{color:var(--amber);border-color:rgba(230,159,0,.4);background:rgba(230,159,0,.08)}
+.role-co{color:var(--ink-soft);background:var(--panel-2)}
+
+/* ---- About: highlights + CV timeline + skills ---- */
+.about-highlights{margin:1.3rem 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.about-highlights li{position:relative;padding-left:1.4rem;color:var(--ink-soft);font-size:.95rem}
+.about-highlights li::before{content:"";position:absolute;left:0;top:.55em;width:8px;height:8px;border-radius:50%;
+  background:var(--teal);box-shadow:0 0 8px var(--teal)}
+
+.cv-block{margin-top:2.8rem}
+.cv-h{font-size:1.3rem;color:#fff;display:flex;align-items:center;gap:.7rem;margin-bottom:1.4rem}
+.cv-h::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+
+.timeline{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:.4rem}
+.tl-item{position:relative;padding:0 0 1.7rem 1.7rem}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:"";position:absolute;left:-8px;top:.3rem;width:13px;height:13px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--teal);box-shadow:0 0 10px rgba(79,208,227,.5)}
+.tl-ai::before{border-color:var(--amber);box-shadow:0 0 10px rgba(230,159,0,.5)}
+.tl-date{font-size:.78rem;color:var(--teal);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.03em}
+.tl-ai .tl-date{color:var(--amber)}
+.tl-item h4{font-size:1.02rem;margin:.25rem 0 .4rem;color:#fff;line-height:1.3}
+.tl-item p{color:var(--ink-soft);font-size:.92rem;margin:0}
+.tl-tag{display:inline-block;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--amber);border:1px solid rgba(230,159,0,.4);background:rgba(230,159,0,.08);
+  padding:.1rem .45rem;border-radius:6px;margin-left:.4rem;vertical-align:middle}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem}
+.skill{background:linear-gradient(160deg,var(--panel),var(--bg-soft));border:1px solid var(--line);
+  border-radius:var(--radius);padding:1.3rem;transition:.25s}
+.skill:hover{border-color:var(--teal);transform:translateY(-3px)}
+.skill h4{font-size:1rem;color:var(--teal);margin-bottom:.55rem}
+.skill p{color:var(--ink-soft);font-size:.9rem;margin:0}
