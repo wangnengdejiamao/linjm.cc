@@ -122,11 +122,14 @@ strong{color:#fff}
 
 /* ===================== CYCLOTRON STAGE ===================== */
 .cyc-stage{display:grid;grid-template-columns:1.5fr 1fr;gap:1.4rem;align-items:stretch}
+/* keep fr ratios even when a child has wide min-content (e.g. a long button) */
+.cyc-stage>*,.spec-stage>*{min-width:0}
+.cyc-controls .btn-sm{white-space:normal;text-align:left}
 .cyc-canvas-wrap{
   background:radial-gradient(120% 120% at 50% 0%, #0a1326, #05080f);
   border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;position:relative;min-height:420px;
 }
-#cycCanvas{display:block;width:100%;height:100%}
+#cycCanvas,#diskCanvas{display:block;width:100%;height:100%}
 .cyc-legend{
   position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:.5rem 1rem;
   padding:.6rem .9rem;font-size:.74rem;color:var(--ink-soft);
@@ -145,7 +148,7 @@ strong{color:#fff}
 .readout-row b{color:#fff;font-variant-numeric:tabular-nums;font-size:1rem}
 .lc-wrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem}
 .lc-wrap h4{font-size:.9rem;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;margin:0 0 .6rem}
-#lcCanvas{display:block;width:100%;height:120px}
+#lcCanvas,#diskLc{display:block;width:100%;height:120px}
 .cyc-controls,.spec-controls{display:flex;flex-direction:column;gap:.8rem;
   background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem}
 .cyc-controls label,.spec-controls label{display:flex;flex-direction:column;gap:.4rem;
