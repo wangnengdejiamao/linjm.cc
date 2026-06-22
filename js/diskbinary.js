@@ -17,6 +17,7 @@
   const ctx = canvas.getContext('2d');
   const lctx = lc.getContext('2d');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FRAME_MS = 1000 / 30;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   const elPhase = document.getElementById('diskPhase');
@@ -29,12 +30,17 @@
   const P_DAYS = 36.71, DEPTH = 0.40, ING = 2.5 / 36.71;   // ingress as fraction of period
   let phase = 0, speed = 1, paused = false, extended = true;
   let W = 0, H = 0, LW = 0, LH = 0;
+  let visible = true, raf = 0, timer = 0, last = 0;
 
   function resize() {
     W = canvas.clientWidth; H = canvas.clientHeight;
     canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
     LW = lc.clientWidth; LH = lc.clientHeight;
     lc.width = LW * dpr; lc.height = LH * dpr; lctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function isVisible() {
+    const r = canvas.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
   }
 
   // flat-bottomed trapezoid; ingress width depends on the occulted source size
@@ -191,24 +197,61 @@
     lctx.textAlign='right'; lctx.fillText('phase 1', x1, LH-3);
   }
 
-  function loop() {
-    if (!paused && !reduce) phase = (phase + 0.0011 * speed) % 1;
+  function canAnimate() {
+    return !reduce && !paused && speed > 0 && visible && !document.hidden;
+  }
+  function render() {
     drawScene(); drawLC();
-    requestAnimationFrame(loop);
+  }
+  function loop(now) {
+    raf = 0;
+    if (canAnimate()) {
+      const dt = last ? Math.min(2.5, (now - last) / 16.67) : 1;
+      last = now;
+      phase = (phase + 0.0011 * speed * dt) % 1;
+    }
+    drawScene(); drawLC();
+    start();
+  }
+  function start() {
+    if (!canAnimate() || raf || timer) return;
+    timer = window.setTimeout(() => {
+      timer = 0;
+      raf = requestAnimationFrame(loop);
+    }, FRAME_MS);
+  }
+  function stop() {
+    if (raf) cancelAnimationFrame(raf);
+    if (timer) clearTimeout(timer);
+    raf = 0;
+    timer = 0;
+    last = 0;
   }
 
-  elSpeed.addEventListener('input', () => speed = +elSpeed.value);
+  elSpeed.addEventListener('input', () => { speed = +elSpeed.value; render(); start(); });
   elToggle.addEventListener('click', () => {
     extended = !extended;
     elToggle.textContent = 'Occulted source: ' + (extended ? 'M/K dwarf' : 'white dwarf');
     elToggle.setAttribute('aria-pressed', String(!extended));
+    render(); start();
   });
   elPause.addEventListener('click', () => {
     paused = !paused; elPause.textContent = paused ? 'Play' : 'Pause';
     elPause.setAttribute('aria-pressed', String(paused));
+    if (paused) { stop(); render(); } else { start(); }
   });
 
   resize();
-  window.addEventListener('resize', resize);
-  if (reduce) { drawScene(); drawLC(); } else { requestAnimationFrame(loop); }
+  visible = isVisible();
+  render();
+  window.addEventListener('resize', () => { resize(); visible = isVisible(); render(); start(); });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) start(); else stop();
+    }, { threshold: 0.05 });
+    io.observe(canvas);
+  }
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  start();
 })();

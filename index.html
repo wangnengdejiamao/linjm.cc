@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://linjm.cc">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styles.css?v=2">
 </head>
 <body>
 <canvas id="starfield" aria-hidden="true"></canvas>
@@ -73,34 +73,73 @@
     </div>
     <div class="cards">
       <article class="card">
-        <div class="card-ico">⬡</div>
+        <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="6"></circle>
+          <path d="M24 7c-9 7-9 27 0 34"></path>
+          <path d="M24 7c9 7 9 27 0 34"></path>
+          <path d="M10 24h28"></path>
+          <path data-glow d="M24 12a12 12 0 0 1 0 24"></path>
+        </svg>
         <h3>Polars (AM&nbsp;Her stars)</h3>
         <p>Cataclysmic variables in which the white-dwarf field is strong enough
         (10–240&nbsp;MG) to lock the binary into synchronous rotation and suppress the
         accretion disk entirely. Gas free-falls along field lines onto the magnetic pole.</p>
       </article>
       <article class="card">
-        <div class="card-ico">∿</div>
+        <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <path d="M6 31c5-15 10-15 15 0s10 15 15 0 5-15 6-15"></path>
+          <path d="M9 38h30"></path>
+          <path d="M14 14v20"></path>
+          <path d="M24 10v28"></path>
+          <path d="M34 14v20"></path>
+          <circle data-dot cx="14" cy="23" r="2.2"></circle>
+          <circle data-dot cx="24" cy="31" r="2.2"></circle>
+          <circle data-dot cx="34" cy="23" r="2.2"></circle>
+        </svg>
         <h3>Cyclotron spectroscopy</h3>
         <p>At the accretion shock, hot electrons gyrate and radiate at harmonics of the
         cyclotron frequency, <em>ν<sub>c</sub>&nbsp;=&nbsp;eB/2πm<sub>e</sub>c</em>. The
         spacing of the resulting humps is a direct, model-light field measurement.</p>
       </article>
       <article class="card">
-        <div class="card-ico">⟲</div>
+        <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <path d="M9 35c7-13 12-18 18-13 5 4 7 12 12 8"></path>
+          <circle cx="24" cy="24" r="13"></circle>
+          <path d="M24 14v20"></path>
+          <path d="M14 24h20"></path>
+          <circle data-dot cx="12" cy="34" r="2.2"></circle>
+          <circle data-dot cx="27" cy="22" r="2.2"></circle>
+          <circle data-dot cx="39" cy="30" r="2.2"></circle>
+        </svg>
         <h3>Automated spectral fitting</h3>
         <p>I fit a Koester white-dwarf photosphere, a hot-spot blackbody, and an isothermal
         constant-Λ cyclotron component <em>simultaneously</em>, using profiled χ²(B) curves to
         expose competing harmonic assignments instead of hiding them.</p>
       </article>
       <article class="card">
-        <div class="card-ico">◷</div>
+        <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="14"></circle>
+          <path d="M24 14v11l8 5"></path>
+          <path d="M12 38c8 4 16 4 24 0"></path>
+          <path d="M9 17c3-6 8-9 15-9"></path>
+          <path d="M39 17c-2-4-5-7-9-8"></path>
+          <circle data-dot cx="12" cy="38" r="2"></circle>
+          <circle data-dot cx="24" cy="41" r="2"></circle>
+          <circle data-dot cx="36" cy="38" r="2"></circle>
+        </svg>
         <h3>Time-domain follow-up</h3>
         <p>I mine 6–7&nbsp;yr of ZTF photometry for orbital periods and aliases — finding,
         for instance, a rare short-period eclipsing-polar candidate below the period gap.</p>
       </article>
       <article class="card">
-        <div class="card-ico">◍</div>
+        <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <ellipse cx="24" cy="25" rx="17" ry="8"></ellipse>
+          <path d="M8 25c4 8 28 8 32 0"></path>
+          <circle data-dot cx="19" cy="23" r="3"></circle>
+          <circle data-dot cx="29" cy="27" r="3"></circle>
+          <path d="M13 18c6-4 16-5 23-1"></path>
+          <path d="M12 32c7 4 18 5 25 1"></path>
+        </svg>
         <h3>Disk-eclipsing binaries &amp; clusters</h3>
         <p>Flat-bottomed “square-wave” eclipses in which a misaligned circumbinary disk occults
         a low-mass binary (à la KH&nbsp;15D). Open-cluster membership turns these into age-dated
@@ -112,10 +151,12 @@
   <!-- ====================== CYCLOTRON ANIMATION ==================== -->
   <section id="cyclotron" class="section">
     <div class="section-head">
-      <h2>Cyclotron emission in a polar</h2>
-      <p>A live, schematic model of the accretion geometry behind every field I measure.
-      Gas streams from the donor, threads onto the dipole, and lights up the magnetic
-      pole; the beamed cyclotron flux is modulated as the white dwarf rotates.</p>
+      <h2>Cyclotron light-curve modelling</h2>
+      <p>A live, schematic polar: gas streams from the donor, threads onto the dipole, and
+      lights up the magnetic pole; the beamed cyclotron flux is modulated as the synchronous
+      binary turns. <strong>Pick a light-curve shape</strong> — these are the canonical
+      morphologies set by inclination <em>i</em>, magnetic colatitude <em>β</em>, the number
+      of accreting poles, and whether the donor eclipses the white dwarf.</p>
     </div>
 
     <div class="cyc-stage">
@@ -134,8 +175,9 @@
       <aside class="cyc-side">
         <div class="readout">
           <div class="readout-row"><span>Spin / orbital phase φ</span><b id="cycPhase">0.00</b></div>
-          <div class="readout-row"><span>Field strength B</span><b id="cycB">56.8 MG</b></div>
-          <div class="readout-row"><span>Viewing modulation</span><b id="cycFlux">—</b></div>
+          <div class="readout-row"><span>Inclination i / colatitude β</span><b id="cycGeom">80° / 58°</b></div>
+          <div class="readout-row"><span>Accreting poles</span><b id="cycPoles">one</b></div>
+          <div class="readout-row"><span>Relative flux</span><b id="cycFlux">—</b></div>
         </div>
 
         <div class="lc-wrap">
@@ -145,17 +187,36 @@
         </div>
 
         <div class="cyc-controls">
-          <label>Speed
-            <input type="range" id="cycSpeed" min="0" max="3" step="0.1" value="1">
+          <div class="morph-presets">
+            <span class="ctl-label">Light-curve shape</span>
+            <div class="preset-row">
+              <button class="chip" data-morph="single">Single hump</button>
+              <button class="chip active" data-morph="double">Double hump</button>
+              <button class="chip" data-morph="twopole">Two-pole</button>
+              <button class="chip" data-morph="eclipse">Eclipsing</button>
+            </div>
+          </div>
+          <label>Inclination i
+            <input type="range" id="cycInc" min="10" max="90" step="1" value="80">
           </label>
           <label>Magnetic colatitude β
-            <input type="range" id="cycBeta" min="5" max="85" step="1" value="55">
+            <input type="range" id="cycBeta" min="5" max="85" step="1" value="58">
+          </label>
+          <div class="toggle-row">
+            <button class="btn btn-sm" id="cycTwoPole" aria-pressed="false">Second pole: off</button>
+            <button class="btn btn-sm" id="cycEclipse" aria-pressed="false">Donor eclipse: off</button>
+          </div>
+          <label>Speed
+            <input type="range" id="cycSpeed" min="0" max="3" step="0.1" value="1">
           </label>
           <button class="btn btn-sm" id="cycPause" aria-pressed="false">Pause</button>
         </div>
       </aside>
     </div>
-    <p class="cap cap-wide">Schematic, not to scale — geometry and timing are illustrative of the AM&nbsp;Her mechanism, not a fit to a specific system.</p>
+    <p class="cap cap-wide">Schematic, not to scale. Polar light curves range from a single beaming hump, to
+    double-humped beaming (two ⟂-B maxima per orbit), to two unequal humps from two-pole accretion, to a
+    sharp total eclipse in high-inclination eclipsing polars — illustrative of the AM&nbsp;Her mechanism,
+    not a fit to one system.</p>
   </section>
 
   <!-- ======================= SPECTRUM LAB ========================= -->
@@ -266,7 +327,7 @@
         <div class="pub-body">
           <h3>A candidate low-mass disk-eclipsing binary in the ~316&nbsp;Myr open cluster UPK&nbsp;13</h3>
           <p class="pub-authors"><strong>J. Lin</strong> et al.</p>
-          <p class="pub-venue">The Astrophysical Journal (submitted)</p>
+          <p class="pub-venue">The Astrophysical Journal (accepted)</p>
           <p class="pub-abs">UPK&nbsp;13-c2 shows a flat-bottomed 36.71-day eclipse with a near-achromatic
           ~40% decrement from the optical through W1 and a mid-IR excess. A slow 2.5-day ingress
           rules out a white-dwarf occulter, favouring a late-K/early-M binary behind a misaligned
@@ -348,11 +409,11 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/starfield.js" defer></script>
-<script src="js/hero.js" defer></script>
-<script src="js/cyclotron.js" defer></script>
-<script src="js/spectrum.js" defer></script>
-<script src="js/diskbinary.js" defer></script>
-<script src="js/main.js" defer></script>
+<script src="js/starfield.js?v=2" defer></script>
+<script src="js/hero.js?v=2" defer></script>
+<script src="js/cyclotron.js?v=2" defer></script>
+<script src="js/spectrum.js?v=2" defer></script>
+<script src="js/diskbinary.js?v=2" defer></script>
+<script src="js/main.js?v=2" defer></script>
 </body>
 </html>

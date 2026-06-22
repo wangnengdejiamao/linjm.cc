@@ -24,16 +24,26 @@
 
   // count-up hero stats
   const nums = document.querySelectorAll('.hero-facts .num');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target, target = +el.dataset.count; let v = 0;
-      const step = Math.max(1, Math.round(target / 28));
-      const tick = () => { v = Math.min(target, v + step); el.textContent = v; if (v < target) requestAnimationFrame(tick); };
-      tick(); io.unobserve(el);
-    });
-  }, { threshold: 0.6 });
-  nums.forEach(n => io.observe(n));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const setFinal = el => { el.textContent = el.dataset.count || el.textContent; };
+  if (reduce || !('IntersectionObserver' in window)) {
+    nums.forEach(setFinal);
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target, target = +el.dataset.count; let v = 0;
+        const step = Math.max(1, Math.round(target / 28));
+        const tick = () => {
+          v = Math.min(target, v + step);
+          el.textContent = v;
+          if (v < target) requestAnimationFrame(tick);
+        };
+        tick(); io.unobserve(el);
+      });
+    }, { threshold: 0.6 });
+    nums.forEach(n => io.observe(n));
+  }
 
   // footer year
   const y = document.getElementById('year');

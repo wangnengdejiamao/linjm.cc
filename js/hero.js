@@ -5,7 +5,9 @@
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const FRAME_MS = 1000 / 30;
   let w, h, dpr = Math.min(window.devicePixelRatio || 1, 2), t = 0;
+  let visible = true, raf = 0, timer = 0, last = 0;
 
   function resize() {
     const s = canvas.clientWidth;
@@ -29,7 +31,12 @@
     ctx.stroke();
   }
 
-  function frame() {
+  function isVisible() {
+    const r = canvas.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
+  }
+
+  function frame(now) {
     ctx.clearRect(0, 0, w, h);
     const cx = w * 0.52, cy = h * 0.5, R = w * 0.12;
     const spin = (t * 0.6) % (Math.PI * 2);
@@ -92,11 +99,49 @@
       }
     }
 
-    if (!reduce) t += 0.016;
-    requestAnimationFrame(frame);
+    if (!reduce && visible && !document.hidden) {
+      const dt = now && last ? Math.min(2.5, (now - last) / 16.67) : 1;
+      if (now) last = now;
+      t += 0.016 * dt;
+      start();
+    } else {
+      raf = 0;
+    }
+  }
+
+  function start() {
+    if (reduce || !visible || document.hidden || raf || timer) return;
+    timer = window.setTimeout(() => {
+      timer = 0;
+      raf = requestAnimationFrame((now) => {
+        raf = 0;
+        frame(now);
+      });
+    }, FRAME_MS);
+  }
+
+  function stop() {
+    if (raf) cancelAnimationFrame(raf);
+    if (timer) clearTimeout(timer);
+    raf = 0;
+    timer = 0;
+    last = 0;
   }
 
   resize();
-  window.addEventListener('resize', resize);
-  requestAnimationFrame(frame);
+  visible = isVisible();
+  window.addEventListener('resize', () => {
+    resize();
+    visible = isVisible();
+    if (reduce || !visible || document.hidden) frame(); else start();
+  });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) start(); else stop();
+    }, { threshold: 0.05 });
+    io.observe(canvas);
+  }
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  if (reduce) frame(); else start();
 })();
