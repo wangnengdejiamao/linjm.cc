@@ -161,6 +161,11 @@
     const act = sel != null ? new Set([sel, ...adj.get(sel).map(a => a.o)]) : null;
     const focusId = hover != null ? hover : sel;
 
+    // panel title (echoes my local KG frontend)
+    ctx.font = '600 12.5px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#3a4a66';
+    ctx.fillText('source · method · model · parameter network', 14, 22);
+
     // edges
     edges.forEach(e => {
       const a = byId.get(e.s), b = byId.get(e.t);
@@ -184,9 +189,9 @@
     // nodes
     nodes.forEach(n => drawNode(n, n.id === focusId, act != null && !act.has(n.id)));
 
-    // pill labels (hubs + focus neighbourhood + hover)
+    // pill labels — only papers by default, plus the focused node + its neighbours
     nodes.forEach(n => {
-      const show = n.deg >= 3 || n.id === focusId || (act && act.has(n.id));
+      const show = n.type === 'Paper' || n.id === focusId || (act && act.has(n.id));
       if (!show) return;
       const dim = act != null && !act.has(n.id);
       const text = n.label.length > 18 ? n.label.slice(0, 17) + '…' : n.label;

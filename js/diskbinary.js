@@ -158,6 +158,25 @@
     ctx.globalAlpha = 1;
   }
 
+  // the disk's sharp (knife-edge) near edge advancing across the wide star:
+  // cov=0 → edge tangent to the star; cov=1 → star fully behind the disk.
+  function drawOcculter(s1, r1, cov, g) {
+    if (cov <= 0.003) return;
+    const Rocc = g.R * 0.42;                          // large curvature → a sharp, near-straight edge
+    const dir = Math.PI / 2 + g.alpha;                // edge advances from the disk side (tilted by α)
+    const ux = Math.cos(dir), uy = Math.sin(dir);
+    const reach = r1 * 1.25;                          // covers the stellar disk (+ a little glow)
+    const D = Rocc + reach - cov * (2 * reach);       // cov 0: tangent · cov 1: fully covering
+    const ox = s1.x + ux * D, oy = s1.y + uy * D;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(s1.x, s1.y, reach, 0, 7); ctx.clip();      // occult ONLY this star
+    ctx.fillStyle = '#241a11';                        // opaque dark disk material (knife edge)
+    ctx.beginPath(); ctx.arc(ox, oy, Rocc, 0, 7); ctx.fill();
+    ctx.lineWidth = 2.2; ctx.strokeStyle = 'rgba(210,170,120,.85)';     // bright dust along the sharp edge
+    ctx.beginPath(); ctx.arc(ox, oy, Rocc, 0, 7); ctx.stroke();
+    ctx.restore();
+  }
+
   function drawScene() {
     ctx.clearRect(0, 0, W, H);
     const g = geom();
@@ -166,31 +185,29 @@
     const th2 = th1 + Math.PI;                   // companion (opposite phase, tighter orbit)
     const s1 = orbit(g.cx, g.cy, g.a1, g.sq, th1);
     const s2 = orbit(g.cx, g.cy, g.a2, g.sq, th2);
-    const r1 = extended ? R * 0.045 : Math.max(2, R * 0.008);
-    const r2 = R * 0.05;
+    const r1 = extended ? R * 0.05 : Math.max(2.5, R * 0.012);
+    const r2 = R * 0.052;
     const cov = cover1(phase), ds = depthScale();
 
-    drawDisk(g);                                 // tilted ring — opens/closes with the viewing angle
-    drawClump(g, true);                          // dust glow (behind stars)
+    drawDisk(g);                                 // tilted ring; opens/closes with the viewing angle
 
-    // faint orbit guides (squashed by the viewing angle)
+    // faint orbit guides (binary plane)
     ctx.strokeStyle = 'rgba(120,140,200,.10)'; ctx.lineWidth = 1; ctx.setLineDash([3,5]);
     ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a1, g.a1*g.sq, 0, 0, 7); ctx.stroke();
     ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a2, g.a2*g.sq, 0, 0, 7); ctx.stroke();
     ctx.setLineDash([]);
 
-    // stars — draw the farther one first (depth z = sin i · sin θ)
-    const z1 = Math.sin(iv) * Math.sin(th1), z2 = Math.sin(iv) * Math.sin(th2);
-    const drawS1 = () => {
-      if (extended) drawStar(s1.x, s1.y, r1, '#ffb482', '#a83c10', 1 - 0.92 * cov);
-      else { ctx.globalAlpha = 1 - 0.95 * cov; drawStar(s1.x, s1.y, r1, '#eafcff', '#7fbfd0', 1); ctx.globalAlpha = 1; }
-    };
-    const drawS2 = () => drawStar(s2.x, s2.y, r2, '#ffd29a', '#c8631a', 1);
-    if (z1 < z2) { drawS1(); drawS2(); } else { drawS2(); drawS1(); }
-
-    drawClump(g, false);                         // localized occulter, on top of the wide-orbit star
+    // companion (always visible, ~60% of the light)
+    drawStar(s2.x, s2.y, r2, '#ffd9a8', '#c8631a', 1);
+    // occulted star at full brightness — the advancing disk edge does the dimming
+    drawStar(s1.x, s1.y, r1, extended ? '#ffd0a0' : '#eafcff', extended ? '#b8551a' : '#7fbfd0', 1);
+    drawOcculter(s1, r1, cov, g);                // sharp disk edge sweeps across it
     drawFrontRim(g);                             // near edge of the ring (3-D depth cue)
 
+    if (cov > 0.25) {
+      ctx.fillStyle = 'rgba(255,190,130,.95)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('occulted by disk edge', s1.x, s1.y - r1 - 10);
+    }
     if (!extended) {
       ctx.fillStyle = 'rgba(170,182,212,.85)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
       ctx.fillText('occulted source = white dwarf (point-like)', g.cx, g.cy - R*0.34);
