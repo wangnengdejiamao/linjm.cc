@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://linjm.cc">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="css/styles.css?v=6">
+<link rel="stylesheet" href="css/styles.css?v=7">
 </head>
 <body>
 <canvas id="starfield" aria-hidden="true"></canvas>
@@ -320,8 +320,9 @@
       <aside class="cyc-side">
         <div class="readout">
           <div class="readout-row"><span>Orbital phase</span><b id="diskPhase">0.00</b></div>
-          <div class="readout-row"><span>Time (P&nbsp;=&nbsp;36.71&nbsp;d)</span><b id="diskDays">0.0 d</b></div>
-          <div class="readout-row"><span>Viewing angle i</span><b id="diskIv">82°</b></div>
+          <div class="readout-row"><span>Binary inclination i</span><b id="diskIv">82°</b></div>
+          <div class="readout-row"><span>Disk misalignment α</span><b id="diskAlphaR">13°</b></div>
+          <div class="readout-row"><span>Disk inner radius</span><b id="diskRin">≈2.5 a ≈ 130 R⊙</b></div>
           <div class="readout-row"><span>Eclipse depth (at i)</span><b id="diskDepth">~40%</b></div>
           <div class="readout-row"><span>Current flux</span><b id="diskFlux">100%</b></div>
         </div>
@@ -333,8 +334,11 @@
         </div>
 
         <div class="cyc-controls">
-          <label>Viewing angle i (edge-on 90° → face-on)
+          <label>Binary inclination i (edge-on 90° → face-on)
             <input type="range" id="diskIncl" min="45" max="88" step="1" value="82">
+          </label>
+          <label>Disk misalignment α (sets ingress slope)
+            <input type="range" id="diskAlpha" min="3" max="25" step="1" value="13">
           </label>
           <label>Speed
             <input type="range" id="diskSpeed" min="0" max="3" step="0.1" value="1">
@@ -344,10 +348,11 @@
         </div>
       </aside>
     </div>
-    <p class="cap cap-wide">The light curve is <strong>real data</strong>: ZTF <em>g</em>/<em>r</em> photometry of UPK&nbsp;13-c2 folded at
-    <strong>P&nbsp;=&nbsp;36.710719&nbsp;d</strong> (T₀&nbsp;=&nbsp;HJD&nbsp;2458246.94), with a χ²-fitted trapezoid — ~40% near-achromatic depth
-    (g&nbsp;0.40, r&nbsp;0.41). Switch the occulted source to a white dwarf and the fit no longer matches the slow ingress.
-    The 3-D scene geometry is schematic (same class as KH&nbsp;15D and Bernhard-2).</p>
+    <p class="cap cap-wide">Light curve = <strong>real ZTF g/r data</strong> folded at <strong>P&nbsp;=&nbsp;36.710719&nbsp;d</strong> with a χ²-fitted
+    trapezoid (~40% depth). The scene is a <strong>knife-edge</strong> (no-thickness) model with <strong>two angles</strong>: the binary
+    inclination <em>i</em> sets the eclipse depth, the disk misalignment <em>α</em> sets the ingress slope
+    (v<sub>⊥</sub>&nbsp;=&nbsp;v<sub>orb</sub>&nbsp;sin&nbsp;α). For a&nbsp;≈&nbsp;0.24&nbsp;AU (Kepler; M<sub>tot</sub>≈1.4&nbsp;M⊙) tidal truncation
+    (Artymowicz&nbsp;&amp;&nbsp;Lubow&nbsp;1994) puts the disk inner edge at <strong>R<sub>in</sub>&nbsp;≈&nbsp;2–3&nbsp;a&nbsp;≈&nbsp;130&nbsp;R⊙</strong>.</p>
   </section>
 
   <!-- ======================= ASTRO AGENT (AI) ===================== -->
@@ -442,10 +447,11 @@
     <div class="kg-block">
       <div class="section-head kg-head">
         <h3>Knowledge graph + dual-track RAG</h3>
-        <p>The agent doesn't just embed text — it builds a typed <strong>knowledge graph</strong> of the literature
-        (entities + relations) and retrieves with <strong>BM25/vector recall <em>and</em> multi-hop graph traversal</strong>.
-        Below is a real connected subgraph of my white-dwarf KG. <strong>Pick a query</strong> (or click a node) to watch
-        retrieval land on an entity and pull in its connected context.</p>
+        <p>The agent builds a typed <strong>knowledge graph</strong> with my project's schema — <strong>8 entity types</strong>
+        (paper · source · WD class · survey · instrument · method · model · parameter) linked by typed relations
+        (uses · proposes · adopts · fits · measures · infers · studies). Shown here is the graph of <strong>my own three
+        papers</strong>; retrieval combines BM25/vector recall with multi-hop graph traversal — <strong>pick a query</strong>
+        (or click a node) to watch it land on an entity and pull in its connected context.</p>
       </div>
       <div class="cyc-stage">
         <div class="cyc-canvas-wrap kg-canvas-wrap">
@@ -454,8 +460,8 @@
         </div>
         <aside class="cyc-side">
           <div class="readout">
-            <div class="readout-row"><span>KG triples</span><b>283</b></div>
-            <div class="readout-row"><span>Subgraph shown</span><b id="kgShown">22 entities</b></div>
+            <div class="readout-row"><span>Entities · relations</span><b>30 · 33</b></div>
+            <div class="readout-row"><span>Built from</span><b id="kgShown">3 papers</b></div>
             <div class="readout-row"><span>Retrieval mode</span><b id="kgMode">BM25 + graph</b></div>
           </div>
           <div class="cyc-controls">
@@ -468,9 +474,9 @@
           </div>
         </aside>
       </div>
-      <p class="cap cap-wide">A real connected subgraph of my white-dwarf knowledge graph — entities and typed relations
-      (uses · adopts · measures · reports) extracted from the literature. The agent's <code>kg_navigator</code> combines
-      BM25/vector recall with multi-hop graph traversal for method-transfer queries.</p>
+      <p class="cap cap-wide">Entities are typed with my project's white-dwarf KG schema (<code>AstronomicalSource</code>,
+      <code>AnalysisMethod</code>, <code>PhysicalModel</code>, <code>PhysicalParameter</code>, …); relations follow its verb set
+      (<code>使用 / 提出 / 采用 / 拟合 / 测量 / 推断 / 研究</code>). Built from my ZTF&nbsp;J0112+5827, polar-field and UPK&nbsp;13-c2 papers.</p>
     </div>
   </section>
 
@@ -693,15 +699,15 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/starfield.js?v=6" defer></script>
-<script src="js/hero.js?v=6" defer></script>
-<script src="js/cyclotron.js?v=6" defer></script>
-<script src="js/spectrum.js?v=6" defer></script>
-<script src="js/diskdata.js?v=6" defer></script>
-<script src="js/diskbinary.js?v=6" defer></script>
-<script src="js/astroagent.js?v=6" defer></script>
-<script src="js/kgdata.js?v=6" defer></script>
-<script src="js/kg.js?v=6" defer></script>
-<script src="js/main.js?v=6" defer></script>
+<script src="js/starfield.js?v=7" defer></script>
+<script src="js/hero.js?v=7" defer></script>
+<script src="js/cyclotron.js?v=7" defer></script>
+<script src="js/spectrum.js?v=7" defer></script>
+<script src="js/diskdata.js?v=7" defer></script>
+<script src="js/diskbinary.js?v=7" defer></script>
+<script src="js/astroagent.js?v=7" defer></script>
+<script src="js/kgdata.js?v=7" defer></script>
+<script src="js/kg.js?v=7" defer></script>
+<script src="js/main.js?v=7" defer></script>
 </body>
 </html>

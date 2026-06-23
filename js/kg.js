@@ -29,13 +29,18 @@
   const edges = DATA.edges;
   const byId = new Map(nodes.map(n => [n.id, n]));
 
-  // type → colour / shape / glyph (mirrors the local frontend palette)
-  const COLOR = { paper:'#de5b7c', source:'#0b9c8e', survey:'#855bd7', method:'#5367dd',
-    parameter:'#f2a93b', process:'#d55e00', concept:'#0e9e88', instrument:'#3aa0c8', telescope:'#3aa0c8' };
-  const SHAPE = { paper:'hex', method:'rsq', parameter:'dia', survey:'tri', process:'pen',
-    source:'ring', concept:'cir', instrument:'tri', telescope:'tri' };
-  const GLYPH = { paper:'✦', method:'∿', parameter:'σ', survey:'◎', process:'⚛', concept:'•',
-    instrument:'◉', telescope:'◉' };
+  // the project's 8 KG entity types → colour / shape / glyph / short legend label
+  const COLOR = { Paper:'#de5b7c', AstronomicalSource:'#0b9c8e', WhiteDwarfCategory:'#855bd7',
+    Survey:'#5367dd', ObservationInstrument:'#3aa0c8', AnalysisMethod:'#2e9e6b',
+    PhysicalModel:'#d5733a', PhysicalParameter:'#f2a93b' };
+  const SHAPE = { Paper:'hex', AstronomicalSource:'ring', WhiteDwarfCategory:'pen',
+    Survey:'tri', ObservationInstrument:'cir', AnalysisMethod:'rsq',
+    PhysicalModel:'oct', PhysicalParameter:'dia' };
+  const GLYPH = { Paper:'¶', WhiteDwarfCategory:'★', Survey:'◎', ObservationInstrument:'◉',
+    AnalysisMethod:'∿', PhysicalModel:'◇', PhysicalParameter:'σ' };
+  const ABBR  = { Paper:'paper', AstronomicalSource:'source', WhiteDwarfCategory:'WD class',
+    Survey:'survey', ObservationInstrument:'instrument', AnalysisMethod:'method',
+    PhysicalModel:'model', PhysicalParameter:'parameter' };
   const col = t => COLOR[t] || '#98a2b3';
 
   const adj = new Map(); nodes.forEach(n => adj.set(n.id, []));
@@ -119,6 +124,7 @@
     else if (s === 'dia') poly(n.x, n.y, r, 4, Math.PI / 4);
     else if (s === 'tri') poly(n.x, n.y + 1, r, 3, -Math.PI / 2);
     else if (s === 'pen') poly(n.x, n.y, r, 5, -Math.PI / 2);
+    else if (s === 'oct') poly(n.x, n.y, r, 8, Math.PI / 8);
     else { ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 7); }
   }
 
@@ -193,6 +199,19 @@
       ctx.fillStyle = '#243049'; ctx.fillText(text, n.x, y + 3, w - 8);
       ctx.globalAlpha = 1;
     });
+
+    // entity-type legend (wraps across the bottom)
+    const used = [...new Set(nodes.map(n => n.type))];
+    ctx.font = '10px system-ui,sans-serif'; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+    let lx = 12, ly = H - 30;
+    for (const ty of used) {
+      const lab = ABBR[ty] || ty, tw = ctx.measureText(lab).width;
+      if (lx + 16 + tw > W - 10) { lx = 12; ly += 15; }
+      ctx.fillStyle = col(ty); ctx.beginPath(); ctx.arc(lx + 4, ly, 4.5, 0, 7); ctx.fill();
+      ctx.fillStyle = '#5c6b85'; ctx.fillText(lab, lx + 12, ly + 0.5);
+      lx += 18 + tw + 8;
+    }
+    ctx.textBaseline = 'alphabetic';
   }
 
   // ---- RAG context panel ----
@@ -274,7 +293,7 @@
   function isVisible() { const r = canvas.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
 
   // ---- init ----
-  if (elShown) elShown.textContent = DATA.stats.shown + ' of ' + DATA.stats.entities + ' entities';
+  if (elShown) elShown.textContent = (DATA.stats.papers || 3) + ' papers · ' + DATA.stats.entities + ' entities';
   resize(); seed(); buildChips(); clearSel();
   if (reduce) { for (let i = 0; i < 260; i++) { simulate(); alpha *= 0.99; } alpha = 0; draw(); }
   else {
