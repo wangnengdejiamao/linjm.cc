@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://linjm.cc">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="css/styles.css?v=5">
+<link rel="stylesheet" href="css/styles.css?v=6">
 </head>
 <body>
 <canvas id="starfield" aria-hidden="true"></canvas>
@@ -231,7 +231,6 @@
           </label>
           <div class="toggle-row">
             <button class="btn btn-sm" id="cycTwoPole" aria-pressed="false">Second pole: off</button>
-            <button class="btn btn-sm" id="cycEclipse" aria-pressed="false">Eclipsing donor: off</button>
           </div>
           <label>Speed
             <input type="range" id="cycSpeed" min="0" max="3" step="0.1" value="1">
@@ -240,11 +239,10 @@
         </div>
       </aside>
     </div>
-    <p class="cap cap-wide">Schematic, not to scale. Polar light curves range from a single beaming hump, to
-    double-humped beaming (two ⟂-B maxima per orbit), to two unequal humps from two-pole accretion, to a
-    sharp total eclipse. The eclipse is now <strong>geometric</strong>: switch on the eclipsing donor and it appears
-    only once the inclination exceeds <em>i</em><sub>c</sub>&nbsp;≈&nbsp;71°&nbsp;(=&nbsp;arccos&nbsp;R<sub>donor</sub>/a) —
-    raise <em>i</em> and watch the WD really get occulted. Illustrative of the AM&nbsp;Her mechanism, not a fit to one system.</p>
+    <p class="cap cap-wide">A real 3-D binary: the inclination slider <strong>tilts the actual orbit</strong>, each body carries a depth,
+    and the nearer one occludes the farther — so raise <em>i</em> and the donor genuinely swings in front of the white dwarf,
+    producing a total eclipse once <em>i</em> exceeds <em>i</em><sub>c</sub>&nbsp;≈&nbsp;67°&nbsp;(=&nbsp;arccos&nbsp;(R<sub>d</sub>+R<sub>wd</sub>)/a).
+    No toggle — the scene and the light curve share one geometry. Illustrative of the AM&nbsp;Her mechanism, not a fit to one system.</p>
   </section>
 
   <!-- ======================= SPECTRUM LAB ========================= -->
@@ -300,8 +298,10 @@
       <p>UPK&nbsp;13-c2 dims in a flat-bottomed “square wave” every <strong>36.71&nbsp;days</strong>.
       A misaligned circumbinary disk's localized edge occults <strong>just one component</strong> of a
       late-K/early-M binary; that star carries ~40% of the light, so the flux drops to ~60% while the
-      companion keeps shining. The slow, multi-day ingress is the clincher —
-      <strong>toggle the occulted source to a white dwarf</strong> and watch the walls snap vertical,
+      companion keeps shining. It's a real 3-D model of the disk + binary: <strong>drag the viewing
+      angle</strong> from edge-on toward face-on and the ring opens up — the eclipse only happens when
+      we see it near edge-on. The slow, multi-day ingress is the clincher —
+      <strong>switch the occulted source to a white dwarf</strong> and watch the walls snap vertical,
       which is exactly why a WD is ruled out.</p>
     </div>
 
@@ -321,7 +321,8 @@
         <div class="readout">
           <div class="readout-row"><span>Orbital phase</span><b id="diskPhase">0.00</b></div>
           <div class="readout-row"><span>Time (P&nbsp;=&nbsp;36.71&nbsp;d)</span><b id="diskDays">0.0 d</b></div>
-          <div class="readout-row"><span>Eclipse depth</span><b id="diskDepth">~40%</b></div>
+          <div class="readout-row"><span>Viewing angle i</span><b id="diskIv">82°</b></div>
+          <div class="readout-row"><span>Eclipse depth (at i)</span><b id="diskDepth">~40%</b></div>
           <div class="readout-row"><span>Current flux</span><b id="diskFlux">100%</b></div>
         </div>
 
@@ -332,6 +333,9 @@
         </div>
 
         <div class="cyc-controls">
+          <label>Viewing angle i (edge-on 90° → face-on)
+            <input type="range" id="diskIncl" min="45" max="88" step="1" value="82">
+          </label>
           <label>Speed
             <input type="range" id="diskSpeed" min="0" max="3" step="0.1" value="1">
           </label>
@@ -689,15 +693,15 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/starfield.js?v=5" defer></script>
-<script src="js/hero.js?v=5" defer></script>
-<script src="js/cyclotron.js?v=5" defer></script>
-<script src="js/spectrum.js?v=5" defer></script>
-<script src="js/diskdata.js?v=5" defer></script>
-<script src="js/diskbinary.js?v=5" defer></script>
-<script src="js/astroagent.js?v=5" defer></script>
-<script src="js/kgdata.js?v=5" defer></script>
-<script src="js/kg.js?v=5" defer></script>
-<script src="js/main.js?v=5" defer></script>
+<script src="js/starfield.js?v=6" defer></script>
+<script src="js/hero.js?v=6" defer></script>
+<script src="js/cyclotron.js?v=6" defer></script>
+<script src="js/spectrum.js?v=6" defer></script>
+<script src="js/diskdata.js?v=6" defer></script>
+<script src="js/diskbinary.js?v=6" defer></script>
+<script src="js/astroagent.js?v=6" defer></script>
+<script src="js/kgdata.js?v=6" defer></script>
+<script src="js/kg.js?v=6" defer></script>
+<script src="js/main.js?v=6" defer></script>
 </body>
 </html>

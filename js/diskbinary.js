@@ -26,13 +26,17 @@
   const elSpeed = document.getElementById('diskSpeed');
   const elToggle= document.getElementById('diskToggle');
   const elPause = document.getElementById('diskPause');
+  const elIncl  = document.getElementById('diskIncl');
+  const elDepth = document.getElementById('diskDepth');
+  const elIv    = document.getElementById('diskIv');
 
   const DD = window.DISK_DATA || null;                     // real folded ZTF data (js/diskdata.js)
   const P_DAYS = DD ? DD.period_days : 36.71;
   const EDGES  = DD ? DD.model_edges : [0.34, 0.42, 0.66, 0.70];  // fitted ingress/egress phases
-  const DEPTH  = DD ? DD.bands.g.depth : 0.40;             // fractional flux drop (~0.40)
+  const DEPTH  = DD ? DD.bands.g.depth : 0.40;             // fractional flux drop (~0.40) at edge-on
   const MID    = DD ? DD.mid_phase : 0.52;
   let phase = 0, speed = 1, paused = false, extended = true;
+  let iv = (elIncl ? +elIncl.value : 82) * Math.PI / 180;  // viewing angle (90°=edge-on)
   let W = 0, H = 0, LW = 0, LH = 0;
   let visible = true, raf = 0, timer = 0, last = 0;
 
@@ -47,36 +51,41 @@
     return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
   }
 
-  // flat-bottomed trapezoid from the real chi^2 fit to the folded ZTF data;
-  // a point-like white dwarf compresses ingress/egress to near-vertical walls.
-  function trapModel(ph, narrow) {
+  // normalised dip shape (0 outside eclipse … 1 at mid-eclipse) from the fitted
+  // trapezoid; a point-like WD compresses ingress/egress to near-vertical walls.
+  function dip(ph, narrow) {
     let [p1, p2, p3, p4] = EDGES;
     if (narrow) { const w = 0.006; p1 = p2 - w; p4 = p3 + w; }
     ph = ((ph % 1) + 1) % 1;
-    if (ph <= p1 || ph >= p4) return 1;
-    if (ph < p2)  return 1 - DEPTH * (ph - p1) / (p2 - p1);
-    if (ph <= p3) return 1 - DEPTH;
-    return 1 - DEPTH * (p4 - ph) / (p4 - p3);
+    if (ph <= p1 || ph >= p4) return 0;
+    if (ph < p2)  return (ph - p1) / (p2 - p1);
+    if (ph <= p3) return 1;
+    return (p4 - ph) / (p4 - p3);
   }
-  const refFlux   = ph => trapModel(ph, false);          // fitted trapezoid (matches the data)
-  const modelFlux = ph => trapModel(ph, !extended);      // extended star vs point-like WD
-  const cover1    = ph => Math.max(0, Math.min(1, (1 - modelFlux(ph)) / DEPTH));
+  function smoothstep(a, b, x) { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); }
+  // a circumbinary disk only occults when viewed near edge-on; the eclipse depth
+  // falls off as the system is tilted toward face-on (schematic angle dependence).
+  function depthScale() { return smoothstep(52 * Math.PI / 180, 80 * Math.PI / 180, iv); }
+  const refFlux   = ph => 1 - DEPTH * dip(ph, false);                  // the observed data (edge-on)
+  const modelFlux = ph => 1 - DEPTH * depthScale() * dip(ph, !extended); // current viewing angle + source
+  const cover1    = ph => depthScale() * dip(ph, !extended);           // fraction of the star covered
 
   // ---- scene ----
   function geom() {
     const R = Math.min(W, H), cx = W * 0.42, cy = H * 0.5;
-    const sq = 0.42;                                 // disk/orbit vertical squash (near edge-on)
-    const a1 = R * 0.21, a2 = R * 0.115;             // orbital radii: occulted (wide) + companion
-    const clump = { x: cx - a1, y: cy, r: R * 0.05 };// localized occulting edge (occulted star's far point)
-    return { R, cx, cy, sq, a1, a2, clump };
+    const sq = Math.max(0.05, Math.cos(iv));         // vertical squash set by the viewing angle
+    const a1 = R * 0.20, a2 = R * 0.11;              // orbital radii: occulted (wide) + companion
+    const rin = R * 0.30, rout = R * 0.50;           // disk cavity holds the binary; ring outside
+    const clump = { x: cx - a1, y: cy, r: R * 0.05 };// localized warped inner-edge occulter
+    return { R, cx, cy, sq, a1, a2, rin, rout, clump };
   }
   function orbit(cx, cy, a, sq, theta) {
     return { x: cx + a * Math.cos(theta), y: cy + a * sq * Math.sin(theta) };
   }
 
   function drawDisk(g) {
-    const { cx, cy, R, sq } = g;
-    const rxO = R * 0.46, ryO = rxO * sq, rxI = R * 0.17, ryI = rxI * sq;
+    const { cx, cy, sq, rin, rout } = g;
+    const rxO = rout, ryO = rxO * sq, rxI = rin, ryI = rxI * sq;
     // dusty annulus (even-odd fill: outer minus inner)
     ctx.save();
     const grd = ctx.createRadialGradient(cx, cy, rxI, cx, cy, rxO);
@@ -97,9 +106,9 @@
     ctx.restore();
   }
   function drawFrontRim(g) {
-    // the near (front, lower) half of the disk, drawn on top so it occults stars behind it
-    const { cx, cy, R, sq } = g;
-    const rxO = R * 0.46, ryO = rxO * sq, rxI = R * 0.17, ryI = rxI * sq;
+    // the near (front, lower) half of the disk ring, drawn on top for depth
+    const { cx, cy, sq, rin, rout } = g;
+    const rxO = rout, ryO = rxO * sq, rxI = rin, ryI = rxI * sq;
     ctx.save();
     ctx.beginPath();
     ctx.ellipse(cx, cy, rxO, ryO, 0, 0, Math.PI, false);     // outer lower arc
@@ -143,38 +152,42 @@
     const s2 = orbit(g.cx, g.cy, g.a2, g.sq, th2);
     const r1 = extended ? R * 0.045 : Math.max(2, R * 0.008);
     const r2 = R * 0.05;
-    const cov = cover1(phase);
+    const cov = cover1(phase), ds = depthScale();
 
-    drawDisk(g);
+    drawDisk(g);                                 // tilted ring — opens/closes with the viewing angle
     drawClump(g, true);                          // dust glow (behind stars)
 
-    // faint orbit guides
+    // faint orbit guides (squashed by the viewing angle)
     ctx.strokeStyle = 'rgba(120,140,200,.10)'; ctx.lineWidth = 1; ctx.setLineDash([3,5]);
     ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a1, g.a1*g.sq, 0, 0, 7); ctx.stroke();
     ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a2, g.a2*g.sq, 0, 0, 7); ctx.stroke();
     ctx.setLineDash([]);
 
-    // companion (always visible, ~60% of the light)
-    drawStar(s2.x, s2.y, r2, '#ffd29a', '#c8631a', 1);
-    // occulted source (~40%), dimmed as it slips behind the edge
-    if (extended) drawStar(s1.x, s1.y, r1, '#ffb482', '#a83c10', 1 - 0.92 * cov);
-    else {
-      ctx.globalAlpha = 1 - 0.95 * cov;
-      drawStar(s1.x, s1.y, r1, '#eafcff', '#7fbfd0', 1); ctx.globalAlpha = 1;
-    }
+    // stars — draw the farther one first (depth z = sin i · sin θ)
+    const z1 = Math.sin(iv) * Math.sin(th1), z2 = Math.sin(iv) * Math.sin(th2);
+    const drawS1 = () => {
+      if (extended) drawStar(s1.x, s1.y, r1, '#ffb482', '#a83c10', 1 - 0.92 * cov);
+      else { ctx.globalAlpha = 1 - 0.95 * cov; drawStar(s1.x, s1.y, r1, '#eafcff', '#7fbfd0', 1); ctx.globalAlpha = 1; }
+    };
+    const drawS2 = () => drawStar(s2.x, s2.y, r2, '#ffd29a', '#c8631a', 1);
+    if (z1 < z2) { drawS1(); drawS2(); } else { drawS2(); drawS1(); }
 
-    drawClump(g, false);                         // opaque clump on top -> hides star behind it
+    drawClump(g, false);                         // localized occulter, on top of the wide-orbit star
+    drawFrontRim(g);                             // near edge of the ring (3-D depth cue)
+
     if (!extended) {
       ctx.fillStyle = 'rgba(170,182,212,.85)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText('occulted source = white dwarf (point-like)', g.cx, g.cy + R*0.30);
+      ctx.fillText('occulted source = white dwarf (point-like)', g.cx, g.cy - R*0.34);
     }
-
     ctx.fillStyle = 'rgba(170,182,212,.7)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('▼ to observer', g.cx, H - 24);
+    ctx.fillText('viewing angle  i = ' + Math.round(iv*180/Math.PI) + '°' + (ds < 0.04 ? '  (near face-on — no eclipse)' : ''), g.cx, 20);
 
     elPhase.textContent = phase.toFixed(2);
     elDays.textContent = (phase * P_DAYS).toFixed(1) + ' d';
     elFlux.textContent = Math.round(modelFlux(phase) * 100) + '%';
+    if (elDepth) elDepth.textContent = Math.round(DEPTH * ds * 100) + '%';
+    if (elIv) elIv.textContent = Math.round(iv*180/Math.PI) + '°';
   }
 
   // ---- light curve: real folded ZTF data + fitted trapezoid + current model ----
@@ -252,6 +265,7 @@
   }
 
   elSpeed.addEventListener('input', () => { speed = +elSpeed.value; render(); start(); });
+  if (elIncl) elIncl.addEventListener('input', () => { iv = +elIncl.value * Math.PI / 180; render(); start(); });
   elToggle.addEventListener('click', () => {
     extended = !extended;
     elToggle.textContent = 'Occulted source: ' + (extended ? 'M/K dwarf' : 'white dwarf');

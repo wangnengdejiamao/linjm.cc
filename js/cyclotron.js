@@ -33,14 +33,13 @@
   const elInc   = document.getElementById('cycInc');
   const elBeta  = document.getElementById('cycBeta');
   const elTwoPole = document.getElementById('cycTwoPole');
-  const elEclipse = document.getElementById('cycEclipse');
   const elPause = document.getElementById('cycPause');
   const chips   = document.querySelectorAll('[data-morph]');
 
   let inc = +elInc.value * Math.PI / 180;
   let beta = +elBeta.value * Math.PI / 180;
   let speed = +elSpeed.value;
-  let twoPole = false, eclipse = false;
+  let twoPole = false;
   let phase = 0, paused = false, W = 0, H = 0, LW = 0, LH = 0;
   let visible = true, raf = 0, timer = 0, last = 0;
 
@@ -54,36 +53,42 @@
     const vis = smooth(-0.35, 0.20, cm);      // self-eclipse behind the WD limb
     return beam * vis;
   }
-  // GEOMETRIC donor eclipse — driven by the inclination, not a fixed toggle.
-  // The M-dwarf occults the WD only when the orbit is inclined enough that the
-  // sky-projected separation drops below the donor radius near conjunction (φ=0.5):
-  //   δ(φ) = √(sin²θ + cos²i·cos²θ),  θ = 2πφ.  Eclipse needs i > i_c = arccos(ρ_d).
-  const RHO_D = 0.33;    // Roche-lobe donor radius / orbital separation (mass ratio q≈0.25)
-  const RHO_WD = 0.012;  // white-dwarf radius / separation (point-like → sharp walls)
-  function eclipseFactor(ph) {
+  // ---- ONE 3-D binary model drives BOTH the scene and the eclipse ----
+  // The orbit plane is tilted by the inclination i. Each body has a screen
+  // offset (sx,sy) from the centre of mass and a depth z (+ = toward viewer).
+  // The donor occults the WD only when it is in front (z larger) and overlaps
+  // it on the sky — so the eclipse EMERGES from the viewing angle, no toggle.
+  const ORB_WD = 0.10, ORB_DON = 0.30;     // orbital radii about the COM (units of min(W,H))
+  const R_DON = 0.105, R_WD = 0.05;        // stellar radii (same units)
+  const SUM_A = ORB_WD + ORB_DON;
+  const I_CRIT = Math.acos((R_DON + R_WD) / SUM_A);   // eclipses appear above this i (~67°)
+  function body3D(orb, th) {                // orb<0 puts the body on the opposite side
+    const py = orb * Math.sin(th);
+    return { sx: orb * Math.cos(th), sy: -py * Math.cos(inc), z: py * Math.sin(inc) };
+  }
+  function eclipseFactor(ph) {              // fraction of the WD visible (1 clear … 0 total)
     const th = 2 * Math.PI * (((ph % 1) + 1) % 1);
-    if (Math.cos(th) >= 0) return 1;                          // WD in front → no WD eclipse
-    const delta = Math.hypot(Math.sin(th), Math.cos(inc) * Math.cos(th));
-    if (delta >= RHO_D + RHO_WD) return 1;                    // uneclipsed
-    if (delta <= RHO_D - RHO_WD) return 0;                    // total eclipse
-    return (delta - (RHO_D - RHO_WD)) / (2 * RHO_WD);         // partial ingress/egress
+    const w = body3D(ORB_WD, th), d = body3D(-ORB_DON, th);
+    if (d.z <= w.z) return 1;                                 // donor behind → WD unblocked
+    const delta = Math.hypot(w.sx - d.sx, w.sy - d.sy);
+    if (delta >= R_DON + R_WD) return 1;
+    if (delta <= R_DON - R_WD) return 0;
+    return (delta - (R_DON - R_WD)) / (2 * R_WD);
   }
-  const I_CRIT = Math.acos(RHO_D);                            // critical inclination (~71°)
-  function eclipseHalfWidth() {                               // eclipse half-duration in phase
-    const arg = RHO_D * RHO_D - Math.cos(inc) * Math.cos(inc);
-    return arg > 0 ? Math.sqrt(arg) / (2 * Math.PI) : 0;
+  function eclipseWindow() {                // phase span where the WD is dimmed (for LC shading)
+    let lo = 2, hi = -1;
+    for (let k = 0; k <= 400; k++) { const ph = k / 400; if (eclipseFactor(ph) < 0.999) { lo = Math.min(lo, ph); hi = Math.max(hi, ph); } }
+    return hi < 0 ? null : { lo, hi };
   }
-  function eclState() {                                       // outcome at conjunction
-    const c = Math.abs(Math.cos(inc));
-    if (c >= RHO_D + RHO_WD) return 'none';
-    if (c <= RHO_D - RHO_WD) return 'total';
-    return 'grazing';
+  function eclState() {
+    let m = 1; for (let k = 0; k <= 200; k++) { const f = eclipseFactor(k / 200); if (f < m) m = f; }
+    return m >= 0.999 ? 'none' : (m <= 0.02 ? 'total' : 'grazing');
   }
   function fluxAt(ph) {
     let F = poleFlux(ph, inc, beta, 0);
     if (twoPole) F += 0.45 * poleFlux(ph, inc, Math.PI - beta, 0.5);
     F = 0.08 + 0.92 * F;                       // small residual baseline (WD photosphere + companion)
-    if (eclipse) F *= eclipseFactor(ph);
+    F *= eclipseFactor(ph);                    // always — eclipse emerges from the inclination
     return F;
   }
 
@@ -106,36 +111,37 @@
     return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
   }
 
-  // ---- scene: a synchronously co-rotating binary ----
+  // ---- scene: a real 3-D synchronously co-rotating binary ----
   function drawScene() {
     ctx.clearRect(0, 0, W, H);
     const R = Math.min(W, H);
     const com = { x: W * 0.45, y: H * 0.5 };
-    const a = phase * 2 * Math.PI;
-    const Rwd = R * 0.085, Rdon = R * 0.075;
-    const orbWD = R * 0.085, orbDon = R * 0.30;
-    const sqi = 0.30 + 0.62 * Math.cos(inc);          // orbit squash conveys inclination
+    const th = phase * 2 * Math.PI, ci = Math.cos(inc);
+    const Rwd = R * R_WD, Rdon = R * R_DON;
     const f1 = poleFlux(phase, inc, beta, 0);
     const f2 = twoPole ? poleFlux(phase, inc, Math.PI - beta, 0.5) : 0;
-    const ecf = eclipse ? eclipseFactor(phase) : 1;
-    const dir = { x: Math.cos(a), y: Math.sin(a) };
-    const wd  = { x: com.x - dir.x * orbWD,  y: com.y - dir.y * orbWD * sqi };
-    const don = { x: com.x + dir.x * orbDon, y: com.y + dir.y * orbDon * sqi };
-    const pa = Math.atan2(don.y - wd.y, don.x - wd.x);   // WD -> donor (screen)
+    const ecf = eclipseFactor(phase);
+
+    // project the tilted orbit; each body carries a depth z (+ = toward viewer)
+    const W3 = body3D(ORB_WD, th), D3 = body3D(-ORB_DON, th);
+    const wd  = { x: com.x + W3.sx * R, y: com.y + W3.sy * R, z: W3.z };
+    const don = { x: com.x + D3.sx * R, y: com.y + D3.sy * R, z: D3.z };
+    const donFront = don.z > wd.z;                       // donor nearer the observer?
+    const pa = Math.atan2(don.y - wd.y, don.x - wd.x);   // accreting pole faces the donor
     const pdir = { x: Math.cos(pa), y: Math.sin(pa) };
     const pole = { x: wd.x + pdir.x * Rwd, y: wd.y + pdir.y * Rwd };
 
-    // orbit guides (inclination-squashed)
+    // orbit guides — vertical extent ∝ cos i (flatten to a line as it tilts edge-on)
     ctx.strokeStyle = 'rgba(120,140,200,.12)'; ctx.lineWidth = 1; ctx.setLineDash([3,5]);
-    ctx.beginPath(); ctx.ellipse(com.x, com.y, orbDon, orbDon*sqi, 0, 0, 7); ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(com.x, com.y, orbWD, orbWD*sqi, 0, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(com.x, com.y, ORB_DON*R, ORB_DON*R*ci, 0, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(com.x, com.y, ORB_WD*R, ORB_WD*R*ci, 0, 0, 7); ctx.stroke();
     ctx.setLineDash([]);
 
-    // accretion stream donor -> primary pole
+    // accretion stream donor -> primary pole (beneath the stars)
     const perp = { x: -pdir.y, y: pdir.x };
     const mid = { x: (don.x + pole.x)/2 + perp.x * R*0.12, y: (don.y + pole.y)/2 + perp.y * R*0.12 };
     const grad = ctx.createLinearGradient(don.x, don.y, pole.x, pole.y);
-    grad.addColorStop(0, 'rgba(230,159,0,.85)'); grad.addColorStop(1, 'rgba(255,210,120,.3)');
+    grad.addColorStop(0, 'rgba(230,159,0,.8)'); grad.addColorStop(1, 'rgba(255,210,120,.28)');
     ctx.strokeStyle = grad; ctx.lineWidth = 3; ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(don.x - pdir.x*Rdon, don.y - pdir.y*Rdon);
@@ -147,57 +153,47 @@
         const sx = don.x - pdir.x*Rdon, sy = don.y - pdir.y*Rdon;
         const x = it*it*sx + 2*it*t*mid.x + t*t*pole.x;
         const y = it*it*sy + 2*it*t*mid.y + t*t*pole.y;
-        ctx.fillStyle = `rgba(255,205,120,${0.85 - t*0.45})`;
+        ctx.fillStyle = `rgba(255,205,120,${0.82 - t*0.45})`;
         ctx.beginPath(); ctx.arc(x, y, 2.6 - t*1.2, 0, 7); ctx.fill();
       }
     }
 
-    // donor (M dwarf)
-    starGlow(don.x, don.y, Rdon, '#ffd9b0', '#d55e00');
-
-    // dipole field lines + magnetic axis, locked to the binary axis
-    ctx.lineWidth = 1.2;
-    for (let k = 0; k < 4; k++) {
-      const L = Rwd * (0.6 + k * 0.7);
-      ctx.strokeStyle = `rgba(110,140,210,${0.22 - k*0.03})`;
-      fieldLine(wd.x, wd.y, Rwd, L, pa, 1); fieldLine(wd.x, wd.y, Rwd, L, pa, -1);
-    }
-    ctx.strokeStyle = 'rgba(150,170,230,.25)'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
-    ctx.beginPath();
-    ctx.moveTo(wd.x - pdir.x*Rwd*2.4, wd.y - pdir.y*Rwd*2.4);
-    ctx.lineTo(wd.x + pdir.x*Rwd*2.4, wd.y + pdir.y*Rwd*2.4);
-    ctx.stroke(); ctx.setLineDash([]);
-
-    // white dwarf
-    starGlow(wd.x, wd.y, Rwd, '#eafcff', '#155a69', 1.6, '#dff7fc');
-
-    // poles: primary (with accretion column) + optional secondary
-    drawPole(wd, pa, Rwd, f1 * ecf, R, true);
-    if (twoPole) drawPole(wd, pa + Math.PI, Rwd, f2 * ecf, R, false);
-    if (!reduce) drawElectrons(pole, pa, f1 * ecf);
-
-    // donor eclipse: blank out the WD + pole
-    if (eclipse && ecf < 1) {
-      ctx.fillStyle = `rgba(7,11,22,${(1 - ecf) * 0.92})`;
-      ctx.beginPath(); ctx.arc(wd.x, wd.y, Rwd * 1.9, 0, 7); ctx.fill();
-      if (ecf < 0.5) {
-        ctx.fillStyle = 'rgba(255,180,120,.9)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
-        ctx.fillText('donor eclipse', wd.x, wd.y - Rwd * 2.3);
+    // the WD system + donor, drawn far-first so the NEARER body occludes the farther
+    const drawWD = () => {
+      ctx.lineWidth = 1.2;
+      for (let k = 0; k < 4; k++) {
+        const L = Rwd * (0.6 + k * 0.7);
+        ctx.strokeStyle = `rgba(110,140,210,${0.22 - k*0.03})`;
+        fieldLine(wd.x, wd.y, Rwd, L, pa, 1); fieldLine(wd.x, wd.y, Rwd, L, pa, -1);
       }
-    }
+      ctx.strokeStyle = 'rgba(150,170,230,.25)'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+      ctx.beginPath();
+      ctx.moveTo(wd.x - pdir.x*Rwd*2.4, wd.y - pdir.y*Rwd*2.4);
+      ctx.lineTo(wd.x + pdir.x*Rwd*2.4, wd.y + pdir.y*Rwd*2.4);
+      ctx.stroke(); ctx.setLineDash([]);
+      starGlow(wd.x, wd.y, Rwd, '#eafcff', '#155a69', 1.6, '#dff7fc');
+      drawPole(wd, pa, Rwd, f1 * ecf, R, true);
+      if (twoPole) drawPole(wd, pa + Math.PI, Rwd, f2 * ecf, R, false);
+      if (!reduce) drawElectrons(pole, pa, f1 * ecf);
+    };
+    const drawDon = () => starGlow(don.x, don.y, Rdon, '#ffd9b0', '#d55e00');
+    if (donFront) { drawWD(); drawDon(); } else { drawDon(); drawWD(); }
 
     ctx.fillStyle = 'rgba(170,182,212,.8)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('▼ to observer', W*0.45, H - 26);
     ctx.fillText('P_spin = P_orb (synchronous)', W*0.45, 22);
+    if (donFront && ecf < 0.55) {
+      ctx.fillStyle = 'rgba(255,190,130,.95)'; ctx.font = '12px sans-serif';
+      ctx.fillText('donor eclipses the WD', wd.x, wd.y - Rdon - 12);
+    }
 
     elPhase.textContent = phase.toFixed(2);
     elGeom.textContent = DEG(inc) + '° / ' + DEG(beta) + '°';
     elPoles.textContent = twoPole ? 'two' : 'one';
     elFlux.textContent = Math.round(norm(fluxAt(phase)) * 100) + '%';
     if (elEcl) {
-      elEcl.textContent = !eclipse ? 'donor not eclipsing'
-        : (eclState() === 'none' ? 'none — raise i past ' + DEG(I_CRIT) + '°'
-        : eclState() + ' · i꜀ ≈ ' + DEG(I_CRIT) + '°');
+      const s = eclState();
+      elEcl.textContent = s === 'none' ? 'none — raise i past ' + DEG(I_CRIT) + '°' : s + ' · i꜀ ≈ ' + DEG(I_CRIT) + '°';
     }
   }
 
@@ -266,13 +262,11 @@
     for (let g = 0; g <= 4; g++) { const gx = x0 + (x1-x0)*g/4;
       lctx.beginPath(); lctx.moveTo(gx, y1); lctx.lineTo(gx, y0); lctx.stroke(); }
     lctx.beginPath(); lctx.moveTo(x0, y0); lctx.lineTo(x1, y0); lctx.stroke();
-    // inclination-driven eclipse window (centred at φ=0.5)
-    if (eclipse) {
-      const hw = eclipseHalfWidth();
-      if (hw > 0) {
-        const xa = x0 + (x1 - x0) * (0.5 - hw), xb = x0 + (x1 - x0) * (0.5 + hw);
-        lctx.fillStyle = 'rgba(230,159,0,.16)'; lctx.fillRect(xa, y1, xb - xa, y0 - y1);
-      }
+    // inclination-driven eclipse window
+    const ew = eclipseWindow();
+    if (ew) {
+      const xa = x0 + (x1 - x0) * ew.lo, xb = x0 + (x1 - x0) * ew.hi;
+      lctx.fillStyle = 'rgba(230,159,0,.16)'; lctx.fillRect(xa, y1, Math.max(2, xb - xa), y0 - y1);
     }
     lctx.strokeStyle = '#4fd0e3'; lctx.lineWidth = 2; lctx.beginPath();
     const N = 160;
@@ -311,22 +305,22 @@
   }
 
   // ---- controls ----
+  // inclinations chosen so single/double/two-pole stay below i_c (no eclipse) and
+  // "eclipse" sits well above it — but dragging i past i_c eclipses on ANY preset.
   const MORPH = {
-    single:  { i: 45, b: 18, two: false, ecl: false },
-    double:  { i: 80, b: 58, two: false, ecl: false },
-    twopole: { i: 60, b: 68, two: true,  ecl: false },
-    eclipse: { i: 82, b: 28, two: false, ecl: true  }
+    single:  { i: 45, b: 18, two: false },
+    double:  { i: 62, b: 58, two: false },
+    twopole: { i: 58, b: 68, two: true  },
+    eclipse: { i: 84, b: 28, two: false }
   };
   function updateToggles() {
     elTwoPole.textContent = 'Second pole: ' + (twoPole ? 'on' : 'off');
     elTwoPole.setAttribute('aria-pressed', String(twoPole));
-    elEclipse.textContent = 'Eclipsing donor: ' + (eclipse ? 'on' : 'off');
-    elEclipse.setAttribute('aria-pressed', String(eclipse));
   }
   function clearActiveChip() { chips.forEach(c => c.classList.remove('active')); }
   function setMorph(key) {
     const m = MORPH[key]; if (!m) return;
-    inc = m.i * Math.PI/180; beta = m.b * Math.PI/180; twoPole = m.two; eclipse = m.ecl;
+    inc = m.i * Math.PI/180; beta = m.b * Math.PI/180; twoPole = m.two;
     elInc.value = m.i; elBeta.value = m.b;
     updateToggles(); clearActiveChip();
     chips.forEach(c => { if (c.dataset.morph === key) c.classList.add('active'); });
@@ -337,7 +331,6 @@
   elInc.addEventListener('input', () => { inc = +elInc.value * Math.PI/180; clearActiveChip(); renorm(); render(); start(); });
   elBeta.addEventListener('input', () => { beta = +elBeta.value * Math.PI/180; clearActiveChip(); renorm(); render(); start(); });
   elTwoPole.addEventListener('click', () => { twoPole = !twoPole; updateToggles(); clearActiveChip(); renorm(); render(); start(); });
-  elEclipse.addEventListener('click', () => { eclipse = !eclipse; updateToggles(); clearActiveChip(); renorm(); render(); start(); });
   chips.forEach(c => c.addEventListener('click', () => setMorph(c.dataset.morph)));
   elPause.addEventListener('click', () => {
     paused = !paused; elPause.textContent = paused ? 'Play' : 'Pause';
