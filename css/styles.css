@@ -333,6 +333,14 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
 
 /* ---- knowledge-graph + RAG block ---- */
 .kg-block{margin-top:2.6rem}
+/* light graph viewport (mirrors my local KG frontend) */
+.kg-canvas-wrap{background:radial-gradient(130% 130% at 50% 0%, #f8fcfc, #e7eef2)!important;
+  border-color:#cfdae1}
+.kg-tip{position:absolute;z-index:6;pointer-events:none;max-width:200px;
+  background:rgba(255,255,255,.97);border:1px solid #d5e0e6;border-radius:8px;
+  box-shadow:0 8px 22px rgba(23,32,51,.18);padding:.5rem .6rem;font-size:.74rem;color:#243049}
+.kg-tip b{display:block;color:#172033;font-size:.8rem;margin-bottom:.15rem}
+.kg-tip span{color:#5c6b85}
 .kg-head{margin-bottom:1.4rem}
 .kg-head h3{font-size:1.35rem;color:#fff}
 .kg-ctx{height:152px}
