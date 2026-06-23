@@ -155,6 +155,7 @@ strong{color:#fff}
   border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;position:relative;min-height:420px;
 }
 #cycCanvas,#diskCanvas,#agentCanvas{display:block;width:100%;height:100%}
+#kgCanvas{display:block;width:100%;height:100%;cursor:pointer}
 .cyc-legend{
   position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:.5rem 1rem;
   padding:.6rem .9rem;font-size:.74rem;color:var(--ink-soft);
@@ -329,3 +330,21 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;
 .skill:hover{border-color:var(--teal);transform:translateY(-3px)}
 .skill h4{font-size:1rem;color:var(--teal);margin-bottom:.55rem}
 .skill p{color:var(--ink-soft);font-size:.9rem;margin:0}
+
+/* ---- knowledge-graph + RAG block ---- */
+.kg-block{margin-top:2.6rem}
+.kg-head{margin-bottom:1.4rem}
+.kg-head h3{font-size:1.35rem;color:#fff}
+.kg-ctx{height:152px}
+.kg-ctx-head{color:var(--ink-soft);margin-bottom:.45rem;font-family:var(--font);white-space:normal;font-size:.78rem}
+.kg-ctx-head b{color:#fff}
+.kg-type{display:inline-block;font-size:.64rem;color:var(--teal);border:1px solid var(--line);
+  border-radius:5px;padding:0 .35rem;margin-left:.3rem}
+.kg-ctx-row{display:flex;gap:.4rem;align-items:baseline;padding:.13rem 0;white-space:normal;
+  font-family:var(--font);font-size:.76rem}
+.kg-s{color:#cdd8f2;flex:0 0 auto;max-width:9em;overflow:hidden;text-overflow:ellipsis}
+.kg-r{color:var(--amber);font-style:italic;flex:0 0 auto}
+.kg-o{color:#9fe7f2;flex:1 1 auto;overflow:hidden;text-overflow:ellipsis}
+.kg-ctx-hint{color:var(--ink-dim);white-space:normal;line-height:1.5;font-family:var(--font);font-size:.8rem}
+#kgChips .chip{font-weight:600}
+#kgChips .kg-clear{border-style:dashed;color:var(--ink-soft)}

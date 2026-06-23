@@ -28,6 +28,7 @@
   const elGeom  = document.getElementById('cycGeom');
   const elPoles = document.getElementById('cycPoles');
   const elFlux  = document.getElementById('cycFlux');
+  const elEcl   = document.getElementById('cycEcl');
   const elSpeed = document.getElementById('cycSpeed');
   const elInc   = document.getElementById('cycInc');
   const elBeta  = document.getElementById('cycBeta');
@@ -53,11 +54,30 @@
     const vis = smooth(-0.35, 0.20, cm);      // self-eclipse behind the WD limb
     return beam * vis;
   }
-  function eclipseFactor(ph) {                 // sharp total donor eclipse at φ=0
-    const p = ((ph % 1) + 1) % 1, d = Math.min(p, 1 - p), w = 0.05, ramp = 0.012;
-    if (d > w) return 1;
-    if (d > w - ramp) return (w - d) / ramp;
-    return 0;
+  // GEOMETRIC donor eclipse — driven by the inclination, not a fixed toggle.
+  // The M-dwarf occults the WD only when the orbit is inclined enough that the
+  // sky-projected separation drops below the donor radius near conjunction (φ=0.5):
+  //   δ(φ) = √(sin²θ + cos²i·cos²θ),  θ = 2πφ.  Eclipse needs i > i_c = arccos(ρ_d).
+  const RHO_D = 0.33;    // Roche-lobe donor radius / orbital separation (mass ratio q≈0.25)
+  const RHO_WD = 0.012;  // white-dwarf radius / separation (point-like → sharp walls)
+  function eclipseFactor(ph) {
+    const th = 2 * Math.PI * (((ph % 1) + 1) % 1);
+    if (Math.cos(th) >= 0) return 1;                          // WD in front → no WD eclipse
+    const delta = Math.hypot(Math.sin(th), Math.cos(inc) * Math.cos(th));
+    if (delta >= RHO_D + RHO_WD) return 1;                    // uneclipsed
+    if (delta <= RHO_D - RHO_WD) return 0;                    // total eclipse
+    return (delta - (RHO_D - RHO_WD)) / (2 * RHO_WD);         // partial ingress/egress
+  }
+  const I_CRIT = Math.acos(RHO_D);                            // critical inclination (~71°)
+  function eclipseHalfWidth() {                               // eclipse half-duration in phase
+    const arg = RHO_D * RHO_D - Math.cos(inc) * Math.cos(inc);
+    return arg > 0 ? Math.sqrt(arg) / (2 * Math.PI) : 0;
+  }
+  function eclState() {                                       // outcome at conjunction
+    const c = Math.abs(Math.cos(inc));
+    if (c >= RHO_D + RHO_WD) return 'none';
+    if (c <= RHO_D - RHO_WD) return 'total';
+    return 'grazing';
   }
   function fluxAt(ph) {
     let F = poleFlux(ph, inc, beta, 0);
@@ -174,6 +194,11 @@
     elGeom.textContent = DEG(inc) + '° / ' + DEG(beta) + '°';
     elPoles.textContent = twoPole ? 'two' : 'one';
     elFlux.textContent = Math.round(norm(fluxAt(phase)) * 100) + '%';
+    if (elEcl) {
+      elEcl.textContent = !eclipse ? 'donor not eclipsing'
+        : (eclState() === 'none' ? 'none — raise i past ' + DEG(I_CRIT) + '°'
+        : eclState() + ' · i꜀ ≈ ' + DEG(I_CRIT) + '°');
+    }
   }
 
   function drawPole(wd, ang, Rwd, bright, R, withColumn) {
@@ -241,6 +266,14 @@
     for (let g = 0; g <= 4; g++) { const gx = x0 + (x1-x0)*g/4;
       lctx.beginPath(); lctx.moveTo(gx, y1); lctx.lineTo(gx, y0); lctx.stroke(); }
     lctx.beginPath(); lctx.moveTo(x0, y0); lctx.lineTo(x1, y0); lctx.stroke();
+    // inclination-driven eclipse window (centred at φ=0.5)
+    if (eclipse) {
+      const hw = eclipseHalfWidth();
+      if (hw > 0) {
+        const xa = x0 + (x1 - x0) * (0.5 - hw), xb = x0 + (x1 - x0) * (0.5 + hw);
+        lctx.fillStyle = 'rgba(230,159,0,.16)'; lctx.fillRect(xa, y1, xb - xa, y0 - y1);
+      }
+    }
     lctx.strokeStyle = '#4fd0e3'; lctx.lineWidth = 2; lctx.beginPath();
     const N = 160;
     for (let i = 0; i <= N; i++) { const ph = i/N, X = x0+(x1-x0)*ph, Y = y0-(y0-y1)*norm(fluxAt(ph));
@@ -287,7 +320,7 @@
   function updateToggles() {
     elTwoPole.textContent = 'Second pole: ' + (twoPole ? 'on' : 'off');
     elTwoPole.setAttribute('aria-pressed', String(twoPole));
-    elEclipse.textContent = 'Donor eclipse: ' + (eclipse ? 'on' : 'off');
+    elEclipse.textContent = 'Eclipsing donor: ' + (eclipse ? 'on' : 'off');
     elEclipse.setAttribute('aria-pressed', String(eclipse));
   }
   function clearActiveChip() { chips.forEach(c => c.classList.remove('active')); }

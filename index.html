@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://linjm.cc">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="css/styles.css?v=3">
+<link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body>
 <canvas id="starfield" aria-hidden="true"></canvas>
@@ -204,6 +204,7 @@
           <div class="readout-row"><span>Inclination i / colatitude β</span><b id="cycGeom">80° / 58°</b></div>
           <div class="readout-row"><span>Accreting poles</span><b id="cycPoles">one</b></div>
           <div class="readout-row"><span>Relative flux</span><b id="cycFlux">—</b></div>
+          <div class="readout-row"><span>Donor eclipse</span><b id="cycEcl">donor not eclipsing</b></div>
         </div>
 
         <div class="lc-wrap">
@@ -230,7 +231,7 @@
           </label>
           <div class="toggle-row">
             <button class="btn btn-sm" id="cycTwoPole" aria-pressed="false">Second pole: off</button>
-            <button class="btn btn-sm" id="cycEclipse" aria-pressed="false">Donor eclipse: off</button>
+            <button class="btn btn-sm" id="cycEclipse" aria-pressed="false">Eclipsing donor: off</button>
           </div>
           <label>Speed
             <input type="range" id="cycSpeed" min="0" max="3" step="0.1" value="1">
@@ -241,8 +242,9 @@
     </div>
     <p class="cap cap-wide">Schematic, not to scale. Polar light curves range from a single beaming hump, to
     double-humped beaming (two ⟂-B maxima per orbit), to two unequal humps from two-pole accretion, to a
-    sharp total eclipse in high-inclination eclipsing polars — illustrative of the AM&nbsp;Her mechanism,
-    not a fit to one system.</p>
+    sharp total eclipse. The eclipse is now <strong>geometric</strong>: switch on the eclipsing donor and it appears
+    only once the inclination exceeds <em>i</em><sub>c</sub>&nbsp;≈&nbsp;71°&nbsp;(=&nbsp;arccos&nbsp;R<sub>donor</sub>/a) —
+    raise <em>i</em> and watch the WD really get occulted. Illustrative of the AM&nbsp;Her mechanism, not a fit to one system.</p>
   </section>
 
   <!-- ======================= SPECTRUM LAB ========================= -->
@@ -326,7 +328,7 @@
         <div class="lc-wrap">
           <h4>Light curve (flux vs. phase)</h4>
           <canvas id="diskLc" role="img" aria-label="Flat-bottomed trapezoidal eclipse light curve."></canvas>
-          <p class="cap">Dashed&nbsp;=&nbsp;observed trapezoid (2.5-day ingress). Solid&nbsp;=&nbsp;current model.</p>
+          <p class="cap">Dots&nbsp;=&nbsp;real ZTF <span style="color:#3fce9e">g</span>/<span style="color:#e98a4d">r</span> photometry, phase-folded. Dashed&nbsp;=&nbsp;χ²-fitted trapezoid. Solid&nbsp;=&nbsp;current model.</p>
         </div>
 
         <div class="cyc-controls">
@@ -338,7 +340,10 @@
         </div>
       </aside>
     </div>
-    <p class="cap cap-wide">Schematic sharp-edge occultation model (P&nbsp;=&nbsp;36.71&nbsp;d, ~316&nbsp;Myr cluster UPK&nbsp;13); geometry illustrative, in the same class as KH&nbsp;15D and Bernhard-2.</p>
+    <p class="cap cap-wide">The light curve is <strong>real data</strong>: ZTF <em>g</em>/<em>r</em> photometry of UPK&nbsp;13-c2 folded at
+    <strong>P&nbsp;=&nbsp;36.710719&nbsp;d</strong> (T₀&nbsp;=&nbsp;HJD&nbsp;2458246.94), with a χ²-fitted trapezoid — ~40% near-achromatic depth
+    (g&nbsp;0.40, r&nbsp;0.41). Switch the occulted source to a white dwarf and the fit no longer matches the slow ingress.
+    The 3-D scene geometry is schematic (same class as KH&nbsp;15D and Bernhard-2).</p>
   </section>
 
   <!-- ======================= ASTRO AGENT (AI) ===================== -->
@@ -427,6 +432,41 @@
         literature review, section writing, refinement — producing <code>aastex631</code> LaTeX that a
         QC checklist and a bounded reflexion loop hold to ApJ standards.</p>
       </article>
+    </div>
+
+    <!-- ---- knowledge graph + RAG ---- -->
+    <div class="kg-block">
+      <div class="section-head kg-head">
+        <h3>Knowledge graph + dual-track RAG</h3>
+        <p>The agent doesn't just embed text — it builds a typed <strong>knowledge graph</strong> of the literature
+        (entities + relations) and retrieves with <strong>BM25/vector recall <em>and</em> multi-hop graph traversal</strong>.
+        Below is a real connected subgraph of my white-dwarf KG. <strong>Pick a query</strong> (or click a node) to watch
+        retrieval land on an entity and pull in its connected context.</p>
+      </div>
+      <div class="cyc-stage">
+        <div class="cyc-canvas-wrap">
+          <canvas id="kgCanvas" role="img"
+            aria-label="Interactive knowledge-graph subgraph: entities such as orbital period, power-law fitting and binary multiplicity connected by typed relations; selecting a query highlights an entity and its graph neighbourhood."></canvas>
+        </div>
+        <aside class="cyc-side">
+          <div class="readout">
+            <div class="readout-row"><span>KG triples</span><b>283</b></div>
+            <div class="readout-row"><span>Subgraph shown</span><b id="kgShown">22 entities</b></div>
+            <div class="readout-row"><span>Retrieval mode</span><b id="kgMode">BM25 + graph</b></div>
+          </div>
+          <div class="cyc-controls">
+            <span class="ctl-label">RAG query — retrieve &amp; traverse</span>
+            <div class="preset-row" id="kgChips"></div>
+          </div>
+          <div class="lc-wrap">
+            <h4>Retrieved context</h4>
+            <div id="kgCtx" class="ag-log kg-ctx" aria-live="polite"></div>
+          </div>
+        </aside>
+      </div>
+      <p class="cap cap-wide">A real connected subgraph of my white-dwarf knowledge graph — entities and typed relations
+      (uses · adopts · measures · reports) extracted from the literature. The agent's <code>kg_navigator</code> combines
+      BM25/vector recall with multi-hop graph traversal for method-transfer queries.</p>
     </div>
   </section>
 
@@ -649,12 +689,15 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/starfield.js?v=3" defer></script>
-<script src="js/hero.js?v=3" defer></script>
-<script src="js/cyclotron.js?v=3" defer></script>
-<script src="js/spectrum.js?v=3" defer></script>
-<script src="js/diskbinary.js?v=3" defer></script>
-<script src="js/astroagent.js?v=3" defer></script>
-<script src="js/main.js?v=3" defer></script>
+<script src="js/starfield.js?v=4" defer></script>
+<script src="js/hero.js?v=4" defer></script>
+<script src="js/cyclotron.js?v=4" defer></script>
+<script src="js/spectrum.js?v=4" defer></script>
+<script src="js/diskdata.js?v=4" defer></script>
+<script src="js/diskbinary.js?v=4" defer></script>
+<script src="js/astroagent.js?v=4" defer></script>
+<script src="js/kgdata.js?v=4" defer></script>
+<script src="js/kg.js?v=4" defer></script>
+<script src="js/main.js?v=4" defer></script>
 </body>
 </html>

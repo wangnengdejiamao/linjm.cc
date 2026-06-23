@@ -27,7 +27,11 @@
   const elToggle= document.getElementById('diskToggle');
   const elPause = document.getElementById('diskPause');
 
-  const P_DAYS = 36.71, DEPTH = 0.40, ING = 2.5 / 36.71;   // ingress as fraction of period
+  const DD = window.DISK_DATA || null;                     // real folded ZTF data (js/diskdata.js)
+  const P_DAYS = DD ? DD.period_days : 36.71;
+  const EDGES  = DD ? DD.model_edges : [0.34, 0.42, 0.66, 0.70];  // fitted ingress/egress phases
+  const DEPTH  = DD ? DD.bands.g.depth : 0.40;             // fractional flux drop (~0.40)
+  const MID    = DD ? DD.mid_phase : 0.52;
   let phase = 0, speed = 1, paused = false, extended = true;
   let W = 0, H = 0, LW = 0, LH = 0;
   let visible = true, raf = 0, timer = 0, last = 0;
@@ -43,15 +47,19 @@
     return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
   }
 
-  // flat-bottomed trapezoid; ingress width depends on the occulted source size
-  function trapezoid(ph, ing) {
-    const c = 0.5, half = 0.16, d = Math.abs((ph % 1) - c);
-    if (d > half) return 1;
-    if (d > half - ing) return 1 - DEPTH * (half - d) / ing;
-    return 1 - DEPTH;
+  // flat-bottomed trapezoid from the real chi^2 fit to the folded ZTF data;
+  // a point-like white dwarf compresses ingress/egress to near-vertical walls.
+  function trapModel(ph, narrow) {
+    let [p1, p2, p3, p4] = EDGES;
+    if (narrow) { const w = 0.006; p1 = p2 - w; p4 = p3 + w; }
+    ph = ((ph % 1) + 1) % 1;
+    if (ph <= p1 || ph >= p4) return 1;
+    if (ph < p2)  return 1 - DEPTH * (ph - p1) / (p2 - p1);
+    if (ph <= p3) return 1 - DEPTH;
+    return 1 - DEPTH * (p4 - ph) / (p4 - p3);
   }
-  const refFlux   = ph => trapezoid(ph, ING);                       // observed (extended)
-  const modelFlux = ph => trapezoid(ph, extended ? ING : 0.004);    // current model
+  const refFlux   = ph => trapModel(ph, false);          // fitted trapezoid (matches the data)
+  const modelFlux = ph => trapModel(ph, !extended);      // extended star vs point-like WD
   const cover1    = ph => Math.max(0, Math.min(1, (1 - modelFlux(ph)) / DEPTH));
 
   // ---- scene ----
@@ -169,31 +177,46 @@
     elFlux.textContent = Math.round(modelFlux(phase) * 100) + '%';
   }
 
-  // ---- light curve ----
+  // ---- light curve: real folded ZTF data + fitted trapezoid + current model ----
   function drawLC() {
     lctx.clearRect(0, 0, LW, LH);
-    const x0 = 6, x1 = LW - 6, y0 = LH - 14, y1 = 8;
-    const Y = f => y0 - (y0 - y1) * (f - (1 - DEPTH) + 0.06) / (DEPTH + 0.12);
+    const x0 = 22, x1 = LW - 6, y0 = LH - 14, y1 = 8;
+    const lo = 1 - DEPTH - 0.12, hi = 1.07;
+    const Y = f => y0 - (y0 - y1) * (Math.max(lo, Math.min(hi, f)) - lo) / (hi - lo);
+    // grid + baseline
     lctx.strokeStyle = 'rgba(255,255,255,.07)'; lctx.lineWidth = 1;
     for (let g = 0; g <= 4; g++) { const gx = x0 + (x1-x0)*g/4;
       lctx.beginPath(); lctx.moveTo(gx, y1); lctx.lineTo(gx, y0); lctx.stroke(); }
     lctx.strokeStyle = 'rgba(255,255,255,.12)';
     lctx.beginPath(); lctx.moveTo(x0, y0); lctx.lineTo(x1, y0); lctx.stroke();
-    // observed reference (dashed)
-    lctx.setLineDash([4,4]); lctx.strokeStyle = 'rgba(170,182,212,.55)'; lctx.lineWidth = 1.4;
+    // flux axis ticks (1.0 and floor)
+    lctx.fillStyle = 'rgba(170,182,212,.6)'; lctx.font = '9px sans-serif'; lctx.textAlign = 'right';
+    lctx.fillText('1.0', x0 - 3, Y(1.0) + 3);
+    lctx.fillText((1 - DEPTH).toFixed(1), x0 - 3, Y(1 - DEPTH) + 3);
+    // real folded ZTF points (g green, r vermillion)
+    function pts(arr, col) {
+      if (!arr) return; lctx.fillStyle = col;
+      for (const p of arr) { const X = x0+(x1-x0)*p[0], YY = Y(p[1]);
+        lctx.beginPath(); lctx.arc(X, YY, 1.7, 0, 7); lctx.fill(); }
+    }
+    if (DD) { pts(DD.bands.r && DD.bands.r.points, 'rgba(213,94,0,.85)');
+              pts(DD.bands.g && DD.bands.g.points, 'rgba(0,158,115,.95)'); }
+    // fitted trapezoid (dashed) — what the data say
+    lctx.setLineDash([4,4]); lctx.strokeStyle = 'rgba(220,228,255,.75)'; lctx.lineWidth = 1.4;
     lctx.beginPath();
-    for (let i = 0; i <= 160; i++) { const ph = i/160, X = x0+(x1-x0)*ph;
+    for (let i = 0; i <= 200; i++) { const ph = i/200, X = x0+(x1-x0)*ph;
       i ? lctx.lineTo(X, Y(refFlux(ph))) : lctx.moveTo(X, Y(refFlux(ph))); }
     lctx.stroke(); lctx.setLineDash([]);
-    // current model (solid)
+    // current model (solid) — diverges from the fit only when WD is selected
     lctx.strokeStyle = extended ? '#4fd0e3' : '#e69f00'; lctx.lineWidth = 2; lctx.beginPath();
-    for (let i = 0; i <= 160; i++) { const ph = i/160, X = x0+(x1-x0)*ph;
+    for (let i = 0; i <= 200; i++) { const ph = i/200, X = x0+(x1-x0)*ph;
       i ? lctx.lineTo(X, Y(modelFlux(ph))) : lctx.moveTo(X, Y(modelFlux(ph))); }
     lctx.stroke();
     const mX = x0+(x1-x0)*(phase%1);
     lctx.fillStyle = '#fff'; lctx.beginPath(); lctx.arc(mX, Y(modelFlux(phase)), 4, 0, 7); lctx.fill();
     lctx.fillStyle = 'rgba(170,182,212,.7)'; lctx.font = '10px sans-serif';
     lctx.textAlign='left'; lctx.fillText('0', x0, LH-3);
+    lctx.textAlign='center'; lctx.fillText(DD ? 'ZTF g/r folded · P = 36.711 d' : 'phase', (x0+x1)/2, LH-3);
     lctx.textAlign='right'; lctx.fillText('phase 1', x1, LH-3);
   }
 
