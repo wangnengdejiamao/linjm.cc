@@ -4,5 +4,12 @@ HANDOFF.md
 # Scratch / working files
 tmp/
 
+# Design-source & unrelated working folders — keep out of the public site repo
+Claude Design优化建议/
+Claude Design优化建议.zip
+腾讯云AI游戏工坊HTML教学/
+uploads/
+_deploy/
+
 # macOS
 .DS_Store

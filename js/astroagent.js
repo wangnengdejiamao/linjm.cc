@@ -55,8 +55,8 @@
   ];
 
   const KIND_COLOR = {
-    io:'#56b4e9', plan:'#4fd0e3', gate:'#009e73', model:'#4fd0e3',
-    dec:'#e69f00', draft:'#cc79a7', done:'#009e73', abort:'#d55e00'
+    io:'#7088e0', plan:'#52a8cb', gate:'#3bb07e', model:'#2bab9b',
+    dec:'#e0975a', draft:'#9a7adf', done:'#3bb07e', abort:'#e07145'
   };
   const STAGE = {
     resolve:'Acquire', data_fetch:'Acquire',
@@ -96,6 +96,7 @@
   let idx = 0, p = 0, iter = 0, line = 0;
   let speed = +elSpeed.value, paused = false;
   let W = 0, H = 0, visible = true, raf = 0, timer = 0, last = 0;
+  let T = 0, holdUntil = -1;
   const visited = new Set();
 
   function pos(key) {
@@ -176,10 +177,10 @@
     ctx.lineWidth = 1.6;
     for (let i = 0; i < MAIN.length - 1; i++) {
       const seg = trimToBox(pos(MAIN[i]), pos(MAIN[i + 1]), b.w, b.h);
-      ctx.strokeStyle = 'rgba(120,150,210,.30)';
+      ctx.strokeStyle = 'rgba(190,180,150,.24)';
       ctx.setLineDash([]);
       ctx.beginPath(); ctx.moveTo(seg.a.x, seg.a.y); ctx.lineTo(seg.b.x, seg.b.y); ctx.stroke();
-      arrow(seg.a, seg.b, 'rgba(120,150,210,.45)');
+      arrow(seg.a, seg.b, 'rgba(190,180,150,.42)');
     }
 
     // curved / branch edges
@@ -206,16 +207,23 @@
     label('insufficient', pathPoint('source_research', 'abnormal', 0.5), '#d55e00');
 
     // nodes
+    const activeKey = (idx >= seq.length - 1) ? seq[idx] : (p > 0 ? curTo : seq[idx]);
     for (const key in NODE) {
       const n = NODE[key], c = pos(key), col = KIND_COLOR[n.kind];
-      const isActive = (key === curTo && p > 0) || (key === seq[idx] && idx === 0 && p === 0);
+      const isActive = key === activeKey;
       const done = visited.has(key);
+      if (isActive) {
+        const pulse = 0.5 + 0.5 * Math.sin(T * 3.2), ring = 5 + 3 * pulse;
+        ctx.fillStyle = hexA(col, 0.13 + 0.11 * pulse);
+        roundRect(c.x - b.w / 2 - ring, c.y - b.h / 2 - ring, b.w + 2 * ring, b.h + 2 * ring, 14);
+        ctx.fill();
+      }
       roundRect(c.x - b.w / 2, c.y - b.h / 2, b.w, b.h, 10);
       const g = ctx.createLinearGradient(0, c.y - b.h / 2, 0, c.y + b.h / 2);
-      g.addColorStop(0, 'rgba(17,26,48,.96)'); g.addColorStop(1, 'rgba(10,16,30,.96)');
+      g.addColorStop(0, 'rgba(42,35,21,.97)'); g.addColorStop(1, 'rgba(22,18,10,.97)');
       ctx.fillStyle = g; ctx.fill();
       ctx.lineWidth = isActive ? 2.4 : 1.3;
-      ctx.strokeStyle = isActive ? col : (done ? hexA(col, .55) : 'rgba(140,160,210,.34)');
+      ctx.strokeStyle = isActive ? col : (done ? hexA(col, .55) : 'rgba(190,180,150,.32)');
       if (isActive) { ctx.shadowColor = col; ctx.shadowBlur = 16; }
       ctx.stroke();
       ctx.shadowBlur = 0;
@@ -223,7 +231,7 @@
       ctx.fillStyle = isActive ? col : hexA(col, done ? .8 : .5);
       ctx.fillRect(c.x - b.w / 2 + 3, c.y - b.h / 2 + 6, 3, b.h - 12);
       // label
-      ctx.fillStyle = isActive ? '#fff' : (done ? '#dfe8ff' : '#9fb0d6');
+      ctx.fillStyle = isActive ? '#fff' : (done ? '#e6dcc6' : '#8c8474');
       ctx.font = '600 12px var(--font, system-ui), system-ui, sans-serif';
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(n.label, c.x + 3, c.y);
@@ -234,7 +242,7 @@
     if (idx < seq.length - 1) {
       const pt = pathPoint(curFrom, curTo, easeIO(p));
       const isLoop = LOOPS.find(l => l.from === curFrom && l.to === curTo);
-      const pc = isLoop ? (isLoop.kind === 'blocked' ? '#ff8a4d' : '#ffce5a') : '#7fe7f3';
+      const pc = isLoop ? (isLoop.kind === 'blocked' ? '#ef9152' : '#f3bd62') : '#eeb079';
       const halo = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, 16);
       halo.addColorStop(0, hexA(pc, .85)); halo.addColorStop(1, hexA(pc, 0));
       ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(pt.x, pt.y, 16, 0, 7); ctx.fill();
@@ -242,14 +250,14 @@
     }
 
     // caption corner
-    ctx.fillStyle = 'rgba(170,182,212,.6)';
+    ctx.fillStyle = 'rgba(180,169,142,.6)';
     ctx.font = '11px ui-monospace,SFMono-Regular,Menlo,monospace';
     ctx.textAlign = 'left';
     ctx.fillText('analysis_agent · LangGraph state machine', 14, H - 14);
   }
   function label(text, pt, color) {
     const w = ctx.measureText(text).width + 10;
-    ctx.fillStyle = 'rgba(7,11,22,.85)';
+    ctx.fillStyle = 'rgba(24,21,13,.9)';
     roundRect(pt.x - w / 2, pt.y - 8, w, 15, 6); ctx.fill();
     ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(text, pt.x, pt.y); ctx.textBaseline = 'alphabetic';
@@ -300,30 +308,35 @@
 
   function reset(keepScenario) {
     if (!keepScenario) seq = SCENARIOS[scenario];
-    idx = 0; p = 0; iter = 0; visited.clear(); clearLog();
+    idx = 0; p = 0; iter = 0; holdUntil = -1; visited.clear(); clearLog();
     arrive(seq[0], null);
   }
 
-  // ---- loop ----
-  function canAnimate() { return !reduce && !paused && speed > 0 && visible && !document.hidden && idx < seq.length - 1; }
+  // ---- loop (never freezes: active node breathes, run auto-replays) ----
+  function running() { return !reduce && !paused && speed > 0 && visible && !document.hidden; }
   function loop(now) {
     raf = 0;
-    if (canAnimate()) {
-      const dt = last ? Math.min(2.5, (now - last) / 16.67) : 1;
-      last = now;
-      // status hint while travelling a special edge
-      const f = seq[idx], t = seq[idx + 1];
-      if (f === 'qa_gate' && t === 'structure_planner') setStatus('replanning…', 'loop');
-      else if (f === 'paper_qc' && t === 'drafter') setStatus('reflexion…', 'loop');
-      else if (t === 'abnormal') setStatus('halting…', 'halt');
-      p += dt * 0.020 * speed;
-      if (p >= 1) { p = 0; idx++; arrive(seq[idx], seq[idx - 1]); }
+    const dt = last ? Math.min(2.5, (now - last) / 16.67) : 1;
+    last = now;
+    T += dt / 60;
+    if (running()) {
+      if (idx < seq.length - 1) {
+        // status hint while travelling a special edge
+        const f = seq[idx], t = seq[idx + 1];
+        if (f === 'qa_gate' && t === 'structure_planner') setStatus('replanning…', 'loop');
+        else if (f === 'paper_qc' && t === 'drafter') setStatus('reflexion…', 'loop');
+        else if (t === 'abnormal') setStatus('halting…', 'halt');
+        p += dt * 0.020 * speed;
+        if (p >= 1) { p = 0; idx++; arrive(seq[idx], seq[idx - 1]); if (idx >= seq.length - 1) holdUntil = T + 2.6; }
+      } else if (holdUntil >= 0 && T >= holdUntil) {
+        holdUntil = -1; reset(true);     // perpetual: replay the same scenario
+      }
     }
     draw();
-    start();
+    if (running()) start();
   }
   function start() {
-    if (!canAnimate() || raf || timer) return;
+    if (!running() || raf || timer) return;
     timer = window.setTimeout(() => { timer = 0; raf = requestAnimationFrame(loop); }, FRAME_MS);
   }
   function stop() { if (raf) cancelAnimationFrame(raf); if (timer) clearTimeout(timer); raf = 0; timer = 0; last = 0; }
