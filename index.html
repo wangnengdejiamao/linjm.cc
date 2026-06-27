@@ -14,9 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=13">
-<script>/* re-apply saved appearance before first paint (no flash) */
-(function(){try{var c=localStorage.getItem('linjm-tweak-css');if(c){var s=document.createElement('style');s.id='tweak-overrides';s.textContent=c;document.head.appendChild(s);}}catch(e){}})();</script>
+<link rel="stylesheet" href="css/styles.css?v=14">
 </head>
 <body>
 
@@ -45,7 +43,7 @@
   <!-- ============================ HERO ============================ -->
   <section class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Astrophysicist · AI / Agent Engineer · Sun Yat-sen University</p>
+      <p class="eyebrow">Astrophysicist · AI / Agent Engineer</p>
       <h1>Jiamao&nbsp;Lin<span class="cn">林佳茂</span></h1>
       <p class="lede">
         I study <strong>magnetic cataclysmic variables</strong> — binary stars where a
@@ -59,12 +57,15 @@
         survey data into auditable, paper-ready analysis.
       </p>
       <div class="hero-links">
-        <a class="btn btn-primary" href="#astroagent">Explore Astro&nbsp;Agent →</a>
-        <a class="btn" href="#cyclotron">See the physics</a>
-        <a class="btn" href="mailto:linjm66@mail2.sysu.edu.cn">Email</a>
-        <a class="btn" href="https://orcid.org/0009-0008-9942-620X" target="_blank" rel="noopener">ORCID</a>
-        <a class="btn" href="https://github.com/wangnengdejiamao" target="_blank" rel="noopener" id="ghLink">GitHub</a>
+        <a class="btn btn-primary" href="#cyclotron">See the physics →</a>
+        <a class="btn" href="#astroagent">Astro&nbsp;Agent</a>
+        <a class="btn" href="#publications">Publications</a>
       </div>
+      <ul class="hero-id">
+        <li><span class="k">Email</span><a href="mailto:linjm66@mail2.sysu.edu.cn">linjm66@mail2.sysu.edu.cn</a></li>
+        <li><span class="k">ORCID</span><a href="https://orcid.org/0009-0008-9942-620X" target="_blank" rel="noopener">0009-0008-9942-620X</a></li>
+        <li><span class="k">GitHub</span><a href="https://github.com/wangnengdejiamao" target="_blank" rel="noopener" id="ghLink">wangnengdejiamao</a></li>
+      </ul>
       <ul class="hero-facts">
         <li><span class="num" data-count="10">10</span><span class="lab">MG — 240&nbsp;MG fields measured</span></li>
         <li><span class="num" data-count="4">4</span><span class="lab">DESI/LAMOST polars modelled</span></li>
@@ -72,8 +73,17 @@
         <li><span class="num" data-count="100">100</span><span class="lab">★ Astro&nbsp;Agent · open source</span></li>
       </ul>
     </div>
-    <div class="hero-figure" aria-hidden="true">
-      <canvas id="heroOrbit"></canvas>
+    <div class="hero-figure">
+      <div class="hero-portrait">
+        <img src="assets/avatar.jpg?v=14" alt="Portrait of Jiamao Lin" width="96" height="96">
+        <div class="pinfo">
+          <b>Jiamao&nbsp;Lin · 林佳茂</b>
+          Ph.D. candidate, Physics &amp; Astronomy<br>Sun Yat-sen University, Zhuhai
+        </div>
+      </div>
+      <div class="hero-fig-plate" aria-hidden="true">
+        <canvas id="heroOrbit"></canvas>
+      </div>
     </div>
   </section>
 
@@ -821,6 +831,5 @@
 <script src="js/ztfcnn.js?v=13" defer></script>
 <script src="js/interactions.js?v=9" defer></script>
 <script src="js/main.js?v=9" defer></script>
-<script src="js/tweaks.js?v=9" defer></script>
 </body>
 </html>
