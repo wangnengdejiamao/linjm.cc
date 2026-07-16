@@ -17,6 +17,7 @@
   const oT = document.getElementById('specTval');
   const oTh = document.getElementById('specThetaval');
   const oH = document.getElementById('specHarm');
+  const oTgt = document.getElementById('specTarget');
   const chips = document.querySelectorAll('.spec-presets .chip');
 
   const LAM0 = 3200, LAM1 = 9800;      // plotted band (Å)
@@ -75,6 +76,14 @@
     const yMax = 2.2;
     const Y = v => y0 - (y0 - y1) * Math.min(v, yMax) / yMax;
 
+    // ZTF photometric bands (Å) — shows which filter each harmonic falls into
+    for (const [lo, hi, lab, col] of [[4000, 5500, 'g', '63,206,158'], [5600, 7300, 'r', '233,138,77'], [6900, 8200, 'i', '204,121,167']]) {
+      ctx.fillStyle = `rgba(${col},.08)`;
+      ctx.fillRect(x(lo), y1, x(hi) - x(lo), y0 - y1);
+      ctx.fillStyle = `rgba(${col},.55)`; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(lab, (x(lo) + x(hi)) / 2, y1 + 22);
+    }
+
     // faint spectral colour strip along the wavelength axis
     for (let lam = 3900; lam <= 7000; lam += 12) {
       ctx.fillStyle = lamToRGB(lam); ctx.globalAlpha = 0.10;
@@ -127,11 +136,17 @@
     oH.textContent = harm.length ? harm.map(h => h.n).join(', ') : 'none in band';
   }
 
-  [sB, sT, sTh].forEach(s => s.addEventListener('input', draw));
+  [sB, sT, sTh].forEach(s => s.addEventListener('input', () => {   // manual drag clears the preset
+    chips.forEach(o => o.classList.remove('active'));
+    if (oTgt) oTgt.textContent = '—';
+    draw();
+  }));
   chips.forEach(c => c.addEventListener('click', () => {
     chips.forEach(o => o.classList.remove('active'));
     c.classList.add('active');
-    sB.value = c.dataset.b; draw();
+    sB.value = c.dataset.b;
+    if (oTgt) oTgt.textContent = c.textContent + ' · P = ' + c.dataset.p + ' min';
+    draw();
   }));
 
   resize();

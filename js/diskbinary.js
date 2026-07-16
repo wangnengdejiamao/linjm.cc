@@ -89,7 +89,7 @@
     const a1 = R * 0.085, a2 = R * 0.06;             // tight binary: orbital radii about the COM
     const a  = a1 + a2;                              // binary semi-major axis
     const rin = RIN_OVER_A * a, rout = rin * 1.5;    // tidally-truncated inner edge ≈ 2.5 a
-    const clump = { x: cx - a1, y: cy, r: R * 0.05 };// localized misaligned inner-edge occulter
+    const clump = { x: cx - a1, y: cy, r: R * 0.07 };// localized misaligned inner-edge occulter
     return { R, cx, cy, sq, a1, a2, a, rin, rout, alpha: alphaMis, clump };
   }
   function orbit(cx, cy, a, sq, theta) {
@@ -203,6 +203,9 @@
     drawStar(s1.x, s1.y, r1, extended ? '#ffd0a0' : '#eafcff', extended ? '#b8551a' : '#7fbfd0', 1);
     drawOcculter(s1, r1, cov, g);                // sharp disk edge sweeps across it
     drawFrontRim(g);                             // near edge of the ring (3-D depth cue)
+    ctx.globalAlpha = 0.35 + 0.65 * ds;          // the localized dust edge the star hides behind
+    drawClump(g, true);
+    ctx.globalAlpha = 1;
 
     if (cov > 0.25) {
       ctx.fillStyle = 'rgba(255,190,130,.95)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';

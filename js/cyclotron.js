@@ -1,8 +1,10 @@
 /* =================================================================
    Cyclotron light-curve modelling — a polar (AM Her star).
    A polar is SYNCHRONOUS: the white-dwarf spin is locked to the orbit
-   (P_spin = P_orb), so the WD and the M-dwarf donor co-revolve and the
-   accreting magnetic pole always faces the donor. Cyclotron emission is
+   (P_spin = P_orb), so the WD and the M-dwarf donor co-revolve. The dipole
+   axis is tilted by β from the spin axis and projected in 3-D exactly like
+   the orbit, so the pole and its beam genuinely sweep past the observer.
+   Cyclotron emission is
    beamed perpendicular to B; as the binary turns, the observed flux is
    modulated, giving the polar's characteristic light-curve morphologies.
 
@@ -29,6 +31,7 @@
   const elPoles = document.getElementById('cycPoles');
   const elFlux  = document.getElementById('cycFlux');
   const elEcl   = document.getElementById('cycEcl');
+  const elMu    = document.getElementById('cycMu');
   const elSpeed = document.getElementById('cycSpeed');
   const elInc   = document.getElementById('cycInc');
   const elBeta  = document.getElementById('cycBeta');
@@ -112,6 +115,15 @@
   }
 
   // ---- scene: a real 3-D synchronously co-rotating binary ----
+  // Magnetic axis in the orbit frame (observer along n = (0, sin i, cos i)):
+  //   m(φ) = (sinβ·sin 2πφ, sinβ·cos 2πφ, cosβ)   →   m·n = cosμ  (≡ poleFlux)
+  // projected with the same mapping as body3D: sx = m_x, sy = −m_y·cos i + m_z·sin i.
+  function magAxis(ph, b) {
+    const t = 2 * Math.PI * ph;
+    const mx = Math.sin(b) * Math.sin(t), my = Math.sin(b) * Math.cos(t), mz = Math.cos(b);
+    const sx = mx, sy = -my * Math.cos(inc) + mz * Math.sin(inc);
+    return { sx, sy, depth: my * Math.sin(inc) + mz * Math.cos(inc), ang: Math.atan2(sy, sx) };
+  }
   function drawScene() {
     ctx.clearRect(0, 0, W, H);
     const R = Math.min(W, H);
@@ -121,15 +133,14 @@
     const f1 = poleFlux(phase, inc, beta, 0);
     const f2 = twoPole ? poleFlux(phase, inc, Math.PI - beta, 0.5) : 0;
     const ecf = eclipseFactor(phase);
+    const m1 = magAxis(phase, beta);                        // primary pole (depth = cosμ)
+    const m2 = twoPole ? { sx: -m1.sx, sy: -m1.sy, depth: -m1.depth, ang: m1.ang + Math.PI } : null;
 
     // project the tilted orbit; each body carries a depth z (+ = toward viewer)
     const W3 = body3D(ORB_WD, th), D3 = body3D(-ORB_DON, th);
     const wd  = { x: com.x + W3.sx * R, y: com.y + W3.sy * R, z: W3.z };
     const don = { x: com.x + D3.sx * R, y: com.y + D3.sy * R, z: D3.z };
     const donFront = don.z > wd.z;                       // donor nearer the observer?
-    const pa = Math.atan2(don.y - wd.y, don.x - wd.x);   // accreting pole faces the donor
-    const pdir = { x: Math.cos(pa), y: Math.sin(pa) };
-    const pole = { x: wd.x + pdir.x * Rwd, y: wd.y + pdir.y * Rwd };
 
     // orbit guides — vertical extent ∝ cos i (flatten to a line as it tilts edge-on)
     ctx.strokeStyle = 'rgba(120,140,200,.12)'; ctx.lineWidth = 1; ctx.setLineDash([3,5]);
@@ -137,44 +148,53 @@
     ctx.beginPath(); ctx.ellipse(com.x, com.y, ORB_WD*R, ORB_WD*R*ci, 0, 0, 7); ctx.stroke();
     ctx.setLineDash([]);
 
-    // accretion stream donor -> primary pole (beneath the stars)
+    // accretion stream donor -> primary pole (beneath the stars); endpoint follows the pole
+    const pole1 = { x: wd.x + m1.sx * Rwd, y: wd.y + m1.sy * Rwd };
+    const pdl = Math.hypot(pole1.x - don.x, pole1.y - don.y) || 1;
+    const pdir = { x: (pole1.x - don.x) / pdl, y: (pole1.y - don.y) / pdl };
     const perp = { x: -pdir.y, y: pdir.x };
-    const mid = { x: (don.x + pole.x)/2 + perp.x * R*0.12, y: (don.y + pole.y)/2 + perp.y * R*0.12 };
-    const grad = ctx.createLinearGradient(don.x, don.y, pole.x, pole.y);
+    const s0 = { x: don.x + pdir.x*Rdon, y: don.y + pdir.y*Rdon };
+    const mid = { x: (s0.x + pole1.x)/2 + perp.x * R*0.12, y: (s0.y + pole1.y)/2 + perp.y * R*0.12 };
+    const grad = ctx.createLinearGradient(s0.x, s0.y, pole1.x, pole1.y);
     grad.addColorStop(0, 'rgba(230,159,0,.8)'); grad.addColorStop(1, 'rgba(255,210,120,.28)');
     ctx.strokeStyle = grad; ctx.lineWidth = 3; ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(don.x - pdir.x*Rdon, don.y - pdir.y*Rdon);
-    ctx.quadraticCurveTo(mid.x, mid.y, pole.x, pole.y);
+    ctx.moveTo(s0.x, s0.y);
+    ctx.quadraticCurveTo(mid.x, mid.y, pole1.x, pole1.y);
     ctx.stroke();
     if (!reduce) {
       for (let i = 0; i < 5; i++) {
         const t = (phase * 1.5 + i / 5) % 1, it = 1 - t;
-        const sx = don.x - pdir.x*Rdon, sy = don.y - pdir.y*Rdon;
-        const x = it*it*sx + 2*it*t*mid.x + t*t*pole.x;
-        const y = it*it*sy + 2*it*t*mid.y + t*t*pole.y;
+        const x = it*it*s0.x + 2*it*t*mid.x + t*t*pole1.x;
+        const y = it*it*s0.y + 2*it*t*mid.y + t*t*pole1.y;
         ctx.fillStyle = `rgba(255,205,120,${0.82 - t*0.45})`;
         ctx.beginPath(); ctx.arc(x, y, 2.6 - t*1.2, 0, 7); ctx.fill();
       }
     }
 
-    // the WD system + donor, drawn far-first so the NEARER body occludes the farther
+    // the WD system + donor, drawn far-first so the NEARER body occludes the farther;
+    // a pole with cosμ < 0 is on the far side and gets covered by the WD body.
+    const drawPoleSet = (behind) => {
+      if ((m1.depth < 0) === behind) drawPole(wd, m1, Rwd, f1 * ecf, R, true);
+      if (m2 && (m2.depth < 0) === behind) drawPole(wd, m2, Rwd, f2 * ecf, R, false);
+    };
     const drawWD = () => {
+      drawPoleSet(true);
       ctx.lineWidth = 1.2;
       for (let k = 0; k < 4; k++) {
         const L = Rwd * (0.6 + k * 0.7);
         ctx.strokeStyle = `rgba(110,140,210,${0.22 - k*0.03})`;
-        fieldLine(wd.x, wd.y, Rwd, L, pa, 1); fieldLine(wd.x, wd.y, Rwd, L, pa, -1);
+        fieldLine(wd.x, wd.y, Rwd, L, m1.ang, 1); fieldLine(wd.x, wd.y, Rwd, L, m1.ang, -1);
       }
+      const ax = Math.cos(m1.ang), ay = Math.sin(m1.ang);
       ctx.strokeStyle = 'rgba(150,170,230,.25)'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
       ctx.beginPath();
-      ctx.moveTo(wd.x - pdir.x*Rwd*2.4, wd.y - pdir.y*Rwd*2.4);
-      ctx.lineTo(wd.x + pdir.x*Rwd*2.4, wd.y + pdir.y*Rwd*2.4);
+      ctx.moveTo(wd.x - ax*Rwd*2.4, wd.y - ay*Rwd*2.4);
+      ctx.lineTo(wd.x + ax*Rwd*2.4, wd.y + ay*Rwd*2.4);
       ctx.stroke(); ctx.setLineDash([]);
       starGlow(wd.x, wd.y, Rwd, '#eafcff', '#155a69', 1.6, '#dff7fc');
-      drawPole(wd, pa, Rwd, f1 * ecf, R, true);
-      if (twoPole) drawPole(wd, pa + Math.PI, Rwd, f2 * ecf, R, false);
-      if (!reduce) drawElectrons(pole, pa, f1 * ecf);
+      drawPoleSet(false);
+      if (!reduce && m1.depth > 0) drawElectrons(pole1, m1.ang, f1 * ecf);
     };
     const drawDon = () => starGlow(don.x, don.y, Rdon, '#ffd9b0', '#d55e00');
     if (donFront) { drawWD(); drawDon(); } else { drawDon(); drawWD(); }
@@ -189,6 +209,7 @@
 
     elPhase.textContent = phase.toFixed(2);
     elGeom.textContent = DEG(inc) + '° / ' + DEG(beta) + '°';
+    if (elMu) elMu.textContent = DEG(Math.acos(clamp1(m1.depth))) + '°';
     elPoles.textContent = twoPole ? 'two' : 'one';
     elFlux.textContent = Math.round(norm(fluxAt(phase)) * 100) + '%';
     if (elEcl) {
@@ -197,10 +218,11 @@
     }
   }
 
-  function drawPole(wd, ang, Rwd, bright, R, withColumn) {
-    const px = wd.x + Math.cos(ang)*Rwd, py = wd.y + Math.sin(ang)*Rwd;
+  function drawPole(wd, m, Rwd, bright, R, withColumn) {
+    const px = wd.x + m.sx*Rwd, py = wd.y + m.sy*Rwd;   // projected pole on the WD surface
+    const pl = Math.hypot(m.sx, m.sy) || 1, ox = m.sx/pl, oy = m.sy/pl; // outward on the sky
     if (withColumn) {
-      const tx = px + Math.cos(ang)*Rwd*0.7, ty = py + Math.sin(ang)*Rwd*0.7;
+      const tx = px + ox*Rwd*0.7, ty = py + oy*Rwd*0.7;
       const cg = ctx.createLinearGradient(px, py, tx, ty);
       cg.addColorStop(0, 'rgba(230,159,0,.9)'); cg.addColorStop(1, 'rgba(255,220,140,0)');
       ctx.strokeStyle = cg; ctx.lineWidth = 6; ctx.lineCap = 'round';
@@ -211,7 +233,7 @@
     ctx.fillStyle = hot; ctx.beginPath(); ctx.arc(px, py, Rwd*0.55, 0, 7); ctx.fill();
     const reach = R * 0.42 * (0.35 + 0.65*bright);
     for (const s of [1, -1]) {
-      const d0 = ang + s * Math.PI/2, spread = 0.42;
+      const d0 = m.ang + s * Math.PI/2, spread = 0.42;
       const g = ctx.createRadialGradient(px, py, 0, px, py, reach);
       g.addColorStop(0, `rgba(79,208,227,${0.45*bright+0.04})`); g.addColorStop(1, 'rgba(79,208,227,0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(px, py);

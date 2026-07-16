@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=14">
+<link rel="stylesheet" href="css/styles.css?v=15">
 </head>
 <body>
 
@@ -75,7 +75,6 @@
     </div>
     <div class="hero-figure">
       <div class="hero-portrait">
-        <img src="assets/avatar.jpg?v=14" alt="Portrait of Jiamao Lin" width="96" height="96">
         <div class="pinfo">
           <b>Jiamao&nbsp;Lin · 林佳茂</b>
           Ph.D. candidate, Physics &amp; Astronomy<br>Sun Yat-sen University, Zhuhai
@@ -231,6 +230,7 @@
         <div class="readout">
           <div class="readout-row"><span>Spin / orbital phase φ</span><b id="cycPhase">0.00</b></div>
           <div class="readout-row"><span>Inclination i / colatitude β</span><b id="cycGeom">80° / 58°</b></div>
+          <div class="readout-row"><span>Beaming angle μ</span><b id="cycMu">—</b></div>
           <div class="readout-row"><span>Accreting poles</span><b id="cycPoles">one</b></div>
           <div class="readout-row"><span>Relative flux</span><b id="cycFlux">—</b></div>
           <div class="readout-row"><span>Donor eclipse</span><b id="cycEcl">donor not eclipsing</b></div>
@@ -294,6 +294,7 @@
           <div class="readout-row"><span>Electron kT</span><b id="specTval">5 keV</b></div>
           <div class="readout-row"><span>View angle θ</span><b id="specThetaval">70°</b></div>
           <div class="readout-row"><span>Visible harmonics</span><b id="specHarm">—</b></div>
+          <div class="readout-row"><span>Preset target</span><b id="specTarget">—</b></div>
         </div>
         <div class="spec-controls">
           <label>Magnetic field B (MG)
@@ -349,6 +350,7 @@
       <aside class="cyc-side">
         <div class="readout">
           <div class="readout-row"><span>Orbital phase</span><b id="diskPhase">0.00</b></div>
+          <div class="readout-row"><span>Elapsed</span><b id="diskDays">0.0 d</b></div>
           <div class="readout-row"><span>Binary inclination i</span><b id="diskIv">82°</b></div>
           <div class="readout-row"><span>Disk misalignment α</span><b id="diskAlphaR">13°</b></div>
           <div class="readout-row"><span>Disk inner radius</span><b id="diskRin">≈2.5 a ≈ 130 R⊙</b></div>
@@ -820,16 +822,16 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/hero.js?v=9" defer></script>
-<script src="js/cyclotron.js?v=9" defer></script>
-<script src="js/spectrum.js?v=9" defer></script>
-<script src="js/diskdata.js?v=9" defer></script>
-<script src="js/diskbinary.js?v=9" defer></script>
-<script src="js/astroagent.js?v=10" defer></script>
-<script src="js/kgdata.js?v=9" defer></script>
-<script src="js/kg.js?v=10" defer></script>
-<script src="js/ztfcnn.js?v=13" defer></script>
-<script src="js/interactions.js?v=9" defer></script>
-<script src="js/main.js?v=9" defer></script>
+<script src="js/hero.js?v=15" defer></script>
+<script src="js/cyclotron.js?v=15" defer></script>
+<script src="js/spectrum.js?v=15" defer></script>
+<script src="js/diskdata.js?v=15" defer></script>
+<script src="js/diskbinary.js?v=15" defer></script>
+<script src="js/astroagent.js?v=15" defer></script>
+<script src="js/kgdata.js?v=15" defer></script>
+<script src="js/kg.js?v=15" defer></script>
+<script src="js/ztfcnn.js?v=15" defer></script>
+<script src="js/interactions.js?v=15" defer></script>
+<script src="js/main.js?v=15" defer></script>
 </body>
 </html>
