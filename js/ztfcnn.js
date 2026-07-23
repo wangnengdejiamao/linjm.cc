@@ -276,11 +276,17 @@
   const pz = $('cnnPause'); if (pz) pz.addEventListener('click', () => { paused = !paused; pz.textContent = paused ? 'Play' : 'Pause'; pz.setAttribute('aria-pressed', String(paused)); if (!paused) start(); });
 
   // ---- init ----
-  buildCM(); resize(); refresh(); dispP = predict(); draw();
+  buildCM(); resize(); refresh(); dispP = predict();
+  // bind the resize listener BEFORE the first draw, so a transient 0-width layout
+  // frame (deep section, fonts still loading) can't abort init and leave a 0-sized canvas.
   window.addEventListener('resize', () => { resize(); if (!alive()) draw(); else start(); });
+  try { draw(); } catch (e) { /* layout not settled yet — re-draws when visible */ }
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) start(); else stop(); }, { threshold: 0.05 }).observe(canvas);
-  } else { visible = true; start(); }
+    new IntersectionObserver(es => {
+      visible = es[0].isIntersecting;
+      if (visible) { resize(); if (!alive()) draw(); else start(); } else stop();
+    }, { threshold: 0.05 }).observe(canvas);
+  } else { visible = true; resize(); start(); }
   document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
   if (reduce) draw(); else start();
 })();

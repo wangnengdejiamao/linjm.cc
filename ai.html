@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI / Agents · Jiamao Lin 林佳茂 — Fine-tuned Astronomy LLMs & Auditable Agents</title>
+<meta name="description" content="Jiamao Lin's AI / agent engineering: a locally fine-tuned 8B astronomy LLM (QLoRA + AttnRes), a knowledge-graph & experiment-design agent for materials science, the auditable A2A Astro Agent, and a lightweight ZTF CNN classifier.">
+<meta name="author" content="Jiamao Lin">
+<meta property="og:title" content="AI / Agents · Jiamao Lin 林佳茂">
+<meta property="og:description" content="Locally fine-tuned astronomy LLMs, dual-track RAG, knowledge graphs, and auditable LangGraph research agents — four projects, fully visualized.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=21">
+<link rel="stylesheet" href="css/cosmic-theme.css?v=20">
+</head>
+<body class="ai-body">
+
+<canvas id="cosmicBackdrop" class="cosmic-backdrop" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-name">Jiamao&nbsp;Lin<span class="brand-cn"> 林佳茂</span></span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="#maoastro">8B&nbsp;LLM</a>
+    <a href="#zte">GUI&nbsp;Agent</a>
+    <a href="#jindu">KG&nbsp;Agent</a>
+    <a href="#astroagent">Astro&nbsp;Agent</a>
+    <a href="research.html" class="nav-cta">Research&nbsp;→</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- ============================ AI HERO ============================ -->
+  <section class="ai-hero">
+    <div class="ai-hero-text">
+      <p class="eyebrow">AI / Agent Engineering</p>
+      <h1>Astronomy intelligence<br>you can <span class="accenty">audit</span></h1>
+      <p class="ai-lede">
+        Five projects, one thread: bring the <strong>evidence-first discipline of physics</strong>
+        into machine learning. A locally fine-tuned <strong>8B astronomy LLM</strong>, a
+        <strong>mobile GUI agent at ZTE</strong> (planner + worker A2A), a knowledge-graph &amp;
+        experiment-design agent with Peking University, an auditable research agent, and a lightweight
+        survey classifier — each built to refuse claims the evidence doesn't support.
+      </p>
+      <div class="ai-hero-chips">
+        <a href="#maoastro" class="ai-hchip"><b>01</b> maoAstro · 8B fine-tune <span>QLoRA + AttnRes</span></a>
+        <a href="#zte" class="ai-hchip"><b>02</b> ZTE mobile GUI agent <span>planner + worker A2A</span></a>
+        <a href="#jindu" class="ai-hchip"><b>03</b> KG &amp; experiment agent <span>北京大学 · Peking Univ.</span></a>
+        <a href="#astroagent" class="ai-hchip"><b>04</b> Astro Agent <span>LangGraph · self-evolving</span></a>
+        <a href="#cnn" class="ai-hchip"><b>05</b> ZTF classifier <span>lightweight CNN</span></a>
+      </div>
+    </div>
+    <div class="ai-hero-visual" aria-label="Animated artificial intelligence constellation">
+      <canvas id="aiHeroCanvas" role="img" aria-label="A pulsing network of astronomy agents routes evidence through observe, reason, tool and verify stages."></canvas>
+      <div class="ai-viz-head">
+        <span><i class="live-dot"></i> LIVE INFERENCE</span>
+        <span>maoAstro / 8B</span>
+      </div>
+      <div class="ai-viz-stages" aria-hidden="true">
+        <span>OBSERVE</span><span>REASON</span><span>TOOLS</span><span>VERIFY</span>
+      </div>
+      <div class="ai-viz-readout" aria-hidden="true">
+        <span>CONTEXT <b id="contextReadout">92%</b></span>
+        <span>TRUST <b id="trustReadout">0.94</b></span>
+        <span>LATENCY <b id="latencyReadout">38ms</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- §01  maoAstro — 8B astronomy LLM fine-tuning                    -->
+  <!-- =============================================================== -->
+  <section id="maoastro" class="section">
+    <div class="section-head">
+      <h2>maoAstro — an 8B astronomy LLM, fine-tuned on one 12&nbsp;GB GPU</h2>
+      <p>An end-to-end domain LLM: <strong>8&nbsp;GB of ADS papers</strong> distilled into a two-stage
+      fine-tune with my own architecture tweak — <strong>QLoRA&nbsp;+&nbsp;AttnRes</strong> — then wrapped in a
+      four-step dual-track RAG. The whole pipeline (training and 4-bit serving) runs on a single
+      <strong>RTX&nbsp;3080&nbsp;Ti&nbsp;12&nbsp;G</strong>, and it beats GPT-4o and AstroSage-8B on domain accuracy
+      and hallucination rate.</p>
+    </div>
+
+    <!-- four-layer stack overview -->
+    <div class="stack-grid">
+      <div class="stack-layer">
+        <span class="stack-tag">Data layer</span>
+        <h4>Collect knowledge</h4>
+        <p>Top-journal literature — ApJ / MNRAS / A&amp;A via ADS. <b>~8k papers · 8&nbsp;GB.</b></p>
+        <ul><li>Fill the domain-knowledge gap</li></ul>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-layer">
+        <span class="stack-tag">Training layer</span>
+        <h4>Two-stage fine-tune</h4>
+        <p>Incremental pre-train (30k) → instruction tune (20k).</p>
+        <ul><li>Core: <b>QLoRA + AttnRes</b></li></ul>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-layer">
+        <span class="stack-tag">Augment layer</span>
+        <h4>Dual-track RAG</h4>
+        <p>Hybrid recall (vector + BM25), bge rerank Top20→Top5.</p>
+        <ul><li>Core: <b>bge reranker</b></li></ul>
+      </div>
+      <div class="stack-arrow">→</div>
+      <div class="stack-layer">
+        <span class="stack-tag">Serving layer</span>
+        <h4>Lightweight web</h4>
+        <p>vLLM, 4-bit AWQ, ~5 stable concurrent users.</p>
+        <ul><li>Core: <b>PagedAttention</b></li></ul>
+      </div>
+    </div>
+
+    <!-- ===== AttnRes interactive — the signature ===== -->
+    <div class="feature-head">
+      <span class="feature-kicker">Architecture innovation</span>
+      <h3>AttnRes — rotating attention 90° into the depth dimension</h3>
+      <p>Standard residual connections just <em>add</em> each layer's output to the last, with a fixed
+      weight of 1. In a deep model, knowledge injected early <strong>fades before it reaches the top</strong>
+      (the "deep-knowledge forgetting" that hurts long astronomy reasoning). <strong>AttnRes</strong> groups
+      the 32 layers into <strong>8 blocks</strong> and replaces that fixed accumulation with a
+      <strong>learnable attention over depth</strong> — a block can read directly from any earlier block.
+      Only tiny pseudo-query vectors are trainable (~10K params, +1–2&nbsp;GB VRAM), zero-initialized so
+      training never destabilizes. <strong>Toggle the mode</strong> and watch a knowledge signal survive to the top.</p>
+    </div>
+
+    <!-- ===== the figure + the math, side by side ===== -->
+    <div class="fig-math">
+      <figure class="paper-fig">
+        <img src="assets/attnres-architecture.png?v=17" alt="Three residual designs: (a) standard residuals add each block's output; (b) full-attention residuals; (c) block attention residuals, where an AttnRes operator α attends over earlier block states via a learnable pseudo-query w with keys/values from earlier blocks."
+          loading="lazy">
+        <figcaption><b>Fig. 1.</b> The three residual designs. <b>(a)</b> standard residuals sum each block's
+        output; <b>(c)</b> <em>Block-AttnRes</em> replaces that sum with an attention operator&nbsp;<em>α</em> whose
+        query is a small learnable vector <em>w</em> and whose keys/values are the earlier block states.</figcaption>
+      </figure>
+      <div class="math-col">
+        <div class="eqn-card">
+          <span class="eqn-lab">Standard residual — fixed unit weight</span>
+          <div class="eqn"><em>h<sub>n</sub></em> = <em>h<sub>n−1</sub></em> + <em>f</em>(<em>h<sub>n−1</sub></em>)</div>
+          <p class="eqn-note">Each block adds only the previous block's output, so knowledge injected early is
+          attenuated with depth — the <em>deep-knowledge forgetting</em> that hurts long reasoning.</p>
+        </div>
+        <div class="eqn-card eqn-hi">
+          <span class="eqn-lab">AttnRes — learnable attention over depth</span>
+          <div class="eqn"><em>h<sub>n</sub></em> = <span class="sum">∑<span class="sum-sub">i&lt;n</span></span>
+            <em>α<sub>n,i</sub></em>&thinsp;<em>h<sub>i</sub></em>,
+            &nbsp;&nbsp;<em>α<sub>n</sub></em> = softmax<span class="paren">(</span><span class="frac"><span class="fnum"><em>w<sub>n</sub></em>&thinsp;K<sup>⊤</sup></span><span class="fden">√<span class="rad"><em>d</em></span></span></span><span class="paren">)</span>,
+            &nbsp; K = [<em>h<sub>0</sub></em> … <em>h<sub>n−1</sub></em>]</div>
+          <p class="eqn-note">A block reads <em>directly</em> from any earlier block. The query <em>w<sub>n</sub></em> is a
+          tiny <strong>pseudo-query</strong> — the <em>only</em> trainable part — zero-initialized so training starts
+          exactly at the standard residual and never destabilizes.</p>
+        </div>
+        <div class="eqn-card">
+          <span class="eqn-lab">Trainable footprint — QLoRA on the pseudo-query</span>
+          <div class="eqn"><em>W</em> = <em>W<sub>0</sub></em> + <em>B</em><em>A</em>,
+            &nbsp; <em>B</em>∈ℝ<sup><em>d</em>×<em>r</em></sup>, <em>A</em>∈ℝ<sup><em>r</em>×<em>k</em></sup>, &nbsp;<em>r</em>&nbsp;≪&nbsp;<em>d</em></div>
+          <p class="eqn-note">Base weights <em>W<sub>0</sub></em> stay <strong>frozen &amp; 4-bit (NF4)</strong>; only the low-rank
+          <em>BA</em> and the pseudo-queries update — <strong>~10K</strong> trainable params, <strong>+1–2&nbsp;GB</strong> VRAM.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cyc-stage attn-stage">
+      <div class="cyc-canvas-wrap" style="min-height:440px">
+        <canvas id="attnresCanvas" role="img"
+          aria-label="A 32-layer model grouped into 8 blocks. In standard-residual mode a knowledge signal injected at the first block decays as it flows up; in AttnRes mode a learnable depth-attention lets upper blocks read directly from the first block, preserving the signal."></canvas>
+      </div>
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>Mode</span><b id="attnMode">AttnRes (depth-attention)</b></div>
+          <div class="readout-row"><span>Layers · blocks</span><b>32 · 8</b></div>
+          <div class="readout-row"><span>Signal reaching top</span><b id="attnRetain">—</b></div>
+          <div class="readout-row"><span>Trainable params</span><b id="attnParams">~10K (pseudo-query)</b></div>
+          <div class="readout-row"><span>Extra VRAM</span><b>+1–2 GB</b></div>
+        </div>
+        <div class="lc-wrap">
+          <h4>Depth-attention weights · block ← earlier blocks</h4>
+          <canvas id="attnHeat" role="img" aria-label="Lower-triangular depth-attention weight matrix over the 8 blocks."></canvas>
+          <p class="cap">Row = a block's query; columns = which earlier blocks it reads. Standard residual is just the sub-diagonal (read only the previous block); AttnRes learns the whole triangle.</p>
+        </div>
+        <div class="cyc-controls">
+          <div class="morph-presets">
+            <span class="ctl-label">Residual mode</span>
+            <div class="preset-row">
+              <button class="chip" data-attn="std">Standard residual</button>
+              <button class="chip active" data-attn="attnres">AttnRes</button>
+            </div>
+          </div>
+          <label>Knowledge-injection depth (block)
+            <input type="range" id="attnInject" min="1" max="4" step="1" value="1">
+          </label>
+          <label>Speed
+            <input type="range" id="attnSpeed" min="0" max="3" step="0.1" value="1">
+          </label>
+          <button class="btn btn-sm" id="attnPause" aria-pressed="false">Pause</button>
+        </div>
+      </aside>
+    </div>
+    <p class="cap cap-wide">Schematic of the Block-AttnRes idea: freeze the base weights, and LoRA-tune only the
+    depth-attention pseudo-queries. On my astronomy benchmark this lifted domain-QA accuracy 86% → <strong>89.2%</strong>,
+    complex-reasoning 78% → <strong>83%</strong>, and cut hallucination 9% → <strong>6%</strong>.</p>
+
+    <!-- ===== block-count ablation figure ===== -->
+    <div class="fig-math fig-math-rev">
+      <figure class="paper-fig">
+        <img src="assets/attnres-blocks-ablation.png?v=17" alt="Bar-and-line chart: astronomy-task accuracy (bars) versus relative VRAM (line) as the model is split into N = 16, 8, 4, 2 blocks. Accuracy is 90.4, 89.5, 86.2, 84 percent while relative VRAM drops 100, 50, 25, 12.5 percent."
+          loading="lazy">
+        <figcaption><b>Fig. 2.</b> Block-count ablation — bars: astronomy-QA accuracy; line: relative VRAM of the
+        depth-attention cache, as the 32 layers are grouped into <em>N</em>&nbsp;=&nbsp;16 → 2 blocks.</figcaption>
+      </figure>
+      <div class="fig-note-col">
+        <span class="feature-kicker">Why 8 blocks</span>
+        <h4>The sweet spot: near-peak accuracy at a quarter of the cache</h4>
+        <p>Finer granularity (<em>N</em>=16) is marginally more accurate (90.4%) but pays full attention-cache cost.
+        Coarser (<em>N</em>=2) collapses toward standard residual and drops to 84%. <strong>N&nbsp;=&nbsp;8 keeps
+        89.5% while cutting the depth-attention memory to ~50%</strong> — which is exactly why the whole thing fits on a
+        single 12&nbsp;GB consumer card.</p>
+        <ul class="fig-bullets">
+          <li><b>N=16</b> — 90.4% · 100% VRAM</li>
+          <li class="fb-pick"><b>N=8</b> — 89.5% · 50% VRAM &nbsp;<span>← chosen</span></li>
+          <li><b>N=4</b> — 86.2% · 25% VRAM</li>
+          <li><b>N=2</b> — 84.0% · 12.5% VRAM</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== data + training details ===== -->
+    <div class="cards ai-detail-cards">
+      <article class="card">
+        <span class="stack-tag">Data pipeline</span>
+        <h3>8&nbsp;GB → 30k clean corpus</h3>
+        <p>LaTeX / reference stripping by regex, a <strong>BERT relevance classifier</strong> to keep
+        astrophysics core, and <strong>MinHash dedup</strong> (128–2048 tokens). Instruction set: 20k
+        samples (DS v3.1 + human check) mixing single-turn / multi-turn / reasoning / tool-calls.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">Domain vocabulary</span>
+        <h3>+2000 astronomy tokens</h3>
+        <p>Extended the Qwen2.5-7B / astroMlab-8B tokenizer with 2000 domain terms. Proper-noun
+        spelling errors dropped <strong>18% → 3%</strong>; QA accuracy <strong>+5%</strong>.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">Why QLoRA</span>
+        <h3>≤10&nbsp;G VRAM, low forgetting</h3>
+        <p>Full fine-tune needs ≥40&nbsp;G and forgets fast. Rank ablation: r=8 (attn only) 78%,
+        <strong>r=64 (all linear) 86%</strong> — best, r=128 84%. Then AttnRes on top.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">RAG that refuses</span>
+        <h3>Hallucination 28% → 9%</h3>
+        <p>Semantic chunking + fixed-length fill lifted recall <strong>72% → 92%</strong>; a 4-step
+        retrieve→rerank chain and fact constraints cut hallucination to 9%, and with <em>no</em>
+        reference the model declines to answer.</p>
+      </article>
+    </div>
+
+    <!-- ===== training recipe + RAG chain ===== -->
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <span class="feature-kicker">Two-stage fine-tune</span>
+        <ol class="recipe-steps">
+          <li><b>① Incremental pre-training</b><span class="rc-meta">30k unsupervised corpus · epoch&nbsp;2 · lr&nbsp;5e-5</span>
+            Inject astronomy base knowledge into a Qwen2.5-7B / astroMlab-8B backbone.</li>
+          <li><b>② Instruction tune + AttnRes</b><span class="rc-meta">20k instructions · epoch&nbsp;3 · lr&nbsp;1e-4 · early-stop + dropout</span>
+            Instruction following &amp; dialogue, with the depth-attention pseudo-queries learned on top.</li>
+        </ol>
+        <p class="rc-foot">Hardware: a single <strong>RTX&nbsp;3080&nbsp;Ti&nbsp;12&nbsp;G</strong> · Transformers + vLLM · Chroma + SQLite.</p>
+      </div>
+      <div class="recipe-card">
+        <span class="feature-kicker">Dual-track RAG · 4-step chain</span>
+        <ol class="rag-chain">
+          <li><span class="rag-n">1</span>Question → <b>metadata filter</b> (time / journal)</li>
+          <li><span class="rag-n">2</span><b>Hybrid recall</b> — vector + BM25 → Top&nbsp;20 candidates</li>
+          <li><span class="rag-n">3</span><b>Rerank</b> — bge-reranker precision sort → Top&nbsp;5</li>
+          <li><span class="rag-n">4</span>Precise context → generate, <b>refuse if unsupported</b></li>
+        </ol>
+        <p class="rc-foot">Semantic chunking (200–800 tok) + fixed fill lifted recall <strong>72% → 92%</strong>;
+        multi-hop via query decomposition + parent/child blocks <strong>58% → 70%</strong>.</p>
+      </div>
+    </div>
+
+    <!-- ===== eval comparison ===== -->
+    <div class="feature-head compact">
+      <span class="feature-kicker">Evaluation</span>
+      <h3>Benchmarked against GPT-4o and AstroSage-8B</h3>
+      <p>60% automated (DS v3.1 scoring) + 40% blind human review by 3 astronomers over 200 samples.
+      <strong>Click a metric</strong> to compare.</p>
+    </div>
+    <div class="eval-block">
+      <div class="eval-switch" id="evalSwitch">
+        <button class="chip active" data-metric="domain">Domain accuracy</button>
+        <button class="chip" data-metric="halluc">Hallucination (lower=better)</button>
+        <button class="chip" data-metric="reason">Complex reasoning</button>
+      </div>
+      <div class="eval-bars" id="evalBars"></div>
+      <table class="eval-table">
+        <thead><tr><th>Model</th><th>Domain acc.</th><th>Hallucination</th><th>Reasoning</th><th>VRAM</th></tr></thead>
+        <tbody>
+          <tr class="eval-me"><td>maoAstro <span class="eval-badge">AttnRes</span></td><td>89.2%</td><td>6%</td><td>83%</td><td>12&nbsp;G</td></tr>
+          <tr><td>GPT-4o</td><td>82%</td><td>18%</td><td>76%</td><td>no local</td></tr>
+          <tr><td>AstroSage-8B</td><td>80.9%</td><td>12%</td><td>78%</td><td>16&nbsp;G</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- §02  ZTE — mobile GUI agent (the real A2A)                       -->
+  <!-- =============================================================== -->
+  <section id="zte" class="section">
+    <div class="section-head">
+      <h2>ZTE — a mobile GUI agent that operates the phone for you</h2>
+      <p>At <strong>ZTE Corporation</strong> I build a <strong>phone-side GUI agent</strong>: you say what you
+      want in natural language, and it drives the real UI — opening apps, tapping, typing, scrolling — to get it
+      done. It is a genuine <strong>agent-to-agent (A2A)</strong> system with two specialised models: a
+      <strong>Planner</strong> that understands your screen and installed apps and decomposes the task, and a
+      self-trained <strong>32B Worker</strong> that grounds each step into concrete touches. Orchestrated on the
+      <strong>OpenClaw</strong> framework.</p>
+    </div>
+
+    <!-- planner ↔ worker A2A -->
+    <div class="a2a-split">
+      <div class="a2a-agent a2a-planner">
+        <span class="a2a-role">Planner agent</span>
+        <h4>4B multimodal · plans</h4>
+        <p>Reads a screenshot of the current screen and the set of <strong>installed apps</strong>, then a large
+        LLM decomposes the request into an ordered chain of executable sub-goals — choosing <em>which</em> app and
+        <em>what</em> to do next.</p>
+        <ul class="a2a-caps">
+          <li>Multimodal screen + app-inventory understanding</li>
+          <li>High-level task → sub-goal chain</li>
+          <li>Re-plans when the screen doesn't match expectation</li>
+        </ul>
+      </div>
+      <div class="a2a-bridge" aria-hidden="true">
+        <span class="a2a-bridge-lab">A2A · OpenClaw</span>
+        <span class="a2a-arrow a2a-arrow-down">sub-goal ▾</span>
+        <span class="a2a-arrow a2a-arrow-up">▴ screen&nbsp;state</span>
+      </div>
+      <div class="a2a-agent a2a-worker">
+        <span class="a2a-role">Worker agent</span>
+        <h4>32B · operates <span class="a2a-tag">self-trained</span></h4>
+        <p>A GUI-grounding model I trained to convert one sub-goal + the current screen into a concrete
+        <strong>action</strong> — tap, swipe, type — with pixel coordinates, then reports the resulting screen back
+        to the Planner to close the loop.</p>
+        <ul class="a2a-caps">
+          <li>Sub-goal + screenshot → grounded UI action</li>
+          <li>tap · swipe · long-press · type</li>
+          <li>Reports new screen → Planner verifies / advances</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- animated phone GUI-agent demo -->
+    <div class="zte-stage">
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <span class="phone-notch" aria-hidden="true"></span>
+          <canvas id="zteScreen" role="img"
+            aria-label="A phone screen: the GUI agent opens apps and taps through them to complete a spoken task, driven by a planner and a worker agent."></canvas>
+        </div>
+        <p class="phone-cap">The finger, taps and screens are schematic; the planner→worker→screen loop mirrors the real control flow.</p>
+      </div>
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>User task</span><b id="zteTask">"Order my coconut latte"</b></div>
+          <div class="readout-row"><span>Active agent</span><b id="zteAgent">Planner · 4B</b></div>
+          <div class="readout-row"><span>Sub-goal</span><b id="zteGoal">perceive apps</b></div>
+          <div class="readout-row"><span>Worker action</span><b id="zteAction">—</b></div>
+          <div class="readout-row"><span>Step</span><b id="zteStep">0 / 6</b></div>
+        </div>
+        <div class="lc-wrap">
+          <h4>A2A message bus · OpenClaw</h4>
+          <div id="zteBus" class="ag-log" style="height:150px"></div>
+          <p class="cap">Planner emits sub-goals; Worker returns grounded actions and the resulting screen — the same
+          hand-off the phone runs on-device.</p>
+        </div>
+        <div class="cyc-controls">
+          <div class="morph-presets">
+            <span class="ctl-label">Task scenario</span>
+            <div class="preset-row" id="zteScenarios">
+              <button class="chip active" data-task="coffee">Order coffee</button>
+              <button class="chip" data-task="message">Reply &amp; set timer</button>
+            </div>
+          </div>
+          <label>Speed
+            <input type="range" id="zteSpeed" min="0" max="3" step="0.1" value="1">
+          </label>
+          <button class="btn btn-sm" id="ztePause" aria-pressed="false">Pause</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="cards ai-detail-cards">
+      <article class="card">
+        <span class="stack-tag">Planner · 4B</span>
+        <h3>Understands your installed apps</h3>
+        <p>A compact <strong>4B multimodal</strong> model perceives the live screen and the app inventory, so the
+        plan is grounded in what's actually on <em>your</em> phone — not a generic script.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">Worker · 32B</span>
+        <h3>A GUI model I trained</h3>
+        <p>The <strong>32B</strong> worker is self-trained for UI grounding: sub-goal&nbsp;+&nbsp;screenshot →
+        exact tap / swipe / type. Splitting perception-planning from execution is what makes it a real A2A system.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">OpenClaw</span>
+        <h3>The orchestration layer</h3>
+        <p>Built on the <strong>OpenClaw</strong> agent framework — a typed message bus carries sub-goals down and
+        screen states back up, with a verify-and-replan loop between the two agents.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">On-device</span>
+        <h3>Real UI, real control</h3>
+        <p>The agent drives the actual interface end-to-end — cross-app tasks that chain several apps together,
+        exactly the multi-step errands people don't want to do by hand.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- §03  Jindu — KG + experiment-design agent (materials science)   -->
+  <!-- =============================================================== -->
+  <section id="jindu" class="section">
+    <div class="section-head">
+      <h2>Peking University — a knowledge-graph &amp; experiment-design agent</h2>
+      <p>As <strong>algorithm lead</strong> I built a materials-science research platform for
+      <strong>battery-electrolyte R&amp;D with Peking University</strong>. It ships as <strong>two frontends</strong>:
+      a <strong>Lab Intelligent Agent System</strong> (a Graph-RAG assistant with Q&amp;A, knowledge-graph and
+      experiment-execution modes) and a <strong>Knowledge-Graph Visualization System</strong> (build, manage
+      and quality-score the graphs). Below: the product framework, an experiment-design walkthrough, and the
+      extraction pipeline behind it.</p>
+    </div>
+
+    <!-- the two real frontends -->
+    <div class="frontends">
+      <div class="frontend-card">
+        <span class="frontend-tag">System 1 · <span class="fe-mono">:3001</span></span>
+        <h4>Lab Intelligent Agent System</h4>
+        <p class="fe-sub">Graph Retrieval-Augmented System · 实验室智能体系统</p>
+        <div class="fe-modes">
+          <span class="fe-mode is-on">问答 · Q&amp;A</span>
+          <span class="fe-mode">知识图谱 · KG</span>
+          <span class="fe-mode">实验执行 · Execute</span>
+        </div>
+        <ul class="fe-feats">
+          <li>Answers grounded in a chosen graph + literature</li>
+          <li>Retrieval depth: <b>quick · deep · wide-area reasoning</b></li>
+          <li>Experiment-design mode → protocol for the <b>Nanocraft</b> auto-synthesis platform</li>
+        </ul>
+      </div>
+      <div class="frontend-card">
+        <span class="frontend-tag">System 2 · <span class="fe-mono">:6700</span></span>
+        <h4>Knowledge-Graph Visualization System</h4>
+        <p class="fe-sub">图谱可视化系统 · build · manage · assess</p>
+        <div class="fe-modes">
+          <span class="fe-mode is-on">图谱可视化</span>
+          <span class="fe-mode">图谱管理</span>
+          <span class="fe-mode">质量评估</span>
+        </div>
+        <ul class="fe-feats">
+          <li>file / content / <b>pipeline</b> graph generation · meta-graph · merge</li>
+          <li>Sub-graph &amp; shortest-path queries, JSON/CSV export</li>
+          <li>Quality score per triple: <b>accuracy · triple-support · usefulness</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- product frontend mock — experiment-design mode -->
+    <div class="app-mock">
+      <div class="app-chrome">
+        <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        <span class="app-url">实验室智能体系统 · 实验执行 / experiment design · dataset: electrolyte_2026</span>
+      </div>
+      <div class="app-body">
+        <!-- left: request + analysis path -->
+        <div class="app-col app-left">
+          <div class="app-lab">User question · experiment-design mode</div>
+          <div class="app-goal" id="labGoal">Design an experiment to determine whether <b>FEC</b> or <b>VC</b>
+            more significantly improves SEI-film stability in a <b>LiPF₆ / EC / DMC</b> electrolyte.</div>
+          <div class="app-lab">Agent workflow</div>
+          <ol class="lab-steps" id="labSteps">
+            <li data-step="analyze"><span class="ls-ico">◇</span><b>Analysis path</b><i>decompose goal → sub-tasks</i></li>
+            <li data-step="rag"><span class="ls-ico">▤</span><b>Graph-RAG retrieval</b><i>deep reasoning over KG + papers</i></li>
+            <li data-step="design"><span class="ls-ico">⚗</span><b>Generate protocol</b><i>controls · cell build · testing</i></li>
+            <li data-step="verify"><span class="ls-ico">✓</span><b>Validate</b><i>evidence &amp; consistency check</i></li>
+          </ol>
+          <button class="btn btn-sm" id="labRun">▸ Run workflow</button>
+        </div>
+        <!-- center: knowledge graph -->
+        <div class="app-col app-center">
+          <div class="app-lab">Knowledge graph · Leiden communities</div>
+          <canvas id="jinduKG" role="img" aria-label="A battery-electrolyte knowledge graph of solvents, salts, additives, interphases and properties, colored by detected community."></canvas>
+          <div class="kg-mini-legend" id="jinduLegend"></div>
+        </div>
+        <!-- right: generated protocol -->
+        <div class="app-col app-right">
+          <div class="app-lab">Generated experiment protocol → Nanocraft</div>
+          <div class="proto" id="labProto"><p class="proto-idle">Run the workflow to synthesize a
+            protocol from retrieved evidence.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- extraction pipeline -->
+    <div class="feature-head">
+      <span class="feature-kicker">Behind the graph</span>
+      <h3>Schema-based extraction · a 3 + 1 pipeline with quality gates</h3>
+      <p>Every triple in the graph is earned. A four-stage LLM pipeline extracts and then <em>audits</em>
+      it, two dedup passes fold synonyms and PubChem CIDs together, and Leiden community detection plus
+      LLM enrichment organize the result before it lands in Neo4j.</p>
+    </div>
+    <div class="pipe-flow" id="kgPipe">
+      <div class="pipe-node" data-k="s1"><span class="pipe-no">Stage 1</span><h5>Entity recognition</h5><p>Schema: entity_types, relation_types, attributes</p></div>
+      <div class="pipe-node" data-k="s2"><span class="pipe-no">Stage 2</span><h5>Relation extraction</h5><p>typed relations between entities</p></div>
+      <div class="pipe-node" data-k="s3"><span class="pipe-no">Stage 3</span><h5>Attribute extraction</h5><p>properties &amp; measured values</p></div>
+      <div class="pipe-node pipe-gate" data-k="s4"><span class="pipe-no">Stage 4 · QC</span><h5>LLM validation</h5><p>score every triple: <b>accuracy · triple-support · usefulness</b>; drop hallucinations <b>(θ=0.5)</b></p></div>
+    </div>
+    <div class="pipe-flow pipe-flow-2">
+      <div class="pipe-node" data-k="d1"><span class="pipe-no">Dedup 1</span><h5>Union-Find</h5><p>abbreviation synonym graph → lexicographically-smallest canonical name</p></div>
+      <div class="pipe-node" data-k="d2"><span class="pipe-no">Dedup 2</span><h5>PubChem CID</h5><p>local SQLite compound-ID alignment; drop redundant abbreviation triples</p></div>
+      <div class="pipe-node" data-k="c1"><span class="pipe-no">Community</span><h5>hierarchical Leiden</h5><p>graspologic partition → LLM names Top-20 members &amp; Top-10 relations</p></div>
+      <div class="pipe-node pipe-out" data-k="n1"><span class="pipe-no">Store</span><h5>Neo4j import</h5><p>MERGE nodes by (label,name), CREATE parallel edges, 500 triples / txn</p></div>
+    </div>
+    <p class="cap cap-wide">The same architecture generalizes: literature → clean chunks → schema-based
+    triples → audited, deduplicated, community-organized graph → Neo4j — reused across both the materials
+    agent here and the astronomy Astro&nbsp;Agent below.</p>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- §03  Astro Agent — A2A, multi-stack, auditable                  -->
+  <!-- =============================================================== -->
+  <section id="astroagent" class="section">
+    <div class="section-head">
+      <h2>Astro&nbsp;Agent — an auditable, self-evolving research agent</h2>
+      <p>My open-source flagship (<a href="https://github.com/wangnengdejiamao/Astro_Agent" target="_blank" rel="noopener">github.com/wangnengdejiamao/Astro_Agent</a>):
+      a <strong>16-node LangGraph</strong> that resolves a target, pulls multi-survey data, models it through
+      <strong>three mandatory iterations</strong>, audits every claim, and — only when the QA gate clears —
+      drafts an ApJ-style manuscript. It uses <strong>filesystem-as-memory</strong> for a diff-able audit
+      trail, and a <strong>delegation loop</strong> that turns new methods from papers into tested, registered
+      tools by handing the implementation to a second coding agent.</p>
+    </div>
+
+    <!-- LangGraph run (reused viz) -->
+    <div class="cyc-stage">
+      <div class="cyc-canvas-wrap">
+        <canvas id="agentCanvas" role="img"
+          aria-label="Animated schematic of the Astro Agent LangGraph pipeline flowing from target resolution and data fetching through retrieval, three modelling iterations, a QA gate, drafting and peer review, with replan and reflexion self-healing loops."></canvas>
+        <div class="cyc-legend">
+          <span><i class="dot" style="background:#56b4e9"></i>Acquire / plan</span>
+          <span><i class="dot" style="background:#009e73"></i>Evidence gate</span>
+          <span><i class="dot" style="background:#e69f00"></i>Self-heal loop</span>
+          <span><i class="dot" style="background:#cc79a7"></i>Draft</span>
+          <span><i class="dot" style="background:#d55e00"></i>Halt</span>
+        </div>
+      </div>
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>Current node</span><b id="agNode">resolve</b></div>
+          <div class="readout-row"><span>Stage</span><b id="agStage">Acquire</b></div>
+          <div class="readout-row"><span>Modelling iteration</span><b id="agIter">0 / 3</b></div>
+          <div class="readout-row"><span>Run status</span><b id="agStatus" class="ag-status ag-run">running</b></div>
+        </div>
+        <div class="lc-wrap">
+          <h4>Run log · filesystem-as-memory</h4>
+          <div id="agLog" class="ag-log" aria-live="polite"></div>
+          <p class="cap">Each node writes a numbered JSON checkpoint — a human-readable provenance chain you can <code>diff</code> between runs.</p>
+        </div>
+        <div class="cyc-controls">
+          <div class="morph-presets">
+            <span class="ctl-label">Run scenario</span>
+            <div class="preset-row">
+              <button class="chip active" data-scenario="clear">Clear → paper</button>
+              <button class="chip" data-scenario="mismatch">Model mismatch → replan</button>
+              <button class="chip" data-scenario="reflexion">QC fail → reflexion</button>
+              <button class="chip" data-scenario="blocked">Insufficient data → halt</button>
+            </div>
+          </div>
+          <label>Speed
+            <input type="range" id="agSpeed" min="0" max="3" step="0.1" value="1">
+          </label>
+          <div class="toggle-row">
+            <button class="btn btn-sm" id="agPause" aria-pressed="false">Pause</button>
+            <button class="btn btn-sm" id="agStep">Step ▸</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <p class="cap cap-wide">Schematic of the real <code>analysis_agent</code> graph — node names mirror the implementation. The hard cap of three modelling iterations, two replans and two reflexion rewrites is exactly how the agent refuses to over-claim.</p>
+
+    <!-- controlled auto-learning / delegation loop -->
+    <div class="feature-head">
+      <span class="feature-kicker">Self-evolving toolbox · delegation</span>
+      <h3>A controlled auto-learning loop — it writes its own tools</h3>
+      <p>When a run hits "I'm missing a tool", the orchestrator doesn't invent an answer. It packages the
+      new method from a paper into a structured spec and <strong>delegates the implementation to Claude&nbsp;Code</strong>
+      (<code>claude_code_delegate</code>) as a second coding agent. The tool is only registered as a new Skill when its
+      <strong>tests pass</strong> — with a human review gate. <strong>Watch the hand-off</strong>.</p>
+    </div>
+    <div class="cyc-stage a2a-stage">
+      <div class="cyc-canvas-wrap" style="min-height:360px">
+        <canvas id="a2aCanvas" role="img"
+          aria-label="Agent-to-agent loop: the orchestrator collects evidence, extracts a method spec, generates a tool-development task, delegates implementation to Claude Code, and registers the new skill only when tests pass."></canvas>
+      </div>
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>Orchestrator</span><b id="a2aOrch">analysis_agent</b></div>
+          <div class="readout-row"><span>Worker agent</span><b id="a2aWorker">Claude Code</b></div>
+          <div class="readout-row"><span>Current step</span><b id="a2aStep">evidence</b></div>
+          <div class="readout-row"><span>Tests</span><b id="a2aTests">—</b></div>
+          <div class="readout-row"><span>Skill registry</span><b id="a2aReg">stable</b></div>
+        </div>
+        <div class="lc-wrap">
+          <h4>A2A message · task spec</h4>
+          <div id="a2aMsg" class="ag-log" style="height:150px"></div>
+          <p class="cap">Boundary: a human review gate stays in the loop, and only tools with literature evidence that pass a smoke test enter the registry.</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- tech-stack toolbox -->
+    <div class="feature-head">
+      <span class="feature-kicker">Multi-stack toolbox</span>
+      <h3>The technology toolbox</h3>
+      <p>The agent is deliberately full-stack. <strong>Hover or tap a tool</strong> to see how it's used —
+      grouped by the four architectural layers.</p>
+    </div>
+    <div class="toolbox" id="toolbox">
+      <div class="tb-group" data-layer="Application layer">
+        <span class="tb-glab">Application</span>
+        <div class="tb-chips">
+          <button class="tb-chip" data-d="Synchronous REST API surface for the whole pipeline.">FastAPI + Uvicorn</button>
+          <button class="tb-chip" data-d="Single-page frontend with 9 tabs — no framework, pure control.">Vanilla JS (9 tabs)</button>
+          <button class="tb-chip" data-d="Deterministic self-contained interactive reports.">ECharts reports</button>
+        </div>
+      </div>
+      <div class="tb-group" data-layer="Agent layer">
+        <span class="tb-glab">Agent</span>
+        <div class="tb-chips">
+          <button class="tb-chip" data-d="StateGraph orchestrating the 16-node workflow.">LangGraph</button>
+          <button class="tb-chip" data-d="Provider-agnostic: DeepSeek / Kimi / Gemini / Fox behind one OpenAI-compatible abstraction.">Multi-provider LLM</button>
+          <button class="tb-chip" data-d="A2A hand-off: delegates tool coding to Claude Code.">claude_code_delegate</button>
+          <button class="tb-chip" data-d="Filesystem-as-memory: numbered JSON checkpoints, no MemorySaver.">FS-as-memory</button>
+        </div>
+      </div>
+      <div class="tb-group" data-layer="Processing layer">
+        <span class="tb-glab">Processing</span>
+        <div class="tb-chips">
+          <button class="tb-chip" data-d="hierarchical_leiden community detection over the KG.">graspologic</button>
+          <button class="tb-chip" data-d="Graph construction & traversal.">networkx</button>
+          <button class="tb-chip" data-d="Schema-based LLM entity/relation/attribute extraction.">Schema extraction</button>
+          <button class="tb-chip" data-d="Baseline fit → physical residual → systematic-error budget.">Physics iteration ×3</button>
+        </div>
+      </div>
+      <div class="tb-group" data-layer="Data layer">
+        <span class="tb-glab">Data</span>
+        <div class="tb-chips">
+          <button class="tb-chip" data-d="PDF text extraction with section recognition.">PyMuPDF (fitz)</button>
+          <button class="tb-chip" data-d="FTS5 BM25 full-text retrieval, WAL concurrency.">SQLite FTS5</button>
+          <button class="tb-chip" data-d="Graph store: MERGE nodes, parallel edges, batched txns.">Neo4j</button>
+          <button class="tb-chip" data-d="Local vector store for dual-track RAG.">Chroma</button>
+        </div>
+      </div>
+      <div class="tb-detail" id="tbDetail">
+        <span class="tb-detail-lab">Tool detail</span>
+        <p id="tbDetailText">Hover a tool above to see how Astro&nbsp;Agent uses it.</p>
+      </div>
+    </div>
+
+    <!-- memory system -->
+    <div class="cards ag-cards">
+      <article class="card"><span class="stack-tag">Working memory</span><h3>LangGraph AnalysisState</h3><p>Session-level context and temporary results passed node-to-node.</p></article>
+      <article class="card"><span class="stack-tag">Semantic memory</span><h3>SQLite RAG (BM25)</h3><p>Keyword search over the local white-dwarf literature — backs methodology decisions.</p></article>
+      <article class="card"><span class="stack-tag">Structured memory</span><h3>Two-layer KG</h3><p>Entity graph + meta-graph over Neo4j / SQLite / JSON — supports method transfer and evidence chains.</p></article>
+      <article class="card"><span class="stack-tag">Rule memory</span><h3>Codex-style hard constraints</h3><p>Every turn emits JSON — prevents behavioural drift and keeps output predictable.</p></article>
+    </div>
+
+    <!-- knowledge graph + dual-track RAG (reused viz) -->
+    <div class="kg-block">
+      <div class="section-head kg-head">
+        <h3>Knowledge graph + dual-track RAG</h3>
+        <p>The agent builds a typed <strong>knowledge graph</strong> — <strong>8 entity types</strong>
+        (paper · source · WD class · survey · instrument · method · model · parameter) linked by typed relations.
+        Shown here is the graph of <strong>my own three papers</strong>; retrieval combines BM25/vector recall with
+        multi-hop graph traversal — <strong>pick a query</strong> (or click a node) to watch it land on an entity
+        and pull in its connected context.</p>
+      </div>
+      <div class="cyc-stage">
+        <div class="cyc-canvas-wrap kg-canvas-wrap">
+          <canvas id="kgCanvas" role="img"
+            aria-label="Interactive knowledge-graph subgraph; selecting a query highlights an entity and its graph neighbourhood."></canvas>
+        </div>
+        <aside class="cyc-side">
+          <div class="readout">
+            <div class="readout-row"><span>Entities · relations</span><b>30 · 33</b></div>
+            <div class="readout-row"><span>Built from</span><b id="kgShown">3 papers</b></div>
+            <div class="readout-row"><span>Retrieval mode</span><b id="kgMode">BM25 + graph</b></div>
+          </div>
+          <div class="cyc-controls">
+            <span class="ctl-label">RAG query — retrieve &amp; traverse</span>
+            <div class="preset-row" id="kgChips"></div>
+          </div>
+          <div class="lc-wrap">
+            <h4>Retrieved context</h4>
+            <div id="kgCtx" class="ag-log kg-ctx" aria-live="polite"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- §04  CNN classifier (brief, reused viz)                         -->
+  <!-- =============================================================== -->
+  <section id="cnn" class="section">
+    <div class="section-head">
+      <h2>ZTF light-curve classifier — a lightweight CNN</h2>
+      <p>Where it started: turn every phase-folded ZTF light curve into a 224×224 <strong>image</strong>,
+      then let a mobile-grade convolutional net read its shape. It sorts each star into <strong>EA</strong>
+      (detached), <strong>EW</strong> (contact) or <strong>Non-EB</strong> — reaching <strong>99.4–99.6%</strong>
+      on 1,884 held-out curves. <strong>Pick a class</strong> and watch the forward pass; add noise and the softmax
+      loses its nerve. Code:
+      <a href="https://github.com/wangnengdejiamao/ztf_CNN_maoclassification" target="_blank" rel="noopener">ztf_CNN_maoclassification</a>.</p>
+    </div>
+
+    <div class="cyc-stage cnn-stage">
+      <div class="cyc-canvas-wrap" style="min-height:460px">
+        <canvas id="cnnCanvas" role="img"
+          aria-label="Schematic of the classifier's forward pass: a phase-folded ZTF light curve is rendered as a 224 by 224 image, passed through a lightweight convolutional network, and turned into softmax probabilities over EA, EW and Non-EB."></canvas>
+      </div>
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>Input class (truth)</span><b id="cnnTrue">EW &middot; W UMa</b></div>
+          <div class="readout-row"><span>Prediction (argmax)</span><b id="cnnPred">EW &middot; W UMa</b></div>
+          <div class="readout-row"><span>Confidence</span><b id="cnnConf">88.0%</b></div>
+          <div class="readout-row"><span>Backbone</span><b id="cnnModel">GhostNet</b></div>
+          <div class="readout-row"><span>Params &middot; FLOPs</span><b id="cnnCost">5.2M &middot; 141M</b></div>
+          <div class="readout-row"><span>Test accuracy</span><b id="cnnAcc">99.37%</b></div>
+        </div>
+        <div class="lc-wrap">
+          <h4>Confusion matrix &middot; GhostNet (normalized)</h4>
+          <div id="cnnCM" class="cm"></div>
+          <p class="cap">Row&nbsp;=&nbsp;truth, column&nbsp;=&nbsp;prediction; rare <strong>EA</strong> is the hard class (0.78 recall).</p>
+        </div>
+        <div class="cyc-controls">
+          <div class="morph-presets">
+            <span class="ctl-label">Light-curve class</span>
+            <div class="preset-row" id="cnnClassChips">
+              <button class="chip" data-cls="EA">EA &middot; Algol</button>
+              <button class="chip active" data-cls="EW">EW &middot; W UMa</button>
+              <button class="chip" data-cls="NonEB">Non-EB</button>
+            </div>
+          </div>
+          <div class="morph-presets">
+            <span class="ctl-label">Backbone</span>
+            <div class="preset-row" id="cnnModelChips">
+              <button class="chip active" data-model="ghost">GhostNet</button>
+              <button class="chip" data-model="mobilenet">MobileNetV2</button>
+            </div>
+          </div>
+          <label>Photometric noise
+            <input type="range" id="cnnNoise" min="0" max="0.6" step="0.01" value="0.12">
+          </label>
+          <label>Speed
+            <input type="range" id="cnnSpeed" min="0" max="3" step="0.1" value="1">
+          </label>
+          <button class="btn btn-sm" id="cnnPause" aria-pressed="false">Pause</button>
+        </div>
+      </aside>
+    </div>
+    <p class="cap cap-wide">Real pipeline: ZTF g/r photometry from IRSA, a Lomb–Scargle period, phase-folding, then a
+    1×224×224 render fed to GhostNet or MobileNetV2. Accuracies and the confusion matrix are the repository's
+    reported values; the forward-pass animation is schematic.</p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>© <span id="year">2026</span> Jiamao Lin · 林佳茂 — <a href="https://linjm.cc">linjm.cc</a> ·
+  <a href="research.html">Research track</a></p>
+  <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
+</footer>
+
+<script src="js/maoastro.js?v=17" defer></script>
+<script src="js/zte.js?v=17" defer></script>
+<script src="js/jindu.js?v=17" defer></script>
+<script src="js/astrostack.js?v=16" defer></script>
+<script src="js/astroagent.js?v=16" defer></script>
+<script src="js/kgdata.js?v=16" defer></script>
+<script src="js/kg.js?v=16" defer></script>
+<script src="js/ztfcnn.js?v=17" defer></script>
+<script src="js/interactions.js?v=16" defer></script>
+<script src="js/cosmic-ui.js?v=21" defer></script>
+<script src="js/main.js?v=20" defer></script>
+</body>
+</html>

@@ -3,6 +3,8 @@ HANDOFF.md
 
 # Scratch / working files
 tmp/
+_index_backup.html
+.claude/
 
 # Design-source & unrelated working folders — keep out of the public site repo
 Claude Design优化建议/
