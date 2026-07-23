@@ -26,7 +26,7 @@
     accentSoft: (css.getPropertyValue('--accent-soft') || '#c2722a').trim(),
     cyan: (css.getPropertyValue('--cyan') || '#2c83c4').trim(),
     green: (css.getPropertyValue('--green') || '#1f9e78').trim(),
-    odDim: '#8c8470'
+    odDim: '#a89e84'
   };
 
   const stage = {
@@ -108,7 +108,7 @@
         const ph = (stage.t * 0.5 + b * 0.2) % 1;
         const mx = (1 - ph) * (1 - ph) * ax + 2 * (1 - ph) * ph * (ax + bulge) + ph * ph * ax;
         const my = (1 - ph) * (1 - ph) * y0 + 2 * (1 - ph) * ph * ((y0 + y1) / 2) + ph * ph * y1;
-        ctx.beginPath(); ctx.arc(mx, my, 2.4, 0, 7); ctx.fillStyle = '#4fd0e3'; ctx.fill();
+        ctx.beginPath(); ctx.arc(mx, my, 2.4, 0, 7); ctx.fillStyle = '#e0a45c'; ctx.fill();
       }
     }
 

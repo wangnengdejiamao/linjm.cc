@@ -89,7 +89,7 @@
     ctx.font = '10px "IBM Plex Mono", monospace';
     ctx.letterSpacing = '.6px';
     ctx.textAlign = align || 'left';
-    ctx.fillStyle = 'rgba(215,234,244,.62)';
+    ctx.fillStyle = 'rgba(234,226,210,.9)';
     ctx.fillText(text, x, y);
     ctx.restore();
   }
@@ -149,9 +149,9 @@
       /* scanning slit */
       const scanX = reduce ? w * .31 : (time * 33) % Math.max(1, w * .37);
       const scan = ctx.createLinearGradient(scanX - 22, 0, scanX + 22, 0);
-      scan.addColorStop(0, 'rgba(103,232,249,0)');scan.addColorStop(.5, 'rgba(103,232,249,.09)');scan.addColorStop(1, 'rgba(103,232,249,0)');
+      scan.addColorStop(0, 'rgba(224,164,92,0)');scan.addColorStop(.5, 'rgba(224,164,92,.09)');scan.addColorStop(1, 'rgba(224,164,92,0)');
       ctx.fillStyle = scan;ctx.fillRect(scanX - 22, h*.08, 44, h*.66);
-      ctx.strokeStyle = 'rgba(103,232,249,.26)';ctx.lineWidth = .8;
+      ctx.strokeStyle = 'rgba(224,164,92,.26)';ctx.lineWidth = .8;
       ctx.beginPath();ctx.moveTo(scanX,h*.08);ctx.lineTo(scanX,h*.74);ctx.stroke();
 
       /* cluster and selected white dwarf */
@@ -167,7 +167,7 @@
       });
       if (selected) {
         const reticle = 11 + (reduce ? 0 : Math.sin(time*1.5)*1.4);
-        ctx.strokeStyle='rgba(103,232,249,.58)';ctx.lineWidth=1;
+        ctx.strokeStyle='rgba(224,164,92,.58)';ctx.lineWidth=1;
         ctx.beginPath();ctx.arc(selected.x,selected.y,reticle,0,TAU);ctx.stroke();
         ctx.beginPath();ctx.moveTo(selected.x-reticle-5,selected.y);ctx.lineTo(selected.x-reticle+1,selected.y);
         ctx.moveTo(selected.x+reticle-1,selected.y);ctx.lineTo(selected.x+reticle+5,selected.y);ctx.stroke();
@@ -176,11 +176,11 @@
       /* candidate packet -> physical characterization */
       ctx.beginPath();ctx.moveTo(clusterCenter.x+radius*.8,clusterCenter.y);
       ctx.quadraticCurveTo(w*.39,h*.2,binaryCenter.x-s*.11,binaryCenter.y);
-      ctx.strokeStyle='rgba(103,232,249,.25)';ctx.lineWidth=1;ctx.stroke();
+      ctx.strokeStyle='rgba(224,164,92,.25)';ctx.lineWidth=1;ctx.stroke();
       const routePhase = reduce ? .54 : (time*.12)%1;
       const ax=clusterCenter.x+radius*.8, ay=clusterCenter.y, cx=w*.39, cy=h*.2, bx=binaryCenter.x-s*.11, by=binaryCenter.y;
       const m=1-routePhase;
-      glow(ctx,m*m*ax+2*m*routePhase*cx+routePhase*routePhase*bx,m*m*ay+2*m*routePhase*cy+routePhase*routePhase*by,1.8,'#67e8f9',10);
+      glow(ctx,m*m*ax+2*m*routePhase*cx+routePhase*routePhase*bx,m*m*ay+2*m*routePhase*cy+routePhase*routePhase*by,1.8,'#e0a45c',10);
 
       /* compact binary orbit */
       ctx.save();ctx.translate(binaryCenter.x,binaryCenter.y);ctx.rotate(-.18);
@@ -197,12 +197,12 @@
       for (let k=0;k<4;k+=1) {
         ctx.save();ctx.translate(wd.x,wd.y);ctx.rotate(k*Math.PI/4+time*.025);
         ctx.beginPath();ctx.ellipse(0,0,s*(.032+k*.01),s*(.012+k*.004),0,0,TAU);
-        ctx.strokeStyle=`rgba(103,232,249,${.32-k*.045})`;ctx.lineWidth=.8;ctx.stroke();ctx.restore();
+        ctx.strokeStyle=`rgba(224,164,92,${.32-k*.045})`;ctx.lineWidth=.8;ctx.stroke();ctx.restore();
       }
       const beamAngle=-1.05+Math.sin(time*.8)*.18;
       const beamEnd={x:wd.x+Math.cos(beamAngle)*s*.13,y:wd.y+Math.sin(beamAngle)*s*.13};
       const beam=ctx.createLinearGradient(wd.x,wd.y,beamEnd.x,beamEnd.y);
-      beam.addColorStop(0,'rgba(103,232,249,.65)');beam.addColorStop(1,'rgba(103,232,249,0)');
+      beam.addColorStop(0,'rgba(224,164,92,.65)');beam.addColorStop(1,'rgba(224,164,92,0)');
       ctx.beginPath();ctx.moveTo(wd.x,wd.y);ctx.lineTo(beamEnd.x,beamEnd.y);ctx.strokeStyle=beam;ctx.lineWidth=4;ctx.stroke();
 
       /* live cyclotron spectrum */
@@ -217,7 +217,7 @@
         const x=x0+u*(x1-x0),y=y0-amp;
         if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
       }
-      ctx.strokeStyle='#67e8f9';ctx.lineWidth=1.4;ctx.stroke();
+      ctx.strokeStyle='#e0a45c';ctx.lineWidth=1.4;ctx.stroke();
 
       label(ctx,'SURVEY + CLUSTER WD',w*.07,h*.14);
       label(ctx,'MAGNETIC BINARY',w*.52,h*.14);
@@ -247,15 +247,15 @@
 
       /* multimodal mobile GUI */
       ctx.save();ctx.translate(phone.x,phone.y);
-      ctx.strokeStyle='rgba(215,229,241,.55)';ctx.lineWidth=1.25;
+      ctx.strokeStyle='rgba(230,222,206,.55)';ctx.lineWidth=1.25;
       roundedRect(ctx,-phone.width/2,-phone.height/2,phone.width,phone.height,8);ctx.stroke();
-      ctx.strokeStyle='rgba(103,232,249,.24)';
+      ctx.strokeStyle='rgba(224,164,92,.24)';
       roundedRect(ctx,-phone.width*.33,-phone.height*.3,phone.width*.66,phone.height*.18,3);ctx.stroke();
       roundedRect(ctx,-phone.width*.33,-phone.height*.04,phone.width*.29,phone.height*.22,3);ctx.stroke();
       roundedRect(ctx,phone.width*.04,-phone.height*.04,phone.width*.29,phone.height*.22,3);ctx.stroke();
-      ctx.beginPath();ctx.arc(0,phone.height*.36,2.2,0,TAU);ctx.fillStyle='rgba(216,234,242,.6)';ctx.fill();
+      ctx.beginPath();ctx.arc(0,phone.height*.36,2.2,0,TAU);ctx.fillStyle='rgba(230,222,206,.6)';ctx.fill();
       const focusY=-phone.height*.21+(reduce?0:(Math.sin(time*.9)*.5+.5)*phone.height*.29);
-      ctx.strokeStyle='rgba(103,232,249,.62)';ctx.strokeRect(-phone.width*.26,focusY,phone.width*.52,phone.height*.075);
+      ctx.strokeStyle='rgba(224,164,92,.62)';ctx.strokeRect(-phone.width*.26,focusY,phone.width*.52,phone.height*.075);
       ctx.restore();
 
       /* visual tokens leave the screen */
@@ -263,28 +263,28 @@
         const phase=reduce?(i+1)/5:(time*.18+i*.24)%1;
         const x=phone.x+phone.width*.55+phase*(graph.x-phone.x-phone.width*.75);
         const y=phone.y+(i-1.5)*6*Math.sin(phase*Math.PI);
-        glow(ctx,x,y,1.5,i%2?'#a78bfa':'#67e8f9',9);
+        glow(ctx,x,y,1.5,i%2?'#8ba9cf':'#e0a45c',9);
       }
 
       /* knowledge graph */
       const pos=nodes.map((node,index)=>({x:graph.x+node[0]*s*.52,y:graph.y+node[1]*s*.52+(reduce?0:Math.sin(time*.42+index)*1.4)}));
       edges.forEach((edge,index)=>{
         const a=pos[edge[0]],b=pos[edge[1]];
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(167,139,250,.28)';ctx.lineWidth=1;ctx.stroke();
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(139,169,207,.28)';ctx.lineWidth=1;ctx.stroke();
         const phase=reduce?.5:(time*.16+edgeOffsets[index])%1;
-        glow(ctx,a.x+(b.x-a.x)*phase,a.y+(b.y-a.y)*phase,1.2,index%3?'#a78bfa':'#67e8f9',8);
+        glow(ctx,a.x+(b.x-a.x)*phase,a.y+(b.y-a.y)*phase,1.2,index%3?'#8ba9cf':'#e0a45c',8);
       });
-      pos.forEach((p,index)=>glow(ctx,p.x,p.y,index===4?3.1:1.8,index%3===0?'#67e8f9':'#a78bfa',10));
+      pos.forEach((p,index)=>glow(ctx,p.x,p.y,index===4?3.1:1.8,index%3===0?'#e0a45c':'#8ba9cf',10));
 
       /* evidence packet -> auditable agent */
       ctx.beginPath();ctx.moveTo(graph.x+s*.13,graph.y);ctx.bezierCurveTo(w*.64,h*.24,w*.70,h*.62,agent.x-s*.105,agent.y);
-      ctx.strokeStyle='rgba(103,232,249,.24)';ctx.lineWidth=1;ctx.stroke();
+      ctx.strokeStyle='rgba(224,164,92,.24)';ctx.lineWidth=1;ctx.stroke();
       const ep=reduce?.56:(time*.14)%1;
-      glow(ctx,graph.x+s*.13+(agent.x-s*.105-graph.x-s*.13)*ep,graph.y+Math.sin(ep*Math.PI)*-8,1.8,'#67e8f9',10);
+      glow(ctx,graph.x+s*.13+(agent.x-s*.105-graph.x-s*.13)*ep,graph.y+Math.sin(ep*Math.PI)*-8,1.8,'#e0a45c',10);
 
       /* plan -> tool -> verify loop */
       const loopLabels=['PLAN','TOOL','VERIFY'];
-      const loopColors=['#67e8f9','#fbbf24','#4ade80'];
+      const loopColors=['#e0a45c','#fbbf24','#4ade80'];
       const loop=[];
       for(let i=0;i<3;i+=1){
         const angle=-Math.PI/2+i*TAU/3;
@@ -293,7 +293,7 @@
       loop.forEach((p,index)=>{
         const q=loop[(index+1)%loop.length];
         ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.quadraticCurveTo(agent.x,agent.y,q.x,q.y);
-        ctx.strokeStyle=`rgba(${index===0?'103,232,249':index===1?'251,191,36':'74,222,128'},.30)`;ctx.lineWidth=1;ctx.stroke();
+        ctx.strokeStyle=`rgba(${index===0?'224,164,92':index===1?'251,191,36':'74,222,128'},.30)`;ctx.lineWidth=1;ctx.stroke();
         const pulse=reduce?.5:(time*.22+index*.33)%1;
         glow(ctx,p.x+(q.x-p.x)*pulse,p.y+(q.y-p.y)*pulse,1.5,loopColors[index],9);
         glow(ctx,p.x,p.y,4.2,loopColors[index],13);
@@ -304,7 +304,7 @@
       /* audit trail */
       const logY=h*.82;
       ctx.strokeStyle='rgba(168,195,211,.22)';ctx.beginPath();ctx.moveTo(w*.07,logY);ctx.lineTo(w*.92,logY);ctx.stroke();
-      const segments=[['VISION','#67e8f9'],['RETRIEVE','#a78bfa'],['ACT','#fbbf24'],['PASS','#4ade80']];
+      const segments=[['VISION','#e0a45c'],['RETRIEVE','#8ba9cf'],['ACT','#fbbf24'],['PASS','#4ade80']];
       segments.forEach((item,index)=>{
         const x=w*(.12+index*.22);
         ctx.fillStyle=item[1];ctx.fillRect(x,logY-2,16,3);

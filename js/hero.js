@@ -54,7 +54,7 @@
     // white dwarf glow
     const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.2, cx, cy, R * 1.5);
     g.addColorStop(0, '#e8fbff');
-    g.addColorStop(0.5, '#4fd0e3');
+    g.addColorStop(0.5, '#e0a45c');
     g.addColorStop(1, 'rgba(10,79,92,0)');
     ctx.fillStyle = g;
     ctx.beginPath(); ctx.arc(cx, cy, R * 1.5, 0, 7); ctx.fill();

@@ -9,12 +9,12 @@
 <meta property="og:title" content="AI / Agents · Jiamao Lin 林佳茂">
 <meta property="og:description" content="Locally fine-tuned astronomy LLMs, dual-track RAG, knowledge graphs, and auditable LangGraph research agents — four projects, fully visualized.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%234fd0e3'/><circle cx='62' cy='40' r='22' fill='%230b1020'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%23a85518'/><circle cx='62' cy='40' r='22' fill='%23140f08'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=21">
-<link rel="stylesheet" href="css/cosmic-theme.css?v=20">
+<link rel="stylesheet" href="css/styles.css?v=26">
+<link rel="stylesheet" href="css/cosmic-theme.css?v=26">
 </head>
 <body class="ai-body">
 
@@ -63,16 +63,11 @@
     <div class="ai-hero-visual" aria-label="Animated artificial intelligence constellation">
       <canvas id="aiHeroCanvas" role="img" aria-label="A pulsing network of astronomy agents routes evidence through observe, reason, tool and verify stages."></canvas>
       <div class="ai-viz-head">
-        <span><i class="live-dot"></i> LIVE INFERENCE</span>
-        <span>maoAstro / 8B</span>
+        <span><i class="live-dot"></i> Evidence flow</span>
+        <span>maoAstro · 8B</span>
       </div>
       <div class="ai-viz-stages" aria-hidden="true">
-        <span>OBSERVE</span><span>REASON</span><span>TOOLS</span><span>VERIFY</span>
-      </div>
-      <div class="ai-viz-readout" aria-hidden="true">
-        <span>CONTEXT <b id="contextReadout">92%</b></span>
-        <span>TRUST <b id="trustReadout">0.94</b></span>
-        <span>LATENCY <b id="latencyReadout">38ms</b></span>
+        <span>Observe</span><span>Reason</span><span>Tools</span><span>Verify</span>
       </div>
     </div>
   </section>
@@ -137,7 +132,7 @@
     <!-- ===== the figure + the math, side by side ===== -->
     <div class="fig-math">
       <figure class="paper-fig">
-        <img src="assets/attnres-architecture.png?v=17" alt="Three residual designs: (a) standard residuals add each block's output; (b) full-attention residuals; (c) block attention residuals, where an AttnRes operator α attends over earlier block states via a learnable pseudo-query w with keys/values from earlier blocks."
+        <img src="assets/attnres-architecture.png?v=26" alt="Three residual designs: (a) standard residuals add each block's output; (b) full-attention residuals; (c) block attention residuals, where an AttnRes operator α attends over earlier block states via a learnable pseudo-query w with keys/values from earlier blocks."
           loading="lazy">
         <figcaption><b>Fig. 1.</b> The three residual designs. <b>(a)</b> standard residuals sum each block's
         output; <b>(c)</b> <em>Block-AttnRes</em> replaces that sum with an attention operator&nbsp;<em>α</em> whose
@@ -213,7 +208,7 @@
     <!-- ===== block-count ablation figure ===== -->
     <div class="fig-math fig-math-rev">
       <figure class="paper-fig">
-        <img src="assets/attnres-blocks-ablation.png?v=17" alt="Bar-and-line chart: astronomy-task accuracy (bars) versus relative VRAM (line) as the model is split into N = 16, 8, 4, 2 blocks. Accuracy is 90.4, 89.5, 86.2, 84 percent while relative VRAM drops 100, 50, 25, 12.5 percent."
+        <img src="assets/attnres-blocks-ablation.png?v=26" alt="Bar-and-line chart: astronomy-task accuracy (bars) versus relative VRAM (line) as the model is split into N = 16, 8, 4, 2 blocks. Accuracy is 90.4, 89.5, 86.2, 84 percent while relative VRAM drops 100, 50, 25, 12.5 percent."
           loading="lazy">
         <figcaption><b>Fig. 2.</b> Block-count ablation — bars: astronomy-QA accuracy; line: relative VRAM of the
         depth-attention cache, as the 32 layers are grouped into <em>N</em>&nbsp;=&nbsp;16 → 2 blocks.</figcaption>
@@ -792,16 +787,16 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/maoastro.js?v=17" defer></script>
-<script src="js/zte.js?v=17" defer></script>
-<script src="js/jindu.js?v=17" defer></script>
-<script src="js/astrostack.js?v=16" defer></script>
-<script src="js/astroagent.js?v=16" defer></script>
-<script src="js/kgdata.js?v=16" defer></script>
-<script src="js/kg.js?v=16" defer></script>
-<script src="js/ztfcnn.js?v=17" defer></script>
-<script src="js/interactions.js?v=16" defer></script>
-<script src="js/cosmic-ui.js?v=21" defer></script>
-<script src="js/main.js?v=20" defer></script>
+<script src="js/maoastro.js?v=26" defer></script>
+<script src="js/zte.js?v=26" defer></script>
+<script src="js/jindu.js?v=26" defer></script>
+<script src="js/astrostack.js?v=26" defer></script>
+<script src="js/astroagent.js?v=26" defer></script>
+<script src="js/kgdata.js?v=26" defer></script>
+<script src="js/kg.js?v=26" defer></script>
+<script src="js/ztfcnn.js?v=26" defer></script>
+<script src="js/interactions.js?v=26" defer></script>
+<script src="js/cosmic-ui.js?v=26" defer></script>
+<script src="js/main.js?v=26" defer></script>
 </body>
 </html>

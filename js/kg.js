@@ -179,7 +179,7 @@
     const active = focusId != null ? new Set([focusId, ...adj.get(focusId).map(a => a.o)]) : null;
 
     ctx.font = '600 12.5px system-ui,sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle = 'rgba(180,169,142,0.85)';
+    ctx.fillStyle = 'rgba(206,196,172,0.85)';
     ctx.fillText('source · method · model · parameter network', 14, 22);
 
     // ---- edges ----
@@ -252,7 +252,7 @@
       const lab = ABBR[ty] || ty, tw = ctx.measureText(lab).width;
       if (lx + 16 + tw > W - 10) { lx = 12; ly += 15; }
       ctx.fillStyle = col(ty); ctx.beginPath(); ctx.arc(lx + 4, ly, 4.5, 0, 7); ctx.fill();
-      ctx.fillStyle = 'rgba(180,169,142,.85)'; ctx.fillText(lab, lx + 12, ly + 0.5);
+      ctx.fillStyle = 'rgba(206,196,172,.85)'; ctx.fillText(lab, lx + 12, ly + 0.5);
       lx += 18 + tw + 8;
     }
     ctx.textBaseline = 'alphabetic';

@@ -204,8 +204,10 @@ strong{color:var(--ink-strong);font-weight:600}
 .toggle-row .btn-sm{flex:1 1 auto}
 .cyc-canvas-wrap{background:var(--well);border:1px solid var(--well-line);border-radius:var(--radius);
   overflow:hidden;position:relative;min-height:420px}
-#cycCanvas,#diskCanvas,#agentCanvas,#cnnCanvas{display:block;width:100%;height:100%}
-#kgCanvas{display:block;width:100%;height:100%;cursor:pointer}
+/* absolute-fill so the canvas size never feeds back into the wrap height
+   (the wrap's min-height / grid-stretch defines the box; the canvas fills it) */
+#cycCanvas,#diskCanvas,#agentCanvas,#cnnCanvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+#kgCanvas{position:absolute;inset:0;display:block;width:100%;height:100%;cursor:pointer}
 .cyc-legend{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:.4rem 1rem;
   padding:.6rem .9rem;font-family:var(--mono);font-size:.68rem;color:var(--ink-od-soft);
   background:linear-gradient(transparent,rgba(8,7,4,.94))}
@@ -245,8 +247,8 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 
 /* spectrum plate */
 .spec-canvas-wrap{background:var(--well);border:1px solid var(--well-line);border-radius:var(--radius);
-  padding:1rem;min-height:380px}
-#specCanvas{display:block;width:100%;height:100%}
+  padding:1rem;min-height:380px;position:relative}
+#specCanvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 .spec-side{display:flex;flex-direction:column;gap:.85rem}
 .spec-presets{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem}
 .spec-presets p{margin:0 0 .7rem;font-size:.78rem;color:var(--ink-soft)}

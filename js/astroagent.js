@@ -250,7 +250,7 @@
     }
 
     // caption corner
-    ctx.fillStyle = 'rgba(180,169,142,.6)';
+    ctx.fillStyle = 'rgba(206,196,172,.6)';
     ctx.font = '11px ui-monospace,SFMono-Regular,Menlo,monospace';
     ctx.textAlign = 'left';
     ctx.fillText('analysis_agent · LangGraph state machine', 14, H - 14);

@@ -77,7 +77,7 @@
     ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = stroke; ctx.stroke();
     ctx.textAlign = 'center'; ctx.fillStyle = '#ece5d6';
     ctx.font = '600 12px "Hanken Grotesk", sans-serif'; ctx.fillText(label, x, y + 3);
-    if (sub) { ctx.font = '9px "IBM Plex Mono", monospace'; ctx.fillStyle = '#8c8470'; ctx.fillText(sub, x, y + r + 14); }
+    if (sub) { ctx.font = '9px "IBM Plex Mono", monospace'; ctx.fillStyle = '#a89e84'; ctx.fillText(sub, x, y + r + 14); }
     ctx.textAlign = 'left';
   }
 
@@ -105,7 +105,7 @@
     // connecting channel
     ctx.beginPath(); ctx.moveTo(ox + r, oy); ctx.lineTo(wx - r, oy);
     ctx.strokeStyle = 'rgba(150,160,180,.25)'; ctx.lineWidth = 2; ctx.setLineDash([5, 6]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.font = '9px "IBM Plex Mono", monospace'; ctx.fillStyle = '#8c8470'; ctx.textAlign = 'center';
+    ctx.font = '9px "IBM Plex Mono", monospace'; ctx.fillStyle = '#a89e84'; ctx.textAlign = 'center';
     ctx.fillText('A2A · task spec ⇄ artifact', (ox + wx) / 2, oy - 14); ctx.textAlign = 'left';
 
     // travelling packet during transit phases
@@ -136,11 +136,11 @@
       const on = i === phase, done = i < phase;
       ctx.beginPath(); ctx.arc(x, railY, on ? 6 : 4, 0, 7);
       ctx.fillStyle = on ? ACC : (done ? GREEN : 'rgba(150,160,180,.35)'); ctx.fill();
-      ctx.font = '8px "IBM Plex Mono", monospace'; ctx.fillStyle = on ? '#ece5d6' : '#8c8470'; ctx.textAlign = 'center';
+      ctx.font = '8px "IBM Plex Mono", monospace'; ctx.fillStyle = on ? '#ece5d6' : '#a89e84'; ctx.textAlign = 'center';
       ctx.fillText('0' + (i + 1), x, railY - 10); ctx.textAlign = 'left';
     });
     // registry stack (top-left)
-    ctx.font = '9px "IBM Plex Mono", monospace'; ctx.fillStyle = '#8c8470';
+    ctx.font = '9px "IBM Plex Mono", monospace'; ctx.fillStyle = '#a89e84';
     ctx.fillText('skill registry: ' + registered, w * 0.08, 20);
     for (let i = 0; i < Math.min(registered, 12); i++) {
       ctx.fillStyle = i === registered - 1 && p.key === 'register' ? GREEN : 'rgba(39,196,153,.4)';

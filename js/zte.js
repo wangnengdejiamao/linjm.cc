@@ -67,9 +67,9 @@
     const s = Math.min(W(), H()) * 0.115;
     APPS.forEach(a => {
       const p = appXY(a.id); const on = hi === a.id;
-      if (on) { ctx.beginPath(); ctx.arc(p[0], p[1], s * .95, 0, 7); ctx.fillStyle = 'rgba(103,232,249,.22)'; ctx.fill(); }
+      if (on) { ctx.beginPath(); ctx.arc(p[0], p[1], s * .95, 0, 7); ctx.fillStyle = 'rgba(224,164,92,.22)'; ctx.fill(); }
       rr(p[0] - s / 2, p[1] - s / 2, s, s, s * .28); ctx.fillStyle = a.c; ctx.fill();
-      if (on) { ctx.lineWidth = 2; ctx.strokeStyle = '#67e8f9'; ctx.stroke(); }
+      if (on) { ctx.lineWidth = 2; ctx.strokeStyle = '#e0a45c'; ctx.stroke(); }
       ctx.fillStyle = '#fff'; ctx.font = '700 ' + (s * .42) + 'px "Hanken Grotesk",sans-serif';
       ctx.textAlign = 'center'; ctx.fillText(a.name[0], p[0], p[1] + s * .15);
       ctx.fillStyle = '#b9cbdd'; ctx.font = (H() * .02) + 'px "Hanken Grotesk",sans-serif';
@@ -86,8 +86,8 @@
   }
   function listRow(y, h, label, sub, hi, accent) {
     rr(W() * .06, y, W() * .88, h, 10);
-    ctx.fillStyle = hi ? 'rgba(103,232,249,.14)' : '#101c30'; ctx.fill();
-    if (hi) { ctx.lineWidth = 2; ctx.strokeStyle = '#67e8f9'; ctx.stroke(); }
+    ctx.fillStyle = hi ? 'rgba(224,164,92,.14)' : '#101c30'; ctx.fill();
+    if (hi) { ctx.lineWidth = 2; ctx.strokeStyle = '#e0a45c'; ctx.stroke(); }
     ctx.fillStyle = '#eaf3fb'; ctx.textAlign = 'left';
     ctx.font = '600 ' + (H() * .026) + 'px "Hanken Grotesk",sans-serif';
     ctx.fillText(label, W() * .1, y + h * .42);
@@ -95,7 +95,7 @@
   }
   function primaryBtn(y, label, hi) {
     rr(W() * .06, y, W() * .88, H() * .075, 12);
-    ctx.fillStyle = hi ? '#67e8f9' : '#1f5fd8'; ctx.fill();
+    ctx.fillStyle = hi ? '#e0a45c' : '#1f5fd8'; ctx.fill();
     ctx.fillStyle = hi ? '#04121a' : '#fff'; ctx.textAlign = 'center';
     ctx.font = '700 ' + (H() * .028) + 'px "Hanken Grotesk",sans-serif';
     ctx.fillText(label, W() * .5, y + H() * .05); ctx.textAlign = 'left';
@@ -104,7 +104,7 @@
     appHeader('Luckin Coffee', '#1f5fd8');
     ctx.fillStyle = '#8fb0cc'; ctx.font = (H() * .024) + 'px "Hanken Grotesk",sans-serif';
     ctx.fillText('Menu · 招牌', W() * .06, H() * .195);
-    listRow(H() * .225, H() * .1, '生椰拿铁 Coconut Latte', '¥ 18   ★ your usual', hi === 'item', '#67e8f9');
+    listRow(H() * .225, H() * .1, '生椰拿铁 Coconut Latte', '¥ 18   ★ your usual', hi === 'item', '#e0a45c');
     listRow(H() * .345, H() * .1, '美式 Americano', '¥ 15', false);
     listRow(H() * .465, H() * .1, '丝绒拿铁 Velvet Latte', '¥ 19', false);
     if (stage === 'cart') primaryBtn(H() * .8, '立即购买 · Order  ¥18', hi === 'order');
@@ -122,13 +122,13 @@
     // input bar
     rr(W() * .06, H() * .82, W() * .66, H() * .07, 20); ctx.fillStyle = '#101c30'; ctx.fill();
     ctx.fillStyle = '#8fb0cc'; ctx.fillText(typed ? 'On my way' : 'Message…', W() * .1, H() * .862);
-    rr(W() * .76, H() * .82, W() * .18, H() * .07, 14); ctx.fillStyle = hi === 'send' ? '#67e8f9' : '#1f5fd8'; ctx.fill();
+    rr(W() * .76, H() * .82, W() * .18, H() * .07, 14); ctx.fillStyle = hi === 'send' ? '#e0a45c' : '#1f5fd8'; ctx.fill();
     ctx.fillStyle = hi === 'send' ? '#04121a' : '#fff'; ctx.textAlign = 'center'; ctx.fillText('Send', W() * .85, H() * .862); ctx.textAlign = 'left';
   }
   function drawClock(set, hi) {
     appHeader('Clock · Timer', '#2b2b33');
     ctx.textAlign = 'center';
-    ctx.fillStyle = set ? '#67e8f9' : '#eaf3fb'; ctx.font = '700 ' + (H() * .09) + 'px "IBM Plex Mono",monospace';
+    ctx.fillStyle = set ? '#e0a45c' : '#eaf3fb'; ctx.font = '700 ' + (H() * .09) + 'px "IBM Plex Mono",monospace';
     ctx.fillText(set ? '30:00' : '00:00', W() * .5, H() * .42);
     ctx.fillStyle = '#8fb0cc'; ctx.font = (H() * .024) + 'px "Hanken Grotesk",sans-serif';
     ctx.fillText(set ? 'counting down' : 'set duration', W() * .5, H() * .5); ctx.textAlign = 'left';
@@ -220,7 +220,7 @@
 
     if (idx !== lastBeat) {
       lastBeat = idx;
-      if (el.agent) { el.agent.textContent = beat.ag === 'worker' ? 'Worker · 32B' : 'Planner · 4B'; el.agent.style.color = beat.ag === 'worker' ? '#67e8f9' : '#b9a6ff'; }
+      if (el.agent) { el.agent.textContent = beat.ag === 'worker' ? 'Worker · 32B' : 'Planner · 4B'; el.agent.style.color = beat.ag === 'worker' ? '#e0a45c' : '#8ba9cf'; }
       if (el.goal) el.goal.textContent = beat.goal;
       if (el.action) el.action.textContent = beat.action;
       if (el.step) el.step.textContent = (idx + 1) + ' / ' + beats.length;
@@ -240,19 +240,19 @@
       ripple = frac > 0.55 ? (frac - 0.55) / 0.45 : 0;
       if (ripple > 0) {
         ctx.beginPath(); ctx.arc(tx, ty, ripple * W() * 0.12, 0, 7);
-        ctx.strokeStyle = 'rgba(103,232,249,' + (0.7 * (1 - ripple)) + ')'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.strokeStyle = 'rgba(224,164,92,' + (0.7 * (1 - ripple)) + ')'; ctx.lineWidth = 2; ctx.stroke();
       }
     }
     // draw finger
     ctx.beginPath(); ctx.arc(finger.x, finger.y, W() * 0.032, 0, 7);
     ctx.fillStyle = 'rgba(233,245,255,.92)'; ctx.fill();
-    ctx.strokeStyle = 'rgba(103,232,249,.9)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = 'rgba(224,164,92,.9)'; ctx.lineWidth = 2; ctx.stroke();
     ctx.beginPath(); ctx.arc(finger.x, finger.y, W() * 0.012, 0, 7); ctx.fillStyle = '#1f5fd8'; ctx.fill();
 
     // agent badge (who is acting)
     rr(W() * .06, H() * .93, W() * .5, H() * .05, 10);
-    ctx.fillStyle = beat.ag === 'worker' ? 'rgba(103,232,249,.16)' : 'rgba(185,166,255,.16)'; ctx.fill();
-    ctx.fillStyle = beat.ag === 'worker' ? '#67e8f9' : '#c9b8ff'; ctx.textAlign = 'left';
+    ctx.fillStyle = beat.ag === 'worker' ? 'rgba(224,164,92,.16)' : 'rgba(139,169,207,.16)'; ctx.fill();
+    ctx.fillStyle = beat.ag === 'worker' ? '#e0a45c' : '#accbe6'; ctx.textAlign = 'left';
     ctx.font = '600 ' + (H() * .022) + 'px "IBM Plex Mono",monospace';
     ctx.fillText((beat.ag === 'worker' ? '● Worker 32B' : '● Planner 4B') + ' · OpenClaw', W() * .09, H() * .962);
 

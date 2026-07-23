@@ -197,10 +197,10 @@
       ctx.fillText('occulted by disk edge', s1.x, s1.y - r1 - 10);
     }
     if (!extended) {
-      ctx.fillStyle = 'rgba(170,182,212,.85)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillStyle = 'rgba(214,203,182,.85)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
       ctx.fillText('occulted source = white dwarf (point-like)', g.cx, g.cy - R*0.34);
     }
-    ctx.fillStyle = 'rgba(170,182,212,.7)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(214,203,182,.7)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('▼ to observer', g.cx, H - 24);
     ctx.fillText('binary i = ' + Math.round(iv*180/Math.PI) + '°,  disk α = ' + Math.round(alphaMis*180/Math.PI) + '°'
       + (ds < 0.04 ? '  (face-on — no eclipse)' : ''), g.cx, 20);
@@ -227,7 +227,7 @@
     lctx.strokeStyle = 'rgba(255,255,255,.12)';
     lctx.beginPath(); lctx.moveTo(x0, y0); lctx.lineTo(x1, y0); lctx.stroke();
     // flux axis ticks (1.0 and floor)
-    lctx.fillStyle = 'rgba(170,182,212,.6)'; lctx.font = '9px sans-serif'; lctx.textAlign = 'right';
+    lctx.fillStyle = 'rgba(214,203,182,.6)'; lctx.font = '9px sans-serif'; lctx.textAlign = 'right';
     lctx.fillText('1.0', x0 - 3, Y(1.0) + 3);
     lctx.fillText((1 - DEPTH).toFixed(1), x0 - 3, Y(1 - DEPTH) + 3);
     // real folded ZTF points (g green, r vermillion)
@@ -239,19 +239,19 @@
     if (DD) { pts(DD.bands.r && DD.bands.r.points, 'rgba(213,94,0,.85)');
               pts(DD.bands.g && DD.bands.g.points, 'rgba(0,158,115,.95)'); }
     // fitted trapezoid (dashed) — what the data say
-    lctx.setLineDash([4,4]); lctx.strokeStyle = 'rgba(220,228,255,.75)'; lctx.lineWidth = 1.4;
+    lctx.setLineDash([4,4]); lctx.strokeStyle = 'rgba(230,222,206,.75)'; lctx.lineWidth = 1.4;
     lctx.beginPath();
     for (let i = 0; i <= 200; i++) { const ph = i/200, X = x0+(x1-x0)*ph;
       i ? lctx.lineTo(X, Y(refFlux(ph))) : lctx.moveTo(X, Y(refFlux(ph))); }
     lctx.stroke(); lctx.setLineDash([]);
     // current model (solid) — diverges from the fit only when WD is selected
-    lctx.strokeStyle = extended ? '#4fd0e3' : '#e69f00'; lctx.lineWidth = 2; lctx.beginPath();
+    lctx.strokeStyle = extended ? '#e0a45c' : '#e69f00'; lctx.lineWidth = 2; lctx.beginPath();
     for (let i = 0; i <= 200; i++) { const ph = i/200, X = x0+(x1-x0)*ph;
       i ? lctx.lineTo(X, Y(modelFlux(ph))) : lctx.moveTo(X, Y(modelFlux(ph))); }
     lctx.stroke();
     const mX = x0+(x1-x0)*(phase%1);
     lctx.fillStyle = '#fff'; lctx.beginPath(); lctx.arc(mX, Y(modelFlux(phase)), 4, 0, 7); lctx.fill();
-    lctx.fillStyle = 'rgba(170,182,212,.7)'; lctx.font = '10px sans-serif';
+    lctx.fillStyle = 'rgba(214,203,182,.7)'; lctx.font = '10px sans-serif';
     lctx.textAlign='left'; lctx.fillText('0', x0, LH-3);
     lctx.textAlign='center'; lctx.fillText(DD ? 'ZTF g/r folded · P = 36.711 d' : 'phase', (x0+x1)/2, LH-3);
     lctx.textAlign='right'; lctx.fillText('phase 1', x1, LH-3);

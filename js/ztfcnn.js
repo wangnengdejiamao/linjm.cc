@@ -15,7 +15,7 @@
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   // palette (warm-dark theme)
-  const INK = '#efe7d4', SOFT = '#b4a98e', DIM = '#7d735d', LINE = '#473d27',
+  const INK = '#efe7d4', SOFT = '#d2c8ae', DIM = '#a89e84', LINE = '#473d27',
         ACC = '#e0975a', WELL = '#0c0a06';
   const CCOL = { EA: '#6f8fe0', EW: '#e0975a', NonEB: '#9aa0ad' };
   const CLASSES = ['EA', 'EW', 'NonEB'];

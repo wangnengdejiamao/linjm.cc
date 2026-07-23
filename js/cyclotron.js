@@ -199,7 +199,7 @@
     const drawDon = () => starGlow(don.x, don.y, Rdon, '#ffd9b0', '#d55e00');
     if (donFront) { drawWD(); drawDon(); } else { drawDon(); drawWD(); }
 
-    ctx.fillStyle = 'rgba(170,182,212,.8)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(214,203,182,.8)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('▼ to observer', W*0.45, H - 26);
     ctx.fillText('P_spin = P_orb (synchronous)', W*0.45, 22);
     if (donFront && ecf < 0.55) {
@@ -290,14 +290,14 @@
       const xa = x0 + (x1 - x0) * ew.lo, xb = x0 + (x1 - x0) * ew.hi;
       lctx.fillStyle = 'rgba(230,159,0,.16)'; lctx.fillRect(xa, y1, Math.max(2, xb - xa), y0 - y1);
     }
-    lctx.strokeStyle = '#4fd0e3'; lctx.lineWidth = 2; lctx.beginPath();
+    lctx.strokeStyle = '#e0a45c'; lctx.lineWidth = 2; lctx.beginPath();
     const N = 160;
     for (let i = 0; i <= N; i++) { const ph = i/N, X = x0+(x1-x0)*ph, Y = y0-(y0-y1)*norm(fluxAt(ph));
       i ? lctx.lineTo(X, Y) : lctx.moveTo(X, Y); }
     lctx.stroke();
     const cphase = phase % 1, mX = x0+(x1-x0)*cphase, mY = y0-(y0-y1)*norm(fluxAt(cphase));
     lctx.fillStyle = '#fff'; lctx.beginPath(); lctx.arc(mX, mY, 4, 0, 7); lctx.fill();
-    lctx.fillStyle = 'rgba(170,182,212,.7)'; lctx.font = '10px sans-serif';
+    lctx.fillStyle = 'rgba(214,203,182,.7)'; lctx.font = '10px sans-serif';
     lctx.textAlign='left'; lctx.fillText('0', x0, LH-3);
     lctx.textAlign='right'; lctx.fillText('orbital phase  1', x1, LH-3);
   }

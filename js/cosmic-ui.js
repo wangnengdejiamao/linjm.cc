@@ -206,7 +206,7 @@
       spine.forEach((seg, index) => {
         const phase = reduceMotion ? .52 : (time * .12 + index * .46) % 1;
         const packet = quadPoint(seg.a, seg.c, seg.b, phase);
-        glowDot(ctx, packet.x, packet.y, 2, '#67e8f9', 12);
+        glowDot(ctx, packet.x, packet.y, 2, '#e0a45c', 12);
       });
 
       /* 1 — a star cluster with a highlighted white dwarf */
@@ -220,7 +220,7 @@
         glowDot(ctx, x, y, star.size * twinkle, star.blue ? '#bfefff' : '#e8d7b5', star.blue ? 12 : 5);
         if (index === 0) {
           ctx.beginPath();ctx.arc(x,y,10 + Math.sin(time*1.3)*1.2,0,TAU);
-          ctx.strokeStyle='rgba(103,232,249,.46)';ctx.lineWidth=1;ctx.stroke();
+          ctx.strokeStyle='rgba(224,164,92,.46)';ctx.lineWidth=1;ctx.stroke();
           ctx.beginPath();ctx.moveTo(x-16,y);ctx.lineTo(x-11,y);ctx.moveTo(x+11,y);ctx.lineTo(x+16,y);ctx.stroke();
         }
       });
@@ -230,7 +230,7 @@
       /* 2 — an accreting magnetic compact binary */
       ctx.save();ctx.translate(binaryC.x,binaryC.y);ctx.rotate(-.18);
       ctx.beginPath();ctx.ellipse(0,0,s*.14,s*.062,0,0,TAU);
-      ctx.strokeStyle='rgba(103,232,249,.24)';ctx.lineWidth=1;ctx.stroke();ctx.restore();
+      ctx.strokeStyle='rgba(224,164,92,.24)';ctx.lineWidth=1;ctx.stroke();ctx.restore();
       const angle = reduceMotion ? .75 : time * .56;
       const whiteDwarf = { x: binaryC.x + Math.cos(angle)*s*.08, y: binaryC.y + Math.sin(angle)*s*.035 };
       const donor = { x: binaryC.x - Math.cos(angle)*s*.105, y: binaryC.y - Math.sin(angle)*s*.046 };
@@ -242,7 +242,7 @@
       for (let k = 0; k < 4; k += 1) {
         ctx.save();ctx.translate(whiteDwarf.x,whiteDwarf.y);ctx.rotate(k*Math.PI/4 + time*.035);
         ctx.beginPath();ctx.ellipse(0,0,s*(.036+k*.012),s*(.014+k*.005),0,0,TAU);
-        ctx.strokeStyle=`rgba(103,232,249,${.26-k*.035})`;ctx.lineWidth=1;ctx.stroke();ctx.restore();
+        ctx.strokeStyle=`rgba(224,164,92,${.26-k*.035})`;ctx.lineWidth=1;ctx.stroke();ctx.restore();
       }
       glowDot(ctx,whiteDwarf.x,whiteDwarf.y,s*.018,'#d8f8ff',22);
       glowDot(ctx,donor.x,donor.y,s*.024,'#d88f62',16);
@@ -250,23 +250,23 @@
       const beamX = whiteDwarf.x + Math.cos(beamAngle)*s*.13;
       const beamY = whiteDwarf.y + Math.sin(beamAngle)*s*.13;
       const beam = ctx.createLinearGradient(whiteDwarf.x,whiteDwarf.y,beamX,beamY);
-      beam.addColorStop(0,'rgba(103,232,249,.52)');beam.addColorStop(1,'rgba(103,232,249,0)');
+      beam.addColorStop(0,'rgba(224,164,92,.52)');beam.addColorStop(1,'rgba(224,164,92,0)');
       ctx.beginPath();ctx.moveTo(whiteDwarf.x,whiteDwarf.y);ctx.lineTo(beamX,beamY);ctx.strokeStyle=beam;ctx.lineWidth=4;ctx.stroke();
 
       /* 3 — a knowledge graph feeding the multimodal mobile agent */
       const phoneW = Math.max(34, s * .105), phoneH = Math.max(72, s * .225);
       ctx.save();
       ctx.translate(phoneC.x, phoneC.y);
-      ctx.strokeStyle='rgba(216,235,245,.46)';ctx.lineWidth=1.2;
+      ctx.strokeStyle='rgba(230,222,206,.46)';ctx.lineWidth=1.2;
       roundedRectPath(ctx,-phoneW/2,-phoneH/2,phoneW,phoneH,7);ctx.stroke();
-      ctx.strokeStyle='rgba(103,232,249,.22)';
+      ctx.strokeStyle='rgba(224,164,92,.22)';
       ctx.strokeRect(-phoneW*.32,-phoneH*.30,phoneW*.64,phoneH*.16);
       ctx.strokeRect(-phoneW*.32,-phoneH*.06,phoneW*.28,phoneH*.20);
       ctx.strokeRect(phoneW*.04,-phoneH*.06,phoneW*.28,phoneH*.20);
       const focusY = -phoneH*.28 + (reduceMotion ? phoneH*.2 : (Math.sin(time*.7)*.5+.5)*phoneH*.4);
-      ctx.strokeStyle='rgba(103,232,249,.6)';
+      ctx.strokeStyle='rgba(224,164,92,.6)';
       ctx.strokeRect(-phoneW*.36,focusY,phoneW*.72,phoneH*.10);
-      ctx.beginPath();ctx.arc(0,phoneH*.38,1.8,0,TAU);ctx.fillStyle='rgba(216,234,242,.6)';ctx.fill();
+      ctx.beginPath();ctx.arc(0,phoneH*.38,1.8,0,TAU);ctx.fillStyle='rgba(230,222,206,.6)';ctx.fill();
       ctx.restore();
 
       const graphPos = graphNodes.map((node,index) => ({
@@ -276,23 +276,23 @@
       graphEdges.forEach((edge,index) => {
         const a=graphPos[edge[0]],b=graphPos[edge[1]];
         ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle='rgba(167,139,250,.24)';ctx.lineWidth=1;ctx.stroke();
+        ctx.strokeStyle='rgba(139,169,207,.24)';ctx.lineWidth=1;ctx.stroke();
         const phase=reduceMotion?.5:(time*.16+index*.13)%1;
-        glowDot(ctx,a.x+(b.x-a.x)*phase,a.y+(b.y-a.y)*phase,1.2,'#a78bfa',8);
+        glowDot(ctx,a.x+(b.x-a.x)*phase,a.y+(b.y-a.y)*phase,1.2,'#8ba9cf',8);
       });
       /* retrieved context flows from the graph into the phone screen */
       const intake = { x: phoneC.x - phoneW*.42, y: phoneC.y - phoneH*.18 };
       [2,5,7].forEach((nodeIndex,index) => {
         const a = graphPos[nodeIndex];
         ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(intake.x,intake.y);
-        ctx.strokeStyle='rgba(103,232,249,.16)';ctx.lineWidth=1;ctx.stroke();
+        ctx.strokeStyle='rgba(224,164,92,.16)';ctx.lineWidth=1;ctx.stroke();
         const phase=reduceMotion?.5:(time*.2+index*.31)%1;
-        glowDot(ctx,a.x+(intake.x-a.x)*phase,a.y+(intake.y-a.y)*phase,1.4,'#67e8f9',9);
+        glowDot(ctx,a.x+(intake.x-a.x)*phase,a.y+(intake.y-a.y)*phase,1.4,'#e0a45c',9);
       });
-      graphPos.forEach((p,index)=>glowDot(ctx,p.x,p.y,index===4?3:1.7,index%3===0?'#67e8f9':'#a78bfa',10));
+      graphPos.forEach((p,index)=>glowDot(ctx,p.x,p.y,index===4?3:1.7,index%3===0?'#e0a45c':'#8ba9cf',10));
 
       /* labels are deliberately concise; the HTML HUD carries the full story */
-      ctx.font='10px "IBM Plex Mono", monospace';ctx.textAlign='center';ctx.fillStyle='rgba(220,235,244,.72)';
+      ctx.font='10px "IBM Plex Mono", monospace';ctx.textAlign='center';ctx.fillStyle='rgba(234,226,210,.72)';
       ctx.fillText('CLUSTER WHITE DWARF', clusterC.x, clusterC.y + clusterRadius + 22);
       ctx.fillText('MAGNETIC ACCRETION', binaryC.x + s*.02, binaryC.y - s*.17);
       ctx.fillText('KG + MOBILE GUI AGENT', phoneC.x - s*.06, phoneC.y - phoneH*.5 - s*.11);
@@ -350,26 +350,26 @@
         const b=positions[edge.column+1][edge.to];
         const bend=(b.x-a.x)*.48;
         ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.bezierCurveTo(a.x+bend,a.y,b.x-bend,b.y,b.x,b.y);
-        ctx.strokeStyle=index%5===0?'rgba(167,139,250,.17)':'rgba(103,232,249,.13)';
+        ctx.strokeStyle=index%5===0?'rgba(139,169,207,.17)':'rgba(224,164,92,.13)';
         ctx.lineWidth=1;ctx.stroke();
 
         const phase=reduceMotion?.56:(time*edge.speed+edge.offset)%1;
         const inv=1-phase;
         const px=inv*inv*inv*a.x+3*inv*inv*phase*(a.x+bend)+3*inv*phase*phase*(b.x-bend)+phase*phase*phase*b.x;
         const py=inv*inv*inv*a.y+3*inv*inv*phase*a.y+3*inv*phase*phase*b.y+phase*phase*phase*b.y;
-        glowDot(ctx,px,py,index%5===0?1.9:1.35,index%5===0?'#a78bfa':'#67e8f9',10);
+        glowDot(ctx,px,py,index%5===0?1.9:1.35,index%5===0?'#8ba9cf':'#e0a45c',10);
       });
 
       positions.forEach((column, columnIndex) => column.forEach((p,row) => {
         const hovered=hover&&Math.hypot(hover.x-p.x,hover.y-p.y)<30;
         const pulse=reduceMotion?1:1+Math.sin(time*1.8+columnIndex+row)*.09;
-        const color=columnIndex===3?'#4ade80':columnIndex===2?'#a78bfa':'#67e8f9';
+        const color=columnIndex===3?'#4ade80':columnIndex===2?'#8ba9cf':'#e0a45c';
         ctx.save();ctx.shadowColor=color;ctx.shadowBlur=hovered?26:12;
         ctx.fillStyle='#071019';ctx.strokeStyle=color;ctx.lineWidth=hovered?2:1.25;
         ctx.beginPath();ctx.arc(p.x,p.y,(hovered?9:6.5)*pulse,0,TAU);ctx.fill();ctx.stroke();
         ctx.fillStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,1.6,0,TAU);ctx.fill();ctx.restore();
         if(hovered){
-          ctx.font='10px IBM Plex Mono, monospace';ctx.fillStyle='rgba(224,247,255,.82)';
+          ctx.font='10px IBM Plex Mono, monospace';ctx.fillStyle='rgba(238,230,214,.82)';
           ctx.textAlign='center';ctx.fillText(['evidence','reasoning','tool call','verified'][columnIndex],p.x,p.y-18);
         }
       }));
@@ -377,7 +377,7 @@
       /* moving spectral scan */
       const scanY=reduceMotion?h*.52:(time*28)%Math.max(1,h);
       const scan=ctx.createLinearGradient(0,scanY-28,0,scanY+28);
-      scan.addColorStop(0,'rgba(103,232,249,0)');scan.addColorStop(.5,'rgba(103,232,249,.035)');scan.addColorStop(1,'rgba(103,232,249,0)');
+      scan.addColorStop(0,'rgba(224,164,92,0)');scan.addColorStop(.5,'rgba(224,164,92,.035)');scan.addColorStop(1,'rgba(224,164,92,0)');
       ctx.fillStyle=scan;ctx.fillRect(0,scanY-28,w,56);
     });
 

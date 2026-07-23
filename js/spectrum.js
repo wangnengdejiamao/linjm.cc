@@ -94,7 +94,7 @@
     // axes
     ctx.strokeStyle = 'rgba(255,255,255,.18)'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(40, y0); ctx.lineTo(W-15, y0); ctx.stroke();
-    ctx.fillStyle = 'rgba(170,182,212,.8)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(214,203,182,.8)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
     for (let lam = 4000; lam <= 9000; lam += 1000) {
       ctx.strokeStyle = 'rgba(255,255,255,.07)';
       ctx.beginPath(); ctx.moveTo(x(lam), y1); ctx.lineTo(x(lam), y0); ctx.stroke();
@@ -105,7 +105,7 @@
     ctx.fillText('flux (arb.)', 0, 0); ctx.restore();
 
     // continuum (dashed) + total spectrum (filled)
-    ctx.setLineDash([5,4]); ctx.strokeStyle = 'rgba(170,182,212,.5)'; ctx.lineWidth = 1.2;
+    ctx.setLineDash([5,4]); ctx.strokeStyle = 'rgba(214,203,182,.5)'; ctx.lineWidth = 1.2;
     ctx.beginPath();
     for (let p = 0; p <= W; p += 3) { const lam = LAM0 + (LAM1-LAM0)*(p-40)/(W-55);
       const s = spectrum(lam, B, kT, th); p?ctx.lineTo(x(lam),Y(s.cont)):ctx.moveTo(x(lam),Y(s.cont)); }
@@ -118,7 +118,7 @@
       ctx.lineTo(x(lam), Y(spectrum(lam, B, kT, th).y)); }
     ctx.lineTo(x(LAM1), y0); ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
 
-    ctx.strokeStyle = '#4fd0e3'; ctx.lineWidth = 2; ctx.beginPath();
+    ctx.strokeStyle = '#e0a45c'; ctx.lineWidth = 2; ctx.beginPath();
     for (let p = 40; p <= W-15; p += 2) { const lam = LAM0 + (LAM1-LAM0)*(p-40)/(W-55);
       const yy = Y(spectrum(lam, B, kT, th).y); (p===40)?ctx.moveTo(x(lam),yy):ctx.lineTo(x(lam),yy); }
     ctx.stroke();
