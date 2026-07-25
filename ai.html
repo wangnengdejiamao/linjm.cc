@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=26">
-<link rel="stylesheet" href="css/cosmic-theme.css?v=26">
+<link rel="stylesheet" href="css/styles.css?v=32">
+<link rel="stylesheet" href="css/cosmic-theme.css?v=32">
 </head>
 <body class="ai-body">
 
@@ -60,14 +60,14 @@
         <a href="#cnn" class="ai-hchip"><b>05</b> ZTF classifier <span>lightweight CNN</span></a>
       </div>
     </div>
-    <div class="ai-hero-visual" aria-label="Animated artificial intelligence constellation">
-      <canvas id="aiHeroCanvas" role="img" aria-label="A pulsing network of astronomy agents routes evidence through observe, reason, tool and verify stages."></canvas>
+    <div class="ai-hero-visual" aria-label="A retrieval audit, animated">
+      <canvas id="aiHeroCanvas" role="img" aria-label="A question is answered by dual-track retrieval: twenty candidate passages from dense-vector and BM25 search are reranked down to five, the answer is written only from those five, and a third example question is refused outright because nothing retrieved supports it."></canvas>
       <div class="ai-viz-head">
-        <span><i class="live-dot"></i> Evidence flow</span>
-        <span>maoAstro · 8B</span>
+        <span><i class="live-dot"></i> Dual-track RAG · audit</span>
+        <span>click to advance</span>
       </div>
       <div class="ai-viz-stages" aria-hidden="true">
-        <span>Observe</span><span>Reason</span><span>Tools</span><span>Verify</span>
+        <span>Recall</span><span>Rerank</span><span>Ground</span><span>Verdict</span>
       </div>
     </div>
   </section>
@@ -132,7 +132,7 @@
     <!-- ===== the figure + the math, side by side ===== -->
     <div class="fig-math">
       <figure class="paper-fig">
-        <img src="assets/attnres-architecture.png?v=26" alt="Three residual designs: (a) standard residuals add each block's output; (b) full-attention residuals; (c) block attention residuals, where an AttnRes operator α attends over earlier block states via a learnable pseudo-query w with keys/values from earlier blocks."
+        <img src="assets/attnres-architecture.png?v=32" alt="Three residual designs: (a) standard residuals add each block's output; (b) full-attention residuals; (c) block attention residuals, where an AttnRes operator α attends over earlier block states via a learnable pseudo-query w with keys/values from earlier blocks."
           loading="lazy">
         <figcaption><b>Fig. 1.</b> The three residual designs. <b>(a)</b> standard residuals sum each block's
         output; <b>(c)</b> <em>Block-AttnRes</em> replaces that sum with an attention operator&nbsp;<em>α</em> whose
@@ -208,7 +208,7 @@
     <!-- ===== block-count ablation figure ===== -->
     <div class="fig-math fig-math-rev">
       <figure class="paper-fig">
-        <img src="assets/attnres-blocks-ablation.png?v=26" alt="Bar-and-line chart: astronomy-task accuracy (bars) versus relative VRAM (line) as the model is split into N = 16, 8, 4, 2 blocks. Accuracy is 90.4, 89.5, 86.2, 84 percent while relative VRAM drops 100, 50, 25, 12.5 percent."
+        <img src="assets/attnres-blocks-ablation.png?v=32" alt="Bar-and-line chart: astronomy-task accuracy (bars) versus relative VRAM (line) as the model is split into N = 16, 8, 4, 2 blocks. Accuracy is 90.4, 89.5, 86.2, 84 percent while relative VRAM drops 100, 50, 25, 12.5 percent."
           loading="lazy">
         <figcaption><b>Fig. 2.</b> Block-count ablation — bars: astronomy-QA accuracy; line: relative VRAM of the
         depth-attention cache, as the 32 layers are grouped into <em>N</em>&nbsp;=&nbsp;16 → 2 blocks.</figcaption>
@@ -360,25 +360,27 @@
     <div class="zte-stage">
       <div class="phone-wrap">
         <div class="phone-frame">
-          <span class="phone-notch" aria-hidden="true"></span>
+          <span class="phone-glare" aria-hidden="true"></span>
           <canvas id="zteScreen" role="img"
-            aria-label="A phone screen: the GUI agent opens apps and taps through them to complete a spoken task, driven by a planner and a worker agent."></canvas>
+            aria-label="A phone screen: the GUI agent reads the home screen, plans sub-goals, then opens Luckin, picks a coconut latte, pauses at the payment gate for a human confirmation, and reports the receipt back."></canvas>
         </div>
-        <p class="phone-cap">The finger, taps and screens are schematic; the planner→worker→screen loop mirrors the real control flow.</p>
+        <p class="phone-cap">Screens are redrawn, not screenshots — but the loop is the real one:
+        <b>perceive → plan → ground → act → verify</b>, with a human gate before it spends money.</p>
       </div>
       <aside class="cyc-side">
         <div class="readout">
-          <div class="readout-row"><span>User task</span><b id="zteTask">"Order my coconut latte"</b></div>
+          <div class="readout-row"><span>User task</span><b id="zteTask">—</b></div>
           <div class="readout-row"><span>Active agent</span><b id="zteAgent">Planner · 4B</b></div>
           <div class="readout-row"><span>Sub-goal</span><b id="zteGoal">perceive apps</b></div>
-          <div class="readout-row"><span>Worker action</span><b id="zteAction">—</b></div>
-          <div class="readout-row"><span>Step</span><b id="zteStep">0 / 6</b></div>
+          <div class="readout-row"><span>Grounded action</span><b id="zteAction">—</b></div>
+          <div class="readout-row"><span>Grounding confidence</span><b id="zteConf">—</b></div>
+          <div class="readout-row"><span>Step</span><b id="zteStep">0 / 8</b></div>
         </div>
         <div class="lc-wrap">
           <h4>A2A message bus · OpenClaw</h4>
           <div id="zteBus" class="ag-log" style="height:150px"></div>
           <p class="cap">Planner emits sub-goals; Worker returns grounded actions and the resulting screen — the same
-          hand-off the phone runs on-device.</p>
+          hand-off the phone runs on-device. Confidences are illustrative.</p>
         </div>
         <div class="cyc-controls">
           <div class="morph-presets">
@@ -388,10 +390,14 @@
               <button class="chip" data-task="message">Reply &amp; set timer</button>
             </div>
           </div>
-          <label>Speed
-            <input type="range" id="zteSpeed" min="0" max="3" step="0.1" value="1">
+          <label class="ctl">
+            <span class="ctl-row"><span>Speed</span><output></output></span>
+            <input type="range" id="zteSpeed" min="0" max="3" step="0.1" value="1" data-dp="1" data-unit="×">
           </label>
-          <button class="btn btn-sm" id="ztePause" aria-pressed="false">Pause</button>
+          <div class="btn-row">
+            <button class="btn btn-sm" id="ztePause" aria-pressed="false">Pause</button>
+            <button class="btn btn-sm" id="zteStepBtn">Step ▸</button>
+          </div>
         </div>
       </aside>
     </div>
@@ -475,8 +481,12 @@
     <!-- product frontend mock — experiment-design mode -->
     <div class="app-mock">
       <div class="app-chrome">
-        <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
-        <span class="app-url">实验室智能体系统 · 实验执行 / experiment design · dataset: electrolyte_2026</span>
+        <span class="app-mark" aria-hidden="true"></span>
+        <span class="app-name">实验室智能体系统<em>Lab Agent</em></span>
+        <span class="app-tabs" aria-hidden="true">
+          <span>问答</span><span>知识图谱</span><span class="is-on">实验执行</span>
+        </span>
+        <span class="app-ds"><i></i>electrolyte_2026 · 4 812 triples</span>
       </div>
       <div class="app-body">
         <!-- left: request + analysis path -->
@@ -495,15 +505,14 @@
         </div>
         <!-- center: knowledge graph -->
         <div class="app-col app-center">
-          <div class="app-lab">Knowledge graph · Leiden communities</div>
-          <canvas id="jinduKG" role="img" aria-label="A battery-electrolyte knowledge graph of solvents, salts, additives, interphases and properties, colored by detected community."></canvas>
+          <div class="app-lab">Knowledge graph · Leiden communities <em>hover a node</em></div>
+          <canvas id="jinduKG" role="img" aria-label="A battery-electrolyte knowledge graph: solvents, lithium salts, additives, interphase properties and characterisation methods, grouped into Leiden communities drawn as shaded regions, with named relations on the edges."></canvas>
           <div class="kg-mini-legend" id="jinduLegend"></div>
         </div>
         <!-- right: generated protocol -->
         <div class="app-col app-right">
-          <div class="app-lab">Generated experiment protocol → Nanocraft</div>
-          <div class="proto" id="labProto"><p class="proto-idle">Run the workflow to synthesize a
-            protocol from retrieved evidence.</p></div>
+          <div class="app-lab">Generated protocol <em>→ Nanocraft</em></div>
+          <div class="proto" id="labProto"></div>
         </div>
       </div>
     </div>
@@ -787,16 +796,19 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/maoastro.js?v=26" defer></script>
-<script src="js/zte.js?v=26" defer></script>
-<script src="js/jindu.js?v=26" defer></script>
-<script src="js/astrostack.js?v=26" defer></script>
-<script src="js/astroagent.js?v=26" defer></script>
-<script src="js/kgdata.js?v=26" defer></script>
-<script src="js/kg.js?v=26" defer></script>
-<script src="js/ztfcnn.js?v=26" defer></script>
-<script src="js/interactions.js?v=26" defer></script>
-<script src="js/cosmic-ui.js?v=26" defer></script>
-<script src="js/main.js?v=26" defer></script>
+<script src="js/figkit.js?v=32" defer></script>
+<script src="js/uikit.js?v=32" defer></script>
+<script src="js/aihero.js?v=32" defer></script>
+<script src="js/maoastro.js?v=32" defer></script>
+<script src="js/zte.js?v=32" defer></script>
+<script src="js/jindu.js?v=32" defer></script>
+<script src="js/astrostack.js?v=32" defer></script>
+<script src="js/astroagent.js?v=32" defer></script>
+<script src="js/kgdata.js?v=32" defer></script>
+<script src="js/kg.js?v=32" defer></script>
+<script src="js/ztfcnn.js?v=32" defer></script>
+<script src="js/interactions.js?v=32" defer></script>
+<script src="js/cosmic-ui.js?v=32" defer></script>
+<script src="js/main.js?v=32" defer></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Research · Jiamao Lin 林佳茂 — Magnetic White Dwarfs &amp; Cyclotron Spectroscopy</title>
-<meta name="description" content="Jiamao Lin (林佳茂): astrophysicist and AI / agent engineer at Sun Yat-sen University. Magnetic cataclysmic variables and cyclotron spectroscopy, plus Astro Agent — an auditable LangGraph research agent.">
+<meta name="description" content="Jiamao Lin (林佳茂): astrophysicist at Sun Yat-sen University. Magnetic cataclysmic variables, cyclotron spectroscopy and disk-eclipsing binaries — with the models rebuilt as live, in-browser figures you can drive.">
 <meta name="author" content="Jiamao Lin">
 <meta property="og:title" content="Jiamao Lin · 林佳茂 — Astrophysics × AI Agents">
 <meta property="og:description" content="White dwarfs, polars and cyclotron spectroscopy — and LLM-agent systems for science, including the open-source Astro Agent research pipeline.">
@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=26">
-<link rel="stylesheet" href="css/cosmic-theme.css?v=26">
+<link rel="stylesheet" href="css/styles.css?v=32">
+<link rel="stylesheet" href="css/cosmic-theme.css?v=32">
 </head>
 <body>
 
@@ -28,9 +28,9 @@
   </a>
   <nav class="nav-links" aria-label="Primary">
     <a href="index.html">Home</a>
-    <a href="#cyclotron">Cyclotron</a>
-    <a href="#spectrum">Spectrum lab</a>
-    <a href="#diskbinary">Disk eclipse</a>
+    <a href="#cyclotron">Fig.&nbsp;1 Polar</a>
+    <a href="#spectrum">Fig.&nbsp;2 Spectrum</a>
+    <a href="#diskbinary">Fig.&nbsp;3 Eclipse</a>
     <a href="#publications">Publications</a>
     <a href="#about">About</a>
     <a href="ai.html" class="nav-cta">AI&nbsp;/&nbsp;Agents&nbsp;→</a>
@@ -48,20 +48,22 @@
       <p class="eyebrow">Astrophysicist · AI / Agent Engineer</p>
       <h1>Jiamao&nbsp;Lin<span class="cn">林佳茂</span></h1>
       <p class="lede">
-        I study <strong>magnetic cataclysmic variables</strong> — binary stars where a
-        strongly magnetized white dwarf pulls gas from a companion and channels it down
-        magnetic field lines. I measure their fields by modelling the
-        <strong>cyclotron humps</strong> their hot, gyrating electrons stamp onto the spectrum.
+        I study <strong>magnetic cataclysmic variables</strong> — binaries in which a
+        strongly magnetised white dwarf strips gas from its companion and funnels it
+        down field lines onto a single pole. I weigh those fields by modelling the
+        <strong>cyclotron humps</strong> that the shocked, gyrating electrons stamp
+        onto the spectrum.
       </p>
       <p class="hero-sub">
-        I also build <strong>LLM-agent systems for science</strong> — a locally fine-tuned
-        astronomy LLM and <a href="ai.html">Astro&nbsp;Agent</a>, an auditable LangGraph
-        pipeline. That work lives on the <a href="ai.html">AI&nbsp;/&nbsp;Agents</a> page.
+        The three figures below are not illustrations. Each one solves the actual
+        geometry in your browser — Roche potentials, ballistic streams, dipole
+        curtains, radiative transfer through a cyclotron slab — so every control
+        moves the physics rather than a drawing.
       </p>
       <div class="hero-links">
-        <a class="btn btn-primary" href="#cyclotron">See the physics →</a>
-        <a class="btn" href="ai.html">AI&nbsp;/&nbsp;Agents&nbsp;→</a>
+        <a class="btn btn-primary" href="#cyclotron">Open the figures <span aria-hidden="true">→</span></a>
         <a class="btn" href="#publications">Publications</a>
+        <a class="btn" href="ai.html">AI&nbsp;/&nbsp;Agents&nbsp;<span aria-hidden="true">→</span></a>
       </div>
       <ul class="hero-id">
         <li><span class="k">Email</span><a href="mailto:linjm66@mail2.sysu.edu.cn">linjm66@mail2.sysu.edu.cn</a></li>
@@ -72,26 +74,24 @@
         <li><span class="num" data-count="10">10</span><span class="lab">MG — 240&nbsp;MG fields measured</span></li>
         <li><span class="num" data-count="4">4</span><span class="lab">DESI/LAMOST polars modelled</span></li>
         <li><span class="num" data-count="6">6</span><span class="lab">first / co-author papers</span></li>
-        <li><span class="num" data-count="100">100</span><span class="lab">★ Astro&nbsp;Agent · open source</span></li>
+        <li><span class="num" data-count="10">10</span><span class="lab">⁸ ZTF light curves searched</span></li>
       </ul>
     </div>
     <div class="hero-figure">
-      <div class="hero-portrait">
-        <div class="pinfo">
-          <b>Jiamao&nbsp;Lin · 林佳茂</b>
-          Ph.D. candidate, Physics &amp; Astronomy<br>Sun Yat-sen University, Zhuhai
-        </div>
+      <div class="hero-fig-plate">
+        <canvas id="heroOrbit" role="img" aria-label="Schematic of a magnetised white dwarf: dipole field lines, an accretion curtain and the beamed cyclotron emission from the hot pole."></canvas>
       </div>
-      <div class="hero-fig-plate" aria-hidden="true">
-        <canvas id="heroOrbit"></canvas>
-      </div>
+      <p class="hero-fig-cap">
+        <b>Ph.D. candidate</b>, Physics &amp; Astronomy, Sun&nbsp;Yat-sen University (Zhuhai) ·
+        advised by Prof.&nbsp;Chengyuan&nbsp;Li · CSST Science Center for the Greater Bay Area.
+      </p>
     </div>
   </section>
 
   <!-- ========================== RESEARCH ========================== -->
   <section id="research" class="section">
     <div class="section-head">
-      <h2>Research</h2>
+      <h2>What I work on</h2>
       <p>How do you weigh the magnetic field of a star you cannot resolve? You read it off the light.</p>
     </div>
     <div class="cards">
@@ -104,9 +104,9 @@
           <path data-glow d="M24 12a12 12 0 0 1 0 24"></path>
         </svg>
         <h3>Polars (AM&nbsp;Her stars)</h3>
-        <p>Cataclysmic variables in which the white-dwarf field is strong enough
-        (10–240&nbsp;MG) to lock the binary into synchronous rotation and suppress the
-        accretion disk entirely. Gas free-falls along field lines onto the magnetic pole.</p>
+        <p>Cataclysmic variables whose white-dwarf field — 10 to 240&nbsp;MG — is strong
+        enough to lock the binary into synchronous rotation and suppress the accretion
+        disk entirely. The gas free-falls along field lines onto one magnetic pole.</p>
       </article>
       <article class="card">
         <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
@@ -120,9 +120,9 @@
           <circle data-dot cx="34" cy="23" r="2.2"></circle>
         </svg>
         <h3>Cyclotron spectroscopy</h3>
-        <p>At the accretion shock, hot electrons gyrate and radiate at harmonics of the
-        cyclotron frequency, <em>ν<sub>c</sub>&nbsp;=&nbsp;eB/2πm<sub>e</sub>c</em>. The
-        spacing of the resulting humps is a direct, model-light field measurement.</p>
+        <p>At the accretion shock, hot electrons gyrate and radiate at harmonics of
+        <em>ν<sub>c</sub>&nbsp;=&nbsp;eB/2πm<sub>e</sub>c</em>. The spacing of the resulting
+        humps is a direct, nearly model-free field measurement.</p>
       </article>
       <article class="card">
         <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
@@ -135,9 +135,9 @@
           <circle data-dot cx="39" cy="30" r="2.2"></circle>
         </svg>
         <h3>Automated spectral fitting</h3>
-        <p>I fit a Koester white-dwarf photosphere, a hot-spot blackbody, and an isothermal
-        constant-Λ cyclotron component <em>simultaneously</em>, using profiled χ²(B) curves to
-        expose competing harmonic assignments instead of hiding them.</p>
+        <p>A Koester photosphere, a hot-spot blackbody and an isothermal constant-Λ
+        cyclotron slab, fitted <em>simultaneously</em>. Profiled χ²(B) curves expose the
+        competing harmonic assignments instead of hiding them behind one number.</p>
       </article>
       <article class="card">
         <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
@@ -151,8 +151,9 @@
           <circle data-dot cx="36" cy="38" r="2"></circle>
         </svg>
         <h3>Time-domain follow-up</h3>
-        <p>I mine 6–7&nbsp;yr of ZTF photometry for orbital periods and aliases — finding,
-        for instance, a rare short-period eclipsing-polar candidate below the period gap.</p>
+        <p>Six to seven years of ZTF photometry, mined for orbital periods and their
+        aliases — which is how a rare short-period eclipsing-polar candidate below the
+        period gap turned up.</p>
       </article>
       <article class="card">
         <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
@@ -164,10 +165,9 @@
           <circle data-dot cx="35" cy="32" r="2.3"></circle>
         </svg>
         <h3>Machine learning on light curves</h3>
-        <p>CNN and SVM classifiers — with engineered period and shape features and DBSCAN
-        clustering — sift <strong>~10⁸ ZTF light curves</strong> to surface rare variables:
-        magnetic&nbsp;CVs, eclipsing systems and other oddities, pulled out of a survey-scale
-        haystack into a short, vettable candidate list.</p>
+        <p>CNN and SVM classifiers, with engineered period and shape features plus DBSCAN
+        clustering, sift <strong>~10⁸ ZTF light curves</strong> down to a short, vettable
+        candidate list: magnetic CVs, eclipsing systems and other oddities.</p>
       </article>
       <article class="card">
         <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
@@ -179,9 +179,9 @@
           <path d="M12 32c7 4 18 5 25 1"></path>
         </svg>
         <h3>Disk-eclipsing binaries &amp; clusters</h3>
-        <p>Flat-bottomed “square-wave” eclipses in which a misaligned circumbinary disk occults
-        a low-mass binary (à la KH&nbsp;15D). Open-cluster membership turns these into age-dated
-        probes of long-lived circumstellar dust.</p>
+        <p>Flat-bottomed “square-wave” eclipses in which a misaligned circumbinary disk
+        occults a low-mass binary, à la KH&nbsp;15D. Open-cluster membership turns these
+        into age-dated probes of long-lived circumstellar dust.</p>
       </article>
       <article class="card">
         <svg class="card-ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
@@ -197,196 +197,353 @@
           <path data-glow d="M24 28v8"></path>
         </svg>
         <h3>AI agents for astronomy</h3>
-        <p>I build <strong>LLM-agent</strong> pipelines that wrap data retrieval, modelling and
-        evidence-auditing into a reviewable graph — RAG + knowledge graphs, tool-calling, and
-        domain-tuned models that refuse to publish a claim the evidence doesn't support.</p>
+        <p>LLM-agent pipelines that wrap retrieval, modelling and evidence-auditing into a
+        reviewable graph — RAG plus knowledge graphs, tool-calling, and domain-tuned models
+        that refuse to publish a claim the evidence doesn't support.</p>
         <a class="card-link" href="ai.html">See the AI&nbsp;/&nbsp;Agents track →</a>
       </article>
     </div>
   </section>
 
-  <!-- ====================== CYCLOTRON ANIMATION ==================== -->
+  <!-- ==================== FIG. 1 — CYCLOTRON POLAR ================= -->
   <section id="cyclotron" class="section">
     <div class="section-head">
       <h2>Cyclotron light-curve modelling</h2>
-      <p>A live, schematic polar: gas streams from the donor, threads onto the dipole, and
-      lights up the magnetic pole; the beamed cyclotron flux is modulated as the synchronous
-      binary turns. <strong>Pick a light-curve shape</strong> — these are the canonical
-      morphologies set by inclination <em>i</em>, magnetic colatitude <em>β</em>, the number
-      of accreting poles, and whether the donor eclipses the white dwarf.</p>
+      <p>A polar is <strong>synchronous</strong> — the white dwarf's spin is locked to the
+      orbit — so the whole magnetic geometry is rigid in the co-rotating frame and only the
+      observer moves. That is exactly how the figure is built: the donor's Roche lobe, the
+      ballistic stream out of L1 and the dipole accretion curtain are solved once, then
+      viewed from a direction that rotates with phase. The light curve is not drawn
+      separately; it is the same geometry, integrated.</p>
     </div>
 
-    <div class="cyc-stage">
-      <div class="cyc-canvas-wrap">
-        <canvas id="cycCanvas" role="img"
-          aria-label="Animation of a magnetized white dwarf accreting from a red-dwarf donor, with cyclotron emission beamed from the magnetic pole."></canvas>
-        <div class="cyc-legend">
-          <span><i class="dot dot-wd"></i>White dwarf</span>
-          <span><i class="dot dot-donor"></i>Donor (M&nbsp;dwarf)</span>
-          <span><i class="dot dot-stream"></i>Accretion stream</span>
-          <span><i class="dot dot-field"></i>Field lines</span>
-          <span><i class="dot dot-cyc"></i>Cyclotron beam</span>
+    <figure class="fig">
+      <figcaption class="fig-head">
+        <span class="fig-no">Fig. 1</span>
+        <span class="fig-title">A synchronous polar, solved in the co-rotating frame</span>
+        <span class="fig-meta">drag the scene or the curve to scrub φ</span>
+      </figcaption>
+
+      <div class="fig-body fig-split">
+        <div class="fig-main">
+          <div class="cyc-canvas-wrap">
+            <canvas id="cycCanvas" role="img"
+              aria-label="A Roche-lobe-filling red dwarf feeds a ballistic stream that threads onto the dipole field of a magnetised white dwarf and lands on one magnetic pole, from which cyclotron emission is beamed."></canvas>
+            <ul class="cyc-legend">
+              <li><i class="dot dot-wd"></i>White dwarf</li>
+              <li><i class="dot dot-donor"></i>Roche-lobe donor</li>
+              <li><i class="dot dot-stream"></i>Ballistic stream</li>
+              <li><i class="dot dot-field"></i>Dipole field</li>
+              <li><i class="dot dot-cyc"></i>Cyclotron beam</li>
+            </ul>
+          </div>
+          <div class="lc-wrap">
+            <h4>Phase-folded cyclotron light curve</h4>
+            <canvas id="lcCanvas" role="img" aria-label="Normalised flux against orbital phase, traced as the accreting pole rotates toward and away from the observer."></canvas>
+            <p class="cap">Hover to read a phase; drag either panel to move the scene with it. The
+            shaded band is the eclipse window implied by the current inclination — it appears on its
+            own once <em>i</em> passes <em>i</em><sub>c</sub>.</p>
+          </div>
+        </div>
+
+        <aside class="cyc-side">
+          <div class="readout">
+            <div class="readout-row"><span>Orbital phase φ</span><b id="cycPhase">0.000</b></div>
+            <div class="readout-row"><span>Inclination <i>i</i> / colatitude β</span><b id="cycGeom">78° / 55°</b></div>
+            <div class="readout-row"><span>Magnetic longitude ψ</span><b id="cycPsi">35°</b></div>
+            <div class="readout-row"><span>Beaming angle µ</span><b id="cycMu">—</b></div>
+            <div class="readout-row"><span>Mass ratio q = M₂/M₁</span><b id="cycQ">0.35</b></div>
+            <div class="readout-row"><span>Roche geometry</span><b id="cycLobe">—</b></div>
+            <div class="readout-row"><span>Accreting poles</span><b id="cycPoles">one</b></div>
+            <div class="readout-row"><span>Relative flux</span><b id="cycFlux">—</b></div>
+            <div class="readout-row"><span>Eclipse</span><b id="cycEcl">—</b></div>
+          </div>
+
+          <div class="cyc-controls">
+            <div class="seg-group">
+              <span class="ctl-label">Canonical morphology</span>
+              <div class="seg">
+                <button class="chip" data-morph="single">Single hump</button>
+                <button class="chip active" data-morph="double">Double hump</button>
+                <button class="chip" data-morph="twopole">Two-pole</button>
+                <button class="chip" data-morph="eclipse">Eclipsing</button>
+              </div>
+            </div>
+            <label class="ctl">
+              <span class="ctl-row"><span>Inclination <i>i</i></span><output></output></span>
+              <input type="range" id="cycInc" min="10" max="90" step="1" value="78" data-unit="°">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Magnetic colatitude β</span><output></output></span>
+              <input type="range" id="cycBeta" min="5" max="88" step="1" value="55" data-unit="°">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Magnetic longitude ψ</span><output></output></span>
+              <input type="range" id="cycPsi_i" min="-90" max="90" step="1" value="35" data-unit="°">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Mass ratio q</span><output></output></span>
+              <input type="range" id="cycQ_i" min="0.08" max="0.9" step="0.01" value="0.35" data-dp="2">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Speed</span><output></output></span>
+              <input type="range" id="cycSpeed" min="0" max="3" step="0.1" value="1" data-dp="1" data-unit="×">
+            </label>
+            <div class="btn-row">
+              <button class="btn btn-sm" id="cycTwoPole" aria-pressed="false">Second pole: off</button>
+              <button class="btn btn-sm" id="cycPause" aria-pressed="false">Pause</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="fig-notes">
+        <div class="note">
+          <span class="note-lab">Beaming</span>
+          <p class="eqn">F&nbsp;∝&nbsp;sin²µ&nbsp;·&nbsp;<span class="vis">vis</span>,&nbsp;&nbsp;
+            cos&nbsp;µ&nbsp;=&nbsp;<b>B̂</b><sub>spot</sub>&nbsp;·&nbsp;<b>n̂</b>(φ)</p>
+          <p class="note-p">Cyclotron radiation leaves perpendicular to <b>B</b>, so the flux
+          peaks when the field at the footpoint lies across the line of sight. <b>B̂</b> is the
+          true dipole direction there, not the pole axis — at the footpoint the field is tilted
+          out of the radial by roughly 14°.</p>
+        </div>
+        <div class="note">
+          <span class="note-lab">The donor</span>
+          <p class="eqn">Φ&nbsp;=&nbsp;−µ₁/r₁&nbsp;−&nbsp;µ₂/r₂&nbsp;−&nbsp;½[(x−x<sub>cm</sub>)²&nbsp;+&nbsp;y²]</p>
+          <p class="note-p">The teardrop is the equipotential through L1, found by bisection along
+          420 directions. Change <em>q</em> and L1 slides, the lobe changes shape, and the
+          stream — integrated with RK4 in the rotating frame — takes a different Coriolis
+          curve. Nothing here is a drawn ellipse.</p>
+        </div>
+        <div class="note">
+          <span class="note-lab">The eclipse</span>
+          <p class="eqn"><i>i</i><sub>c</sub>&nbsp;=&nbsp;arccos&nbsp;[(R<sub>L,proj</sub>&nbsp;+&nbsp;R<sub>wd</sub>)&nbsp;/&nbsp;a]</p>
+          <p class="note-p">There is no eclipse toggle. Raise <em>i</em> and the projected lobe
+          eventually covers the white dwarf on the sky; the shaded window in the light curve
+          appears at the same moment, because both read the same projected silhouette.</p>
         </div>
       </div>
 
-      <aside class="cyc-side">
-        <div class="readout">
-          <div class="readout-row"><span>Spin / orbital phase φ</span><b id="cycPhase">0.00</b></div>
-          <div class="readout-row"><span>Inclination i / colatitude β</span><b id="cycGeom">80° / 58°</b></div>
-          <div class="readout-row"><span>Beaming angle μ</span><b id="cycMu">—</b></div>
-          <div class="readout-row"><span>Accreting poles</span><b id="cycPoles">one</b></div>
-          <div class="readout-row"><span>Relative flux</span><b id="cycFlux">—</b></div>
-          <div class="readout-row"><span>Donor eclipse</span><b id="cycEcl">donor not eclipsing</b></div>
-        </div>
-
-        <div class="lc-wrap">
-          <h4>Cyclotron light curve</h4>
-          <canvas id="lcCanvas" role="img" aria-label="Phase-folded cyclotron light curve traced as the white dwarf rotates."></canvas>
-          <p class="cap">Flux vs. phase, traced live as the pole rotates toward and away from us — the same beaming signature I search for in ZTF data.</p>
-        </div>
-
-        <div class="cyc-controls">
-          <div class="morph-presets">
-            <span class="ctl-label">Light-curve shape</span>
-            <div class="preset-row">
-              <button class="chip" data-morph="single">Single hump</button>
-              <button class="chip active" data-morph="double">Double hump</button>
-              <button class="chip" data-morph="twopole">Two-pole</button>
-              <button class="chip" data-morph="eclipse">Eclipsing</button>
-            </div>
-          </div>
-          <label>Inclination i
-            <input type="range" id="cycInc" min="10" max="90" step="1" value="80">
-          </label>
-          <label>Magnetic colatitude β
-            <input type="range" id="cycBeta" min="5" max="85" step="1" value="58">
-          </label>
-          <div class="toggle-row">
-            <button class="btn btn-sm" id="cycTwoPole" aria-pressed="false">Second pole: off</button>
-          </div>
-          <label>Speed
-            <input type="range" id="cycSpeed" min="0" max="3" step="0.1" value="1">
-          </label>
-          <button class="btn btn-sm" id="cycPause" aria-pressed="false">Pause</button>
-        </div>
-      </aside>
-    </div>
-    <p class="cap cap-wide">A real 3-D binary: the inclination slider <strong>tilts the actual orbit</strong>, each body carries a depth,
-    and the nearer one occludes the farther — so raise <em>i</em> and the donor genuinely swings in front of the white dwarf,
-    producing a total eclipse once <em>i</em> exceeds <em>i</em><sub>c</sub>&nbsp;≈&nbsp;67°&nbsp;(=&nbsp;arccos&nbsp;(R<sub>d</sub>+R<sub>wd</sub>)/a).
-    No toggle — the scene and the light curve share one geometry. Illustrative of the AM&nbsp;Her mechanism, not a fit to one system.</p>
+      <figcaption class="fig-foot">
+        The white dwarf is drawn ~30× oversized so the pole geometry is legible; the field-line
+        shells, the threading radius R<sub>µ</sub>&nbsp;≈&nbsp;0.17&nbsp;a and the curtain width are
+        schematic. Everything else — lobe, L1, stream, dipole geometry, projection, beaming and
+        occultation — is computed. Illustrative of the AM&nbsp;Her mechanism, not a fit to one system.
+      </figcaption>
+    </figure>
   </section>
 
-  <!-- ======================= SPECTRUM LAB ========================= -->
+  <!-- ==================== FIG. 2 — SPECTRUM LAB =================== -->
   <section id="spectrum" class="section">
     <div class="section-head">
       <h2>Cyclotron spectrum lab</h2>
-      <p>Drag the field strength and watch the harmonic humps slide across the optical
-      band — this sliding is exactly what pins down <em>B</em>. The harmonics sit at
-      λ<sub>n</sub>&nbsp;≈&nbsp;107.1&nbsp;/&nbsp;(n·B[MG])&nbsp;µm.</p>
+      <p>The spectrum of a polar is a sum, not a curve: a white-dwarf photosphere, a heated
+      pole cap, and an isothermal cyclotron slab. Only the third one knows about <em>B</em>,
+      and it only shows resolved humps where it has gone <strong>optically thin</strong>.
+      Drag Λ — the slab's column parameter — and watch the turnover harmonic march up the
+      ladder. That drift is the whole reason harmonic assignment is ambiguous, and why the
+      paper reports competing branches rather than a single field strength.</p>
     </div>
 
-    <div class="spec-stage">
-      <div class="spec-canvas-wrap">
-        <canvas id="specCanvas" role="img"
-          aria-label="Interactive optical spectrum showing cyclotron harmonic humps on a white-dwarf continuum."></canvas>
-      </div>
-      <aside class="spec-side">
-        <div class="spec-readout">
-          <div class="readout-row"><span>Field B</span><b id="specBval">40 MG</b></div>
-          <div class="readout-row"><span>Electron kT</span><b id="specTval">5 keV</b></div>
-          <div class="readout-row"><span>View angle θ</span><b id="specThetaval">70°</b></div>
-          <div class="readout-row"><span>Visible harmonics</span><b id="specHarm">—</b></div>
-          <div class="readout-row"><span>Preset target</span><b id="specTarget">—</b></div>
+    <figure class="fig">
+      <figcaption class="fig-head">
+        <span class="fig-no">Fig. 2</span>
+        <span class="fig-title">Three components, one emergent spectrum</span>
+        <span class="fig-meta">hover for λ, F and τ<sub>n</sub></span>
+      </figcaption>
+
+      <div class="fig-body fig-stack">
+        <div class="spec-canvas-wrap">
+          <canvas id="specCanvas" role="img"
+            aria-label="An optical spectrum decomposed into a white-dwarf photosphere, a hot-spot blackbody and a cyclotron slab whose harmonic humps move as the magnetic field changes."></canvas>
         </div>
-        <div class="spec-controls">
-          <label>Magnetic field B (MG)
-            <input type="range" id="specB" min="10" max="120" step="0.5" value="40">
-          </label>
-          <label>Electron temperature kT (keV)
-            <input type="range" id="specT" min="1" max="20" step="0.5" value="5">
-          </label>
-          <label>Viewing angle θ to field (°)
-            <input type="range" id="specTheta" min="10" max="90" step="1" value="70">
-          </label>
-        </div>
-        <div class="spec-presets">
-          <p>Load a real target from my survey:</p>
-          <div class="preset-row">
-            <button class="chip" data-b="56.8" data-p="105.3">J0005+2941</button>
-            <button class="chip" data-b="64.4" data-p="717.4">J0022+1340</button>
-            <button class="chip" data-b="51.1" data-p="143.8">J0035+4333</button>
-            <button class="chip" data-b="29.3" data-p="80.4">J0749+3654</button>
+        <aside class="spec-side spec-rail">
+          <div class="spec-readout">
+            <div class="readout-row"><span>Field B</span><b id="specBval">40 MG</b></div>
+            <div class="readout-row"><span>Electron kT<sub>e</sub></span><b id="specTval">5 keV</b></div>
+            <div class="readout-row"><span>View angle θ to <b>B</b></span><b id="specThetaval">70°</b></div>
+            <div class="readout-row"><span>Column parameter Λ</span><b id="specLamval">10^5.0</b></div>
+            <div class="readout-row"><span>Optical depth</span><b id="specTurn">—</b></div>
+            <div class="readout-row"><span>Harmonics in band</span><b id="specHarm">—</b></div>
+            <div class="readout-row"><span>Preset target</span><b id="specTarget">—</b></div>
           </div>
+          <div class="spec-controls">
+            <label class="ctl">
+              <span class="ctl-row"><span>Magnetic field B</span><output></output></span>
+              <input type="range" id="specB" min="10" max="120" step="0.5" value="40" data-dp="1" data-unit=" MG">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Electron temperature kT<sub>e</sub></span><output></output></span>
+              <input type="range" id="specT" min="1" max="25" step="0.5" value="5" data-dp="1" data-unit=" keV">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Viewing angle θ</span><output></output></span>
+              <input type="range" id="specTheta" min="10" max="90" step="1" value="70" data-unit="°">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Column parameter log Λ</span><output></output></span>
+              <input type="range" id="specLam" min="3" max="8" step="0.1" value="5" data-dp="1" data-prefix="10^">
+            </label>
+            <div class="comp-row">
+              <span class="ctl-label">Components</span>
+              <div class="seg">
+                <button class="chip is-on" data-comp="wd" aria-pressed="true">WD photosphere</button>
+                <button class="chip is-on" data-comp="spot" aria-pressed="true">Hot spot</button>
+                <button class="chip is-on" data-comp="cyc" aria-pressed="true">Cyclotron</button>
+              </div>
+            </div>
+          </div>
+          <div class="spec-presets">
+            <p>Load a field from my DESI/LAMOST sample:</p>
+            <div class="seg">
+              <button class="chip" data-b="56.8" data-kt="6" data-p="105.3">J0005+2941</button>
+              <button class="chip" data-b="64.4" data-kt="5" data-p="717.4">J0022+1340</button>
+              <button class="chip" data-b="51.1" data-kt="7" data-p="143.8">J0035+4333</button>
+              <button class="chip" data-b="29.3" data-kt="5" data-p="80.4">J0749+3654</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="fig-notes">
+        <div class="note">
+          <span class="note-lab">Harmonic ladder</span>
+          <p class="eqn">λ<sub>n</sub>&nbsp;≈&nbsp;1.071×10⁶&nbsp;/&nbsp;(n&nbsp;·&nbsp;B[MG])&nbsp;Å</p>
+          <p class="note-p">Consecutive humps are spaced by Δλ/λ&nbsp;≈&nbsp;1/n, so the pattern
+          compresses toward the blue. Measuring the <em>spacing</em>, not the absolute position,
+          is what makes B nearly model-independent — provided you have the right n.</p>
         </div>
-      </aside>
-    </div>
-    <p class="cap cap-wide">Schematic constant-Λ harmonic model on a Rayleigh–Jeans-like WD continuum; intended to build intuition for hump spacing, not to reproduce a published fit.</p>
+        <div class="note">
+          <span class="note-lab">Radiative transfer</span>
+          <p class="eqn">I&nbsp;=&nbsp;B<sub>λ</sub>(T<sub>e</sub>)&nbsp;[1&nbsp;−&nbsp;e<sup>−Στ<sub>n</sub></sup>]</p>
+          <p class="note-p">Not a sum of Gaussians. Low harmonics saturate at the source function
+          and merge into a smooth blue continuum; only where τ<sub>n</sub>&nbsp;&lt;&nbsp;1 do
+          separate humps survive. The inset bars show log&nbsp;τ<sub>n</sub> and where it crosses 1.</p>
+        </div>
+        <div class="note">
+          <span class="note-lab">Why B is ambiguous</span>
+          <p class="eqn">τ<sub>n</sub>&nbsp;∝&nbsp;Λ&nbsp;n<sup>2n</sup>/(2ⁿn!)&nbsp;·&nbsp;β<sup>n−1</sup>&nbsp;sin<sup>2n−2</sup>θ</p>
+          <p class="note-p">Raise Λ or kT<sub>e</sub> and the turnover moves up, so the <em>same</em>
+          observed humps can be labelled n or n+1 — and B shifts by tens of MG. My fitting code
+          profiles χ²(B) across those branches and reports them, instead of quietly picking one.</p>
+        </div>
+      </div>
+
+      <figcaption class="fig-foot">
+        Leading-order Chanmugam &amp; Dulk (1981) harmonic scaling through a homogeneous
+        isothermal slab, with Planck photosphere and hot-spot components; hydrogen lines and full
+        angle-dependent transfer are omitted. Built to make the hump spacing and the optical-depth
+        turnover legible, not to reproduce a published fit.
+      </figcaption>
+    </figure>
   </section>
 
-  <!-- ===================== DISK-ECLIPSING BINARY ================== -->
+  <!-- ================== FIG. 3 — DISK-ECLIPSING BINARY ============= -->
   <section id="diskbinary" class="section">
     <div class="section-head">
       <h2>Square-wave eclipse: a disk-eclipsing binary</h2>
-      <p>UPK&nbsp;13-c2 dims in a flat-bottomed “square wave” every <strong>36.71&nbsp;days</strong>.
-      A misaligned circumbinary disk's localized edge occults <strong>just one component</strong> of a
-      late-K/early-M binary; that star carries ~40% of the light, so the flux drops to ~60% while the
-      companion keeps shining. It's a real 3-D model of the disk + binary: <strong>drag the viewing
-      angle</strong> from edge-on toward face-on and the ring opens up — the eclipse only happens when
-      we see it near edge-on. The slow, multi-day ingress is the clincher —
-      <strong>switch the occulted source to a white dwarf</strong> and watch the walls snap vertical,
+      <p>UPK&nbsp;13-c2 dims into a flat-bottomed square wave every <strong>36.71&nbsp;days</strong>.
+      A misaligned circumbinary disk presents a sharp inner edge, and only the wider-orbit
+      component swings behind it — that star carries ~40% of the light, so the floor lands near
+      60% while its companion keeps shining. The clincher is the <strong>slow, multi-day
+      ingress</strong>: switch the occulted source to a white dwarf and the walls snap vertical,
       which is exactly why a WD is ruled out.</p>
     </div>
 
-    <div class="cyc-stage">
-      <div class="cyc-canvas-wrap">
-        <canvas id="diskCanvas" role="img"
-          aria-label="A misaligned circumbinary dust disk periodically occulting a low-mass binary, producing a flat-bottomed light curve."></canvas>
-        <div class="cyc-legend">
-          <span><i class="dot" style="background:#ffd29a"></i>Companion (visible)</span>
-          <span><i class="dot" style="background:#ffb482"></i>Occulted star</span>
-          <span><i class="dot" style="background:#6b5640"></i>Circumbinary disk</span>
-          <span><i class="dot" style="background:#46362a"></i>Occulting dust</span>
+    <figure class="fig">
+      <figcaption class="fig-head">
+        <span class="fig-no">Fig. 3</span>
+        <span class="fig-title">A knife edge crossing a star, against real ZTF photometry</span>
+        <span class="fig-meta">drag to scrub · inset is ×4</span>
+      </figcaption>
+
+      <div class="fig-body fig-split">
+        <div class="fig-main">
+          <div class="cyc-canvas-wrap">
+            <canvas id="diskCanvas" role="img"
+              aria-label="A misaligned circumbinary dust disk whose inner edge periodically occults one component of a low-mass binary, producing a flat-bottomed light curve."></canvas>
+            <ul class="cyc-legend">
+              <li><i class="dot" style="background:#f4ba80"></i>Occulted star</li>
+              <li><i class="dot" style="background:#ffd5a5"></i>Companion (visible)</li>
+              <li><i class="dot" style="background:#7e6042"></i>Circumbinary disk</li>
+              <li><i class="dot" style="background:#1d160f;box-shadow:0 0 0 1px rgba(214,172,120,.7)"></i>Occulting edge</li>
+            </ul>
+          </div>
+          <div class="lc-wrap">
+            <h4>Folded light curve · real ZTF data</h4>
+            <canvas id="diskLc" role="img" aria-label="Flat-bottomed trapezoidal eclipse: ZTF g and r photometry folded on the 36.71 day period, with a fitted trapezoid and the live model."></canvas>
+            <p class="cap">Dots&nbsp;= real ZTF <span class="k-g">g</span>/<span class="k-r">r</span>
+            photometry, phase-folded on P&nbsp;=&nbsp;36.710719&nbsp;d. Dashed&nbsp;= the χ²-fitted
+            trapezoid. Solid&nbsp;= the live model — it only leaves the fit when you change the
+            occulted source or the geometry.</p>
+          </div>
+        </div>
+
+        <aside class="cyc-side">
+          <div class="readout">
+            <div class="readout-row"><span>Orbital phase</span><b id="diskPhase">0.000</b></div>
+            <div class="readout-row"><span>Elapsed</span><b id="diskDays">0.0 d</b></div>
+            <div class="readout-row"><span>Binary inclination <i>i</i></span><b id="diskIv">82°</b></div>
+            <div class="readout-row"><span>Disk misalignment α</span><b id="diskAlphaR">13°</b></div>
+            <div class="readout-row"><span>Ingress duration</span><b id="diskIngress">—</b></div>
+            <div class="readout-row"><span>Disk inner radius</span><b id="diskRin">≈2.5 a ≈ 130 R⊙</b></div>
+            <div class="readout-row"><span>Eclipse depth (at <i>i</i>)</span><b id="diskDepth">~40%</b></div>
+            <div class="readout-row"><span>Current flux</span><b id="diskFlux">100%</b></div>
+          </div>
+
+          <div class="cyc-controls">
+            <label class="ctl">
+              <span class="ctl-row"><span>Binary inclination <i>i</i></span><output></output></span>
+              <input type="range" id="diskIncl" min="45" max="88" step="1" value="82" data-unit="°">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Disk misalignment α</span><output></output></span>
+              <input type="range" id="diskAlpha" min="3" max="25" step="1" value="13" data-unit="°">
+            </label>
+            <label class="ctl">
+              <span class="ctl-row"><span>Speed</span><output></output></span>
+              <input type="range" id="diskSpeed" min="0" max="3" step="0.1" value="1" data-dp="1" data-unit="×">
+            </label>
+            <div class="btn-row">
+              <button class="btn btn-sm" id="diskToggle" aria-pressed="false">Occulted source: M/K dwarf</button>
+              <button class="btn btn-sm" id="diskPause" aria-pressed="false">Pause</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="fig-notes">
+        <div class="note">
+          <span class="note-lab">The ingress</span>
+          <p class="eqn">v<sub>⊥</sub>&nbsp;=&nbsp;v<sub>orb</sub>&nbsp;sin&nbsp;α,&nbsp;&nbsp;
+            t<sub>ing</sub>&nbsp;≈&nbsp;2R<sub>★</sub>/v<sub>⊥</sub></p>
+          <p class="note-p">A grazing geometry stretches a stellar-diameter crossing into days.
+          Shrink α and the walls flatten further; a point-like occulted source removes
+          R<sub>★</sub> from the numerator entirely and the eclipse becomes a step function.</p>
+        </div>
+        <div class="note">
+          <span class="note-lab">Where the disk sits</span>
+          <p class="eqn">R<sub>in</sub>&nbsp;≈&nbsp;2–3&nbsp;a&nbsp;≈&nbsp;130&nbsp;R<sub>⊙</sub></p>
+          <p class="note-p">For a&nbsp;≈&nbsp;0.24&nbsp;AU (Kepler, M<sub>tot</sub>&nbsp;≈&nbsp;1.4&nbsp;M<sub>⊙</sub>),
+          tidal truncation (Artymowicz &amp; Lubow 1994) clears the disk inside ~2.5&nbsp;a. The ring
+          in the figure is drawn at that radius, not at a convenient one.</p>
+        </div>
+        <div class="note">
+          <span class="note-lab">Why the floor is 60%</span>
+          <p class="eqn">F<sub>min</sub>&nbsp;=&nbsp;1&nbsp;−&nbsp;L<sub>occ</sub>/L<sub>tot</sub>&nbsp;≈&nbsp;0.60</p>
+          <p class="note-p">A single star behind an opaque edge cannot produce a 40% flat bottom
+          unless something else is still shining. The near-achromatic depth from the optical through
+          W1, plus a mid-IR excess, is what points to dust rather than a stellar companion.</p>
         </div>
       </div>
 
-      <aside class="cyc-side">
-        <div class="readout">
-          <div class="readout-row"><span>Orbital phase</span><b id="diskPhase">0.00</b></div>
-          <div class="readout-row"><span>Elapsed</span><b id="diskDays">0.0 d</b></div>
-          <div class="readout-row"><span>Binary inclination i</span><b id="diskIv">82°</b></div>
-          <div class="readout-row"><span>Disk misalignment α</span><b id="diskAlphaR">13°</b></div>
-          <div class="readout-row"><span>Disk inner radius</span><b id="diskRin">≈2.5 a ≈ 130 R⊙</b></div>
-          <div class="readout-row"><span>Eclipse depth (at i)</span><b id="diskDepth">~40%</b></div>
-          <div class="readout-row"><span>Current flux</span><b id="diskFlux">100%</b></div>
-        </div>
-
-        <div class="lc-wrap">
-          <h4>Light curve (flux vs. phase)</h4>
-          <canvas id="diskLc" role="img" aria-label="Flat-bottomed trapezoidal eclipse light curve."></canvas>
-          <p class="cap">Dots&nbsp;=&nbsp;real ZTF <span style="color:#3fce9e">g</span>/<span style="color:#e98a4d">r</span> photometry, phase-folded. Dashed&nbsp;=&nbsp;χ²-fitted trapezoid. Solid&nbsp;=&nbsp;current model.</p>
-        </div>
-
-        <div class="cyc-controls">
-          <label>Binary inclination i (edge-on 90° → face-on)
-            <input type="range" id="diskIncl" min="45" max="88" step="1" value="82">
-          </label>
-          <label>Disk misalignment α (sets ingress slope)
-            <input type="range" id="diskAlpha" min="3" max="25" step="1" value="13">
-          </label>
-          <label>Speed
-            <input type="range" id="diskSpeed" min="0" max="3" step="0.1" value="1">
-          </label>
-          <button class="btn btn-sm" id="diskToggle" aria-pressed="false">Occulted source: M/K dwarf</button>
-          <button class="btn btn-sm" id="diskPause" aria-pressed="false">Pause</button>
-        </div>
-      </aside>
-    </div>
-    <p class="cap cap-wide">Light curve = <strong>real ZTF g/r data</strong> folded at <strong>P&nbsp;=&nbsp;36.710719&nbsp;d</strong> with a χ²-fitted
-    trapezoid (~40% depth). The scene is a <strong>knife-edge</strong> (no-thickness) model with <strong>two angles</strong>: the binary
-    inclination <em>i</em> sets the eclipse depth, the disk misalignment <em>α</em> sets the ingress slope
-    (v<sub>⊥</sub>&nbsp;=&nbsp;v<sub>orb</sub>&nbsp;sin&nbsp;α). For a&nbsp;≈&nbsp;0.24&nbsp;AU (Kepler; M<sub>tot</sub>≈1.4&nbsp;M⊙) tidal truncation
-    (Artymowicz&nbsp;&amp;&nbsp;Lubow&nbsp;1994) puts the disk inner edge at <strong>R<sub>in</sub>&nbsp;≈&nbsp;2–3&nbsp;a&nbsp;≈&nbsp;130&nbsp;R⊙</strong>.</p>
+      <figcaption class="fig-foot">
+        Light curve = <strong>real ZTF g/r data</strong> folded at P&nbsp;=&nbsp;36.710719&nbsp;d with a
+        χ²-fitted trapezoid (~40% depth). The scene is a knife-edge (zero-thickness) model driven by
+        two angles; stellar radii are exaggerated ~15× so the crossing is visible, which is what the
+        magnified inset compensates for.
+      </figcaption>
+    </figure>
   </section>
 
   <!-- ===================== CROSS-LINK TO AI PAGE ===================== -->
@@ -397,8 +554,8 @@
         <h2>The AI&nbsp;/&nbsp;Agents track</h2>
         <p>The machine-learning and LLM side of this work — a locally fine-tuned 8B astronomy
         model (QLoRA&nbsp;+&nbsp;AttnRes), a knowledge-graph &amp; experiment-design agent, the
-        <strong>Astro&nbsp;Agent</strong> research pipeline, and the ZTF CNN classifier — now lives
-        on its own page, each project fully visualized.</p>
+        <strong>Astro&nbsp;Agent</strong> research pipeline, and the ZTF CNN classifier — lives on
+        its own page, each project fully visualised.</p>
       </div>
       <a class="btn btn-primary" href="ai.html">Open AI&nbsp;/&nbsp;Agents&nbsp;→</a>
     </div>
@@ -423,6 +580,7 @@
           rules out a white-dwarf occulter, favouring a late-K/early-M binary behind a misaligned
           circumbinary disk — potentially the oldest known main-sequence disk-eclipsing binary.</p>
           <div class="pub-tags"><span>disk eclipse</span><span>open clusters</span><span>circumbinary disk</span><span>ZTF</span></div>
+          <a class="pub-jump" href="#diskbinary">See Fig. 3 →</a>
         </div>
       </li>
       <li class="pub">
@@ -437,6 +595,7 @@
           candidate below the period gap — and reports explicit harmonic-branch constraints rather
           than hiding the ambiguous cases.</p>
           <div class="pub-tags"><span>polars</span><span>cyclotron</span><span>white dwarfs</span><span>automated fitting</span></div>
+          <a class="pub-jump" href="#spectrum">See Fig. 2 →</a>
         </div>
       </li>
       <li class="pub">
@@ -452,6 +611,7 @@
           magnetic CV showing accretion streams (no disk) and a white-dwarf field of 38.7&nbsp;MG
           measured from its cyclotron harmonics.</p>
           <div class="pub-tags"><span>polar</span><span>cyclotron</span><span>X-ray</span><span>Doppler tomography</span></div>
+          <a class="pub-jump" href="#cyclotron">See Fig. 1 →</a>
         </div>
       </li>
       <li class="pub">
@@ -514,11 +674,11 @@
         University</strong> (Zhuhai), advised by <strong>Prof. Chengyuan&nbsp;Li</strong> and
         affiliated with the CSST Science Center for the Greater Bay Area — and an
         <strong>AI application engineer</strong> at heart.</p>
-        <p>On the science side I model accretion onto magnetized white dwarfs from wide-field
-        surveys (DESI, LAMOST, ZTF), and I care a lot about methods that report their own
+        <p>On the science side I model accretion onto magnetised white dwarfs from wide-field
+        surveys (DESI, LAMOST, ZTF), and I care a great deal about methods that report their own
         uncertainties honestly — including the ambiguous cases. On the engineering side I build
-        retrieval-augmented, tool-calling LLM agents that carry that same evidence-first
-        discipline into software.</p>
+        retrieval-augmented, tool-calling LLM agents that carry the same evidence-first discipline
+        into software.</p>
         <ul class="about-highlights">
           <li>Invited talks at <strong>Tsinghua University</strong>, the Chinese Academy of Sciences and the National Astronomical Observatory</li>
           <li>Independent referee for <strong>RAA</strong> (Research in Astronomy and Astrophysics)</li>
@@ -560,14 +720,14 @@
       <div class="timeline">
         <div class="tl-item tl-ai">
           <span class="tl-date">2025.10 — present</span>
-          <h4>Astro&nbsp;Agent — astronomy knowledge-graph &amp; analysis agent <span class="tl-tag">open source · 100+ ★</span></h4>
+          <h4>Astro&nbsp;Agent — astronomy knowledge-graph &amp; analysis agent <span class="tl-tag">open source</span></h4>
           <p>Solo full-stack build. Domain knowledge base joining vector search, keyword search and
           knowledge-graph queries; a retrieval → reasoning → tool-calling → result-verification agent
           loop; domain adaptation of Qwen3 / Llama-7B with LoRA + Attn-Res. Helped produce a published paper.</p>
         </div>
         <div class="tl-item tl-ai">
           <span class="tl-date">2026.02 — 2026.04</span>
-          <h4>AI Application Engineer — Jindu Life Sciences (津渡生科) <span class="tl-tag">for PKU Materials Science</span></h4>
+          <h4>AI Application Engineer — knowledge graph for PKU Materials Science</h4>
           <p>Built a knowledge-graph pipeline (literature parsing → chunk cleaning → LLM entity/relation
           extraction → entity disambiguation → Neo4j triples), a dual-track RAG store (vector + multi-hop
           graph), and a LangGraph ReAct Q&amp;A agent that verifies intermediate results before generating
@@ -577,9 +737,8 @@
           <span class="tl-date">2026.04 — 2026.05</span>
           <h4>AI Application Engineer — Blue Moon Group (蓝月亮)</h4>
           <p>Designed a “deterministic engine + LLM agent” hybrid for large-scale advertising-creative
-          (Juliang Qianchuan) analysis — pushing the analytics logic into a trusted compute backend to
-          eliminate quantitative hallucination, with self-contained interactive ECharts reports.
-          Cut monthly review effort by 95%+.</p>
+          analysis — pushing the analytics logic into a trusted compute backend to eliminate quantitative
+          hallucination, with self-contained interactive ECharts reports. Cut monthly review effort by 95%+.</p>
         </div>
         <div class="tl-item">
           <span class="tl-date">2023.03 — 2025.10</span>
@@ -619,16 +778,17 @@
 
 <footer class="footer">
   <p>© <span id="year">2026</span> Jiamao Lin · 林佳茂 — <a href="https://linjm.cc">linjm.cc</a></p>
-  <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
+  <p class="footer-note">A static site. Every figure is computed live in your browser — no video, no images.</p>
 </footer>
 
-<script src="js/hero.js?v=26" defer></script>
-<script src="js/cyclotron.js?v=26" defer></script>
-<script src="js/spectrum.js?v=26" defer></script>
-<script src="js/diskdata.js?v=26" defer></script>
-<script src="js/diskbinary.js?v=26" defer></script>
-<script src="js/interactions.js?v=26" defer></script>
-<script src="js/cosmic-ui.js?v=26" defer></script>
-<script src="js/main.js?v=26" defer></script>
+<script src="js/figkit.js?v=32" defer></script>
+<script src="js/hero.js?v=32" defer></script>
+<script src="js/cyclotron.js?v=32" defer></script>
+<script src="js/spectrum.js?v=32" defer></script>
+<script src="js/diskdata.js?v=32" defer></script>
+<script src="js/diskbinary.js?v=32" defer></script>
+<script src="js/interactions.js?v=32" defer></script>
+<script src="js/cosmic-ui.js?v=32" defer></script>
+<script src="js/main.js?v=32" defer></script>
 </body>
 </html>

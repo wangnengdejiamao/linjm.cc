@@ -208,14 +208,15 @@ strong{color:var(--ink-strong);font-weight:600}
    (the wrap's min-height / grid-stretch defines the box; the canvas fills it) */
 #cycCanvas,#diskCanvas,#agentCanvas,#cnnCanvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 #kgCanvas{position:absolute;inset:0;display:block;width:100%;height:100%;cursor:pointer}
-.cyc-legend{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:.4rem 1rem;
-  padding:.6rem .9rem;font-family:var(--mono);font-size:.68rem;color:var(--ink-od-soft);
-  background:linear-gradient(transparent,rgba(8,7,4,.94))}
-.cyc-legend span{display:inline-flex;align-items:center;gap:.4rem}
-.dot{width:9px;height:9px;border-radius:50%;flex:none}
-.dot-wd{background:#cfe9ef}.dot-donor{background:#e07145}
-.dot-stream{background:#e6a23c}.dot-field{background:#6f8fe0}
-.dot-cyc{background:#4fd0e3}
+.cyc-legend{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:.35rem 1.05rem;
+  margin:0;padding:.55rem .9rem;list-style:none;font-family:var(--mono);font-size:.67rem;
+  letter-spacing:.01em;color:var(--ink-od-soft);
+  background:linear-gradient(transparent,rgba(24,20,14,.92) 55%)}
+.cyc-legend span,.cyc-legend li{display:inline-flex;align-items:center;gap:.4rem}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.dot-wd{background:#dde9f2}.dot-donor{background:#e89e68}
+.dot-stream{background:#e0a45c}.dot-field{background:#8ba9cf}
+.dot-cyc{background:#f0bd86}
 .cyc-side{display:flex;flex-direction:column;gap:.85rem}
 .readout,.spec-readout{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem}
 .readout-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.34rem 0;
@@ -227,7 +228,7 @@ strong{color:var(--ink-strong);font-weight:600}
 .lc-wrap{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem}
 .lc-wrap h4{font-family:var(--mono);font-size:.7rem;color:var(--ink-dim);text-transform:uppercase;
   letter-spacing:.1em;margin:0 0 .65rem;font-weight:500}
-#lcCanvas,#diskLc{display:block;width:100%;height:120px;background:var(--well);border-radius:4px}
+#lcCanvas,#diskLc{display:block;width:100%;height:158px;background:var(--well);border-radius:4px}
 .cyc-controls,.spec-controls{display:flex;flex-direction:column;gap:.85rem;
   background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem}
 .cyc-controls label,.spec-controls label{display:flex;flex-direction:column;gap:.45rem;
@@ -247,7 +248,7 @@ input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;bac
 
 /* spectrum plate */
 .spec-canvas-wrap{background:var(--well);border:1px solid var(--well-line);border-radius:var(--radius);
-  padding:1rem;min-height:380px;position:relative}
+  padding:1rem;min-height:430px;position:relative}
 #specCanvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 .spec-side{display:flex;flex-direction:column;gap:.85rem}
 .spec-presets{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem}
@@ -650,18 +651,36 @@ details[open] .disclose-mark::after{transform:translate(-50%,-50%) scaleY(0)}
 .eval-badge{font-family:var(--mono);font-size:.6rem;color:var(--accent-deep);border:1px solid rgba(168,85,24,.35);
   background:rgba(168,85,24,.1);border-radius:999px;padding:.05rem .4rem;margin-left:.4rem;letter-spacing:.04em}
 
-/* ---- Jindu app frontend mock ---- */
-.app-mock{border:1px solid var(--line-strong);border-radius:10px;overflow:hidden;background:var(--surface);
-  box-shadow:0 24px 60px -38px rgba(40,30,10,.45);margin-bottom:1rem}
-.app-chrome{display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;background:var(--surface-3);border-bottom:1px solid var(--line-strong)}
-.app-chrome .dot-r,.app-chrome .dot-y,.app-chrome .dot-g{width:11px;height:11px;border-radius:50%}
-.app-chrome .dot-r{background:#e0654e}.app-chrome .dot-y{background:#e3b23c}.app-chrome .dot-g{background:#4fae6d}
-.app-url{margin-left:.6rem;font-family:var(--mono);font-size:.74rem;color:var(--ink-dim)}
-.app-body{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:0}
+/* ---- Jindu: the lab-agent product window ----
+   Not a browser: a product. The macOS traffic lights were the tell —
+   they say "screenshot of something else". A mark, a name, the mode
+   tabs the real app has, and the dataset it is bound to. */
+.app-mock{border:1px solid var(--line-strong);border-radius:12px;overflow:hidden;background:var(--surface);
+  box-shadow:0 30px 70px -44px rgba(40,30,10,.5);margin-bottom:1rem}
+.app-chrome{display:flex;align-items:center;gap:.75rem;padding:.62rem .95rem;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface-3));border-bottom:1px solid var(--line-strong)}
+.app-mark{width:16px;height:16px;border-radius:5px;flex:none;
+  background:conic-gradient(from 210deg,var(--accent),#c2722a,#8ba9cf,var(--accent));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+.app-name{font-family:var(--sans);font-size:.82rem;font-weight:600;color:var(--ink-strong);
+  display:inline-flex;align-items:baseline;gap:.45rem;white-space:nowrap}
+.app-name em{font-style:normal;font-family:var(--mono);font-size:.66rem;color:var(--ink-dim);letter-spacing:.03em}
+.app-tabs{display:inline-flex;gap:.2rem;margin-left:.4rem;background:var(--bg-2);
+  border:1px solid var(--line);border-radius:7px;padding:2px}
+.app-tabs span{font-family:var(--sans);font-size:.7rem;color:var(--ink-dim);padding:.2rem .55rem;border-radius:5px}
+.app-tabs .is-on{background:var(--surface);color:var(--ink-strong);font-weight:600;
+  box-shadow:0 1px 2px rgba(40,30,10,.12)}
+.app-ds{margin-left:auto;font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);
+  display:inline-flex;align-items:center;gap:.4rem;white-space:nowrap}
+.app-ds i{width:6px;height:6px;border-radius:50%;background:var(--green);flex:none;
+  box-shadow:0 0 0 3px rgba(31,158,120,.14)}
+.app-body{display:grid;grid-template-columns:.92fr 1.35fr 1.02fr;gap:0}
 .app-col{padding:1.1rem 1.15rem;min-width:0}
 .app-left{border-right:1px solid var(--line)}
 .app-center{border-right:1px solid var(--line);background:var(--bg-2)}
-.app-lab{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim);margin:0 0 .55rem}
+.app-lab{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--ink-dim);margin:0 0 .55rem;display:flex;justify-content:space-between;gap:.6rem}
+.app-lab em{font-style:normal;text-transform:none;letter-spacing:.02em;color:var(--line-strong)}
 .app-goal{font-family:var(--serif);font-size:.98rem;color:var(--ink-strong);line-height:1.45;
   background:var(--surface-2);border:1px solid var(--line);border-left:2px solid var(--accent);border-radius:4px;padding:.7rem .8rem;margin-bottom:1.1rem}
 .lab-steps{list-style:none;margin:0 0 1rem;padding:0;display:flex;flex-direction:column;gap:.5rem}
@@ -669,28 +688,64 @@ details[open] .disclose-mark::after{transform:translate(-50%,-50%) scaleY(0)}
   padding:.55rem .7rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
   transition:border-color .25s,background .25s,box-shadow .25s;position:relative}
 .lab-steps li .ls-ico{grid-row:1/3;width:26px;height:26px;display:flex;align-items:center;justify-content:center;
-  border-radius:50%;background:var(--surface-2);border:1px solid var(--line-strong);color:var(--ink-dim);font-size:.9rem}
+  border-radius:50%;background:var(--surface-2);border:1px solid var(--line-strong);color:var(--ink-dim);font-size:.9rem;
+  transition:background .25s,border-color .25s,color .25s}
 .lab-steps li b{font-size:.88rem;color:var(--ink-strong)}
 .lab-steps li i{font-style:normal;font-family:var(--mono);font-size:.68rem;color:var(--ink-dim)}
 .lab-steps li.is-active{border-color:var(--accent);background:rgba(168,85,24,.06);box-shadow:0 8px 20px -16px rgba(168,85,24,.5)}
 .lab-steps li.is-active .ls-ico{background:var(--accent);border-color:var(--accent);color:#fff}
 .lab-steps li.is-done .ls-ico{background:var(--green);border-color:var(--green);color:#fff}
-#jinduKG{display:block;width:100%;height:300px;background:var(--well);border:1px solid var(--well-line);border-radius:var(--radius);cursor:pointer}
-.kg-mini-legend{display:flex;flex-wrap:wrap;gap:.4rem .9rem;margin-top:.55rem;font-family:var(--mono);font-size:.66rem;color:var(--ink-soft)}
+#jinduKG{display:block;width:100%;aspect-ratio:1.16;min-height:300px;background:var(--well);
+  border:1px solid var(--well-line);border-radius:var(--radius);cursor:crosshair}
+.kg-mini-legend{display:flex;flex-wrap:wrap;gap:.35rem .85rem;margin-top:.6rem;font-family:var(--mono);font-size:.65rem;color:var(--ink-soft)}
 .kg-mini-legend span{display:inline-flex;align-items:center;gap:.35rem}
 .kg-mini-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
-.proto{min-height:280px;font-size:.84rem}
-.proto-idle{color:var(--ink-dim);font-style:italic}
-.proto-step{display:flex;gap:.55rem;padding:.5rem 0;border-bottom:1px dashed var(--line);opacity:0;transform:translateY(6px);
-  transition:opacity .35s var(--ease),transform .35s var(--ease)}
-.proto-step.is-in{opacity:1;transform:none}
-.proto-step .ps-n{font-family:var(--mono);font-size:.7rem;color:var(--accent);flex:none;margin-top:.1rem}
-.proto-step .ps-t{color:var(--ink-soft);line-height:1.45}
-.proto-step .ps-t b{color:var(--ink-strong)}
-.proto-step .ps-ev{display:block;font-family:var(--mono);font-size:.66rem;color:var(--ink-dim);margin-top:.15rem}
-.proto-verdict{margin-top:.7rem;font-family:var(--mono);font-size:.74rem;color:var(--green);
-  display:flex;align-items:center;gap:.4rem;opacity:0;transition:opacity .4s}
-.proto-verdict.is-in{opacity:1}
+
+/* ---- the generated protocol: an ELN page, not a bullet list ---- */
+.proto{min-height:300px;max-height:520px;overflow-y:auto;font-size:.84rem;scrollbar-width:thin}
+.proto::-webkit-scrollbar{width:6px}
+.proto::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:6px}
+.pr-idle .pr-slot{display:flex;align-items:center;gap:.6rem;padding:.55rem 0;border-bottom:1px dashed var(--line)}
+.pr-idle .pr-slot span{font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:var(--line-strong)}
+.pr-idle .pr-slot i{flex:1;height:6px;border-radius:3px;background:var(--surface-3)}
+.pr-hint{margin:.9rem 0 0;font-size:.78rem;color:var(--ink-dim);line-height:1.55}
+.pr-block,.pr-step,.pr-gate,.pr-retr,.pr-verdict{opacity:0;transform:translateY(5px);
+  transition:opacity .34s var(--ease),transform .34s var(--ease)}
+.pr-block.is-in,.pr-step.is-in,.pr-gate.is-in,.pr-retr.is-in,.pr-verdict.is-in{opacity:1;transform:none}
+.pr-lab{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);margin:.9rem 0 .4rem}
+.pr-block:first-child .pr-lab{margin-top:0}
+.pr-block p{margin:0;color:var(--ink-soft);line-height:1.55;font-size:.85rem}
+.pr-obj p{font-family:var(--serif);font-size:.94rem;color:var(--ink-strong);line-height:1.45}
+.pr-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-top:.15rem}
+.pr-table td{padding:.34rem .4rem;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.4}
+.pr-table td:first-child{font-family:var(--mono);font-size:.7rem;color:var(--ink-strong);white-space:nowrap;width:4.6em}
+.pr-table td:last-child{font-family:var(--mono);font-size:.62rem;color:var(--ink-dim);text-align:right;white-space:nowrap}
+.pr-table .pr-control td:first-child{color:var(--ink-dim)}
+.pr-table .pr-variable td:first-child{color:var(--accent-deep)}
+.pr-retr{font-family:var(--mono);font-size:.68rem;color:var(--ink-dim);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:.4rem .55rem;margin-top:.5rem}
+.pr-retr b{color:var(--ink-strong)}
+.pr-step{display:grid;grid-template-columns:20px 1fr;gap:.5rem;padding:.42rem 0;border-bottom:1px solid var(--line)}
+.pr-n{font-family:var(--mono);font-size:.7rem;color:var(--accent);text-align:right;padding-top:.05rem}
+.pr-t{color:var(--ink-soft);line-height:1.45;font-size:.82rem}
+/* the provenance chip — the whole point of the system, so it is a
+   chip you can see rather than a grey line of small print */
+.pr-ev{display:inline-block;margin-top:.3rem;font-family:var(--mono);font-size:.63rem;line-height:1.3;
+  padding:.14rem .42rem;border-radius:4px;border:1px solid var(--line-strong);color:var(--ink-dim);background:var(--surface-2)}
+.pr-ev-graph{border-color:rgba(44,131,196,.4);color:#1f6ea8;background:rgba(44,131,196,.07)}
+.pr-ev-literature{border-color:rgba(164,84,138,.38);color:#8a4573;background:rgba(164,84,138,.06)}
+.pr-ev-protocol{border-color:rgba(197,133,31,.4);color:var(--accent-deep);background:rgba(197,133,31,.07)}
+.pr-end p{font-family:var(--serif);font-size:.9rem;color:var(--ink-strong)}
+.pr-gate{display:flex;gap:.5rem;align-items:flex-start;padding:.3rem 0;font-size:.79rem;color:var(--ink-soft);line-height:1.45}
+.pr-gate i{font-style:normal;font-family:var(--mono);flex:none;width:1.1em;text-align:center}
+.pr-gate.is-ok i{color:var(--green)}
+.pr-gate.is-bad i{color:var(--vermillion)}
+.pr-verdict{margin-top:.8rem;font-family:var(--mono);font-size:.72rem;color:var(--green);line-height:1.5;
+  border-top:1px solid var(--line);padding-top:.6rem}
+.pr-verdict b{color:var(--ink-strong)}
+.pipe-node.is-past{border-color:rgba(31,158,120,.35)}
+.pipe-node.is-past .pipe-no{color:var(--green)}
 
 /* ---- extraction pipeline flow ---- */
 .pipe-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:0 0 .8rem;position:relative}
@@ -869,17 +924,34 @@ details[open] .disclose-mark::after{transform:translate(-50%,-50%) scaleY(0)}
   background:var(--surface);border:1px solid var(--line-strong);border-radius:var(--radius);
   padding:clamp(1rem,2vw,1.4rem);box-shadow:0 14px 40px -30px rgba(0,0,0,.5)}
 .zte-stage>*{min-width:0}
-.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:.7rem}
-.phone-frame{position:relative;width:100%;max-width:290px;aspect-ratio:.49;background:#05070c;
-  border:8px solid #10151f;border-radius:34px;overflow:hidden;
-  box-shadow:0 30px 70px -34px rgba(0,0,0,.8),inset 0 0 0 1px rgba(103,232,249,.12)}
-.phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:38%;height:20px;
-  background:#10151f;border-radius:0 0 14px 14px;z-index:3}
-#zteScreen{position:absolute;inset:0;width:100%;height:100%;display:block}
-.phone-cap{font-size:.78rem;color:var(--ink-dim);text-align:center;max-width:30ch;margin:0;line-height:1.5}
-.zte-p .ag-name{color:var(--accent-soft)}
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:.9rem}
+/* The device: a titanium rail, a black bezel, and a screen that is
+   inset from it — three surfaces, which is what stops a phone mock
+   reading as a rounded rectangle with a picture in it. */
+.phone-frame{position:relative;width:100%;max-width:292px;aspect-ratio:.492;
+  background:#0a0906;border-radius:46px;overflow:hidden;isolation:isolate;
+  padding:4px;
+  box-shadow:
+    0 0 0 1.5px #2a251c,
+    0 0 0 4px #16130e,
+    0 0 0 5px rgba(224,164,92,.16),
+    0 42px 84px -40px rgba(20,14,6,.85),
+    0 8px 24px -14px rgba(20,14,6,.5)}
+.phone-frame::before{content:"";position:absolute;inset:0;border-radius:46px;pointer-events:none;z-index:4;
+  box-shadow:inset 0 0 0 1px rgba(246,241,230,.10)}
+/* a single soft specular sweep, the only "glass" cue that survives at
+   this size — anything more and it reads as a stock 3-D mockup */
+.phone-glare{position:absolute;inset:0;border-radius:46px;pointer-events:none;z-index:5;
+  background:linear-gradient(128deg,rgba(255,255,255,.10) 0 16%,rgba(255,255,255,0) 42%);
+  mix-blend-mode:screen}
+#zteScreen{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);
+  display:block;border-radius:42px;z-index:2}
+.phone-cap{font-size:.8rem;color:var(--ink-dim);text-align:center;max-width:34ch;margin:0;line-height:1.55}
+.phone-cap b{color:var(--ink-soft);font-weight:600}
+.zte-p .ag-name{color:#5c7ba4}
 .zte-w .ag-name{color:var(--accent)}
-@media (max-width:820px){.zte-stage{grid-template-columns:1fr}.phone-frame{max-width:260px}}
+.zte-h .ag-name{color:#b9491f}
+@media (max-width:820px){.zte-stage{grid-template-columns:1fr}.phone-frame{max-width:268px}}
 
 /* cnnCanvas: absolute-fill to stop the dpr height-feedback collapse; ztfcnn re-resizes on visible */
 .ai-body #cnnCanvas{position:absolute;inset:0;width:100%;height:100%}
@@ -893,3 +965,137 @@ details[open] .disclose-mark::after{transform:translate(-50%,-50%) scaleY(0)}
 .cv-col .cv-h::after{content:"";flex:1;height:1px;background:var(--line)}
 .cv-pubs{grid-template-columns:1fr;gap:.7rem}
 @media (max-width:860px){.cv-two{grid-template-columns:1fr;gap:2.2rem}}
+
+/* ============================================================= *
+ *  v30 — FIGURE PLATES, INSTRUMENT RAILS AND CONTROLS           *
+ *  The three research figures are presented the way a journal    *
+ *  presents a plate: a numbered header, the figure, the notes     *
+ *  that explain the model, and a caption that states the limits.  *
+ * ============================================================= */
+
+.fig{background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;
+  box-shadow:0 20px 48px -36px rgba(40,30,10,.45);margin:0;overflow:hidden}
+.fig-head{display:flex;align-items:baseline;gap:.9rem;padding:.8rem clamp(.9rem,1.8vw,1.3rem);
+  border-bottom:1px solid var(--line);background:var(--surface-2)}
+.fig-no{font-family:var(--mono);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;flex:none}
+.fig-title{font-family:var(--serif);font-size:1.02rem;font-weight:560;color:var(--ink-strong);
+  flex:1 1 auto;min-width:0;line-height:1.3}
+.fig-meta{font-family:var(--mono);font-size:.63rem;letter-spacing:.05em;color:var(--ink-dim);
+  flex:none;white-space:nowrap}
+.fig-body{display:grid;gap:1.1rem;padding:clamp(.9rem,1.8vw,1.3rem)}
+.fig-split{grid-template-columns:1.52fr 1fr;align-items:stretch}
+.fig-split-wide{grid-template-columns:1.68fr 1fr}
+.fig-split>*{min-width:0}
+.fig-foot{padding:0 clamp(.9rem,1.8vw,1.3rem) 1.15rem;font-size:.82rem;color:var(--ink-dim);
+  line-height:1.66}
+.fig-foot strong{color:var(--ink-soft);font-weight:550}
+
+/* the side rail reads as one instrument panel, not three stacked cards */
+.fig-split .cyc-side,.fig-split .spec-side{gap:0;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.fig-split .cyc-side>*,.fig-split .spec-side>*{background:none;border:0;border-radius:0;
+  border-bottom:1px solid var(--line);padding:.95rem 1.05rem}
+.fig-split .cyc-side>*:last-child,.fig-split .spec-side>*:last-child{border-bottom:0}
+.cyc-canvas-wrap{cursor:grab}
+.cyc-canvas-wrap:active{cursor:grabbing}
+
+/* --- the notes strip: the model, stated --- */
+.fig-notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:.75rem;
+  padding:0 clamp(.9rem,1.8vw,1.3rem) 1.05rem}
+.note{background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:.9rem 1rem}
+.note-lab{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:.55rem}
+.note .eqn{font-family:var(--serif);font-size:1rem;line-height:1.5;color:var(--ink-strong);
+  margin:0 0 .55rem;padding:.45rem .65rem;background:var(--surface);
+  border-left:2px solid rgba(168,85,24,.5);border-radius:0 3px 3px 0;overflow-wrap:anywhere}
+.note .eqn b{font-weight:600}
+.note .eqn .vis{font-family:var(--sans);font-size:.82em;color:var(--ink-soft)}
+.note-p{margin:0;font-size:.855rem;color:var(--ink-soft);line-height:1.6}
+.note-p b{color:var(--ink-strong);font-weight:600}
+.note-p em{font-style:italic}
+
+/* --- labelled controls with a live value --- */
+.ctl{display:flex;flex-direction:column;gap:.22rem}
+.ctl-row{display:flex;align-items:baseline;justify-content:space-between;gap:.8rem;
+  font-size:.78rem;color:var(--ink-soft);line-height:1.35}
+.ctl-row output{font-family:var(--mono);font-size:.76rem;color:var(--ink-strong);
+  font-variant-numeric:tabular-nums;flex:none}
+.ctl-row i{font-style:italic;font-family:var(--serif);font-size:1.05em}
+.ctl-label{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.11em;
+  color:var(--ink-dim);display:block}
+.seg{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.45rem}
+.seg-group,.comp-row{display:block}
+.btn-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.btn-row .btn-sm{flex:1 1 auto;justify-content:center;text-align:center}
+
+/* sliders: a filled track, a quiet thumb, a real focus ring */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:16px;
+  background:none;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent) 0 var(--p,50%),var(--line-strong) var(--p,50%) 100%)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;
+  margin-top:-5.5px;border-radius:50%;background:var(--surface);border:1.5px solid var(--accent);
+  box-shadow:0 1px 3px rgba(40,30,10,.3);transition:transform .14s var(--ease),box-shadow .14s}
+input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.14)}
+input[type=range]:active::-webkit-slider-thumb{box-shadow:0 0 0 5px rgba(168,85,24,.16)}
+input[type=range]::-moz-range-track{height:3px;border-radius:2px;background:var(--line-strong)}
+input[type=range]::-moz-range-progress{height:3px;border-radius:2px;background:var(--accent)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;
+  background:var(--surface);border:1.5px solid var(--accent)}
+
+/* component toggles read as on/off, not as another button */
+.chip.is-on{border-color:var(--accent);color:var(--accent-deep);background:rgba(168,85,24,.09)}
+.chip.is-off{opacity:.48;border-style:dashed}
+.chip.active{position:relative}
+.chip.active::after{content:"";position:absolute;left:.6rem;right:.6rem;bottom:2px;height:1.5px;
+  background:var(--accent);border-radius:2px}
+
+/* --- hero figure caption + plate --- */
+#heroOrbit{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-fig-plate::after{content:none}
+.hero-fig-cap{margin:.75rem 0 0;font-size:.84rem;color:var(--ink-dim);line-height:1.6}
+.hero-fig-cap b{color:var(--ink-strong);font-weight:600}
+.hero-figure{max-width:460px}
+
+/* --- publication → figure cross-references --- */
+.pub-jump{display:inline-flex;align-items:center;gap:.3rem;margin-top:.8rem;font-family:var(--mono);
+  font-size:.7rem;letter-spacing:.03em;color:var(--accent);transition:color .18s var(--ease)}
+.pub-jump:hover{color:var(--accent-deep)}
+.k-g{color:#1f9e78;font-weight:600}
+.k-r{color:#cf5a2c;font-weight:600}
+
+@media (max-width:900px){
+  .fig-split,.fig-split-wide{grid-template-columns:1fr}
+  .fig-head{flex-wrap:wrap;gap:.3rem .8rem}
+  .fig-meta{width:100%}
+}
+
+/* the left column of a figure: scene above, light curve directly beneath it,
+   so the phase cursor and the scene sit on the same visual axis */
+.fig-main{display:flex;flex-direction:column;gap:.85rem;min-width:0}
+.fig-main .cyc-canvas-wrap{aspect-ratio:1.52;min-height:320px}
+.fig-main .spec-canvas-wrap{aspect-ratio:1.6;min-height:360px}
+.fig-main .lc-wrap{background:var(--surface-2);border:1px solid var(--line);
+  border-radius:6px;padding:.9rem 1rem}
+.lc-wrap h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-dim);margin:0 0 .6rem;font-weight:500}
+@media (max-width:900px){.fig-main .cyc-canvas-wrap{aspect-ratio:1.25;min-height:300px}}
+
+/* a spectrum is inherently wide: give it the full width and lay the
+   instrument panel out horizontally underneath it */
+.fig-stack{grid-template-columns:1fr}
+.fig-stack .spec-canvas-wrap{aspect-ratio:2.25;min-height:380px}
+.spec-rail{display:grid!important;grid-template-columns:1fr 1.15fr .85fr;gap:0;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.spec-rail>*{background:none;border:0;border-radius:0;border-right:1px solid var(--line);
+  padding:.95rem 1.05rem}
+.spec-rail>*:last-child{border-right:0}
+.spec-rail .readout-row{padding:.28rem 0}
+.spec-rail .spec-controls{display:flex;flex-direction:column;gap:.7rem}
+@media (max-width:900px){
+  .spec-rail{grid-template-columns:1fr}
+  .spec-rail>*{border-right:0;border-bottom:1px solid var(--line)}
+  .spec-rail>*:last-child{border-bottom:0}
+  .fig-stack .spec-canvas-wrap{aspect-ratio:1.35;min-height:340px}
+}

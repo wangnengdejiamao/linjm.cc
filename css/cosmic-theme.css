@@ -100,6 +100,14 @@ input:focus-visible,.door:focus-visible,.ai-hchip:focus-visible{
 .cosmos-hud-bottom,.ai-viz-stages{bottom:.95rem;left:1.1rem;right:1.1rem;top:auto;
   display:flex;align-items:center;justify-content:center;gap:.7rem;color:var(--ink-od-dim)}
 .ai-viz-stages{justify-content:space-between}
+/* the stage rail tracks the animation, so the plate and its caption
+   are one instrument rather than a picture with a label under it */
+.ai-viz-stages span{position:relative;padding-bottom:.32rem;transition:color .3s var(--ease)}
+.ai-viz-stages span::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:var(--fig-amber);transform:scaleX(0);transform-origin:left;
+  transition:transform .34s var(--ease)}
+.ai-viz-stages span.is-on{color:var(--fig-amber)}
+.ai-viz-stages span.is-on::after{transform:scaleX(1)}
 .cosmos-hud-bottom b{color:var(--fig-amber);font-weight:400}
 .ai-viz-readout{display:none}         /* remove fabricated live metrics */
 
@@ -118,7 +126,7 @@ input:focus-visible,.door:focus-visible,.ai-hchip:focus-visible{
 .fig-bullets .fb-pick span{color:var(--accent)}
 .fe-mode.is-on{border-color:var(--accent);color:var(--accent);background:rgba(168,85,24,.08)}
 .a2a-tag{color:var(--accent);border-color:rgba(168,85,24,.35)}
-.phone-frame{box-shadow:0 30px 70px -34px rgba(0,0,0,.8),inset 0 0 0 1px rgba(214,180,120,.12)}
+/* (the device shadow/rail now lives in styles.css — do not re-flatten it here) */
 .eb-fill{background:linear-gradient(90deg,var(--teal),var(--cyan))}
 .eb-fill.eb-fill-me{background:linear-gradient(90deg,var(--accent-deep),var(--accent-soft))}
 

@@ -1,147 +1,112 @@
-/* Hero figure: a stylised magnetized white dwarf with a rotating dipole
-   field and an accretion stream curling onto the pole. Decorative. */
+/* =================================================================
+   Hero plate — a magnetised white dwarf, drawn with the same kit and
+   the same dipole maths as Fig. 1, just smaller and without controls.
+   Field lines are r = r_eq sin²θ around a tilted moment; the curtain
+   lands on a footpoint whose beam sweeps as the star turns.
+   ================================================================= */
 (function () {
   const canvas = document.getElementById('heroOrbit');
-  if (!canvas) return;
+  if (!canvas || !window.FK) return;
   const ctx = canvas.getContext('2d');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const FRAME_MS = 1000 / 30;
-  let w, h, dpr = Math.min(window.devicePixelRatio || 1, 2), t = 0;
-  let visible = true, raf = 0, timer = 0, last = 0;
+  const C = FK.C;
+  let W = 0, H = 0, t = 0;
 
-  function resize() {
-    const s = canvas.clientWidth;
-    w = h = s;
-    canvas.width = canvas.height = s * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const BETA = FK.RAD(28), INC = FK.RAD(74), R_WD = 0.15, R_MU = 0.72;
+
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  let eh = [1, 0, 0], ev = [0, 1, 0], nh = [0, 0, 1];
+  function setView(ph) {
+    const psi = 2 * Math.PI * ph, s = Math.sin(INC), c = Math.cos(INC);
+    const cp = Math.cos(psi), sp = Math.sin(psi);
+    nh = [s * cp, s * sp, c]; eh = [-sp, cp, 0]; ev = [-c * cp, -c * sp, s];
   }
+  const rot = (v, ax, a) => {
+    const c = Math.cos(a), s = Math.sin(a), d = dot(v, ax);
+    return [v[0] * c + (ax[1] * v[2] - ax[2] * v[1]) * s + ax[0] * d * (1 - c),
+            v[1] * c + (ax[2] * v[0] - ax[0] * v[2]) * s + ax[1] * d * (1 - c),
+            v[2] * c + (ax[0] * v[1] - ax[1] * v[0]) * s + ax[2] * d * (1 - c)];
+  };
 
-  function dipoleLine(cx, cy, R, L, ang, sign) {
-    // simple dipole-ish loop rotated by `ang`
-    ctx.beginPath();
-    for (let i = 0; i <= 40; i++) {
-      const th = (i / 40) * Math.PI;             // 0..pi
-      const r = R + L * Math.sin(th);
-      const lx = sign * r * Math.sin(th);
-      const ly = -Math.cos(th) * (R + L);
-      const x = cx + lx * Math.cos(ang) - ly * Math.sin(ang);
-      const y = cy + lx * Math.sin(ang) + ly * Math.cos(ang);
-      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-    }
-    ctx.stroke();
-  }
+  function resize() { const m = FK.fit(canvas, ctx); if (m) { W = m.w; H = m.h; } }
 
-  function isVisible() {
-    const r = canvas.getBoundingClientRect();
-    return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
-  }
+  function frame() {
+    if (!W) return;
+    ctx.clearRect(0, 0, W, H);
+    setView(t);
+    const cx = W * 0.5, cy = H * 0.52, S = Math.min(W, H) * 0.40;
+    const m = [Math.sin(BETA), 0, Math.cos(BETA)];
+    const e0 = [Math.cos(BETA), 0, -Math.sin(BETA)];
 
-  function frame(now) {
-    ctx.clearRect(0, 0, w, h);
-    const cx = w * 0.52, cy = h * 0.5, R = w * 0.12;
-    const spin = (t * 0.6) % (Math.PI * 2);
+    const lineOf = (req, e1, thA, thB, n) => {
+      const p = [];
+      for (let k = 0; k <= n; k++) {
+        const th = thA + (thB - thA) * k / n;
+        const st = Math.sin(th), ct = Math.cos(th), r = req * st * st;
+        const P = [r * (st * e1[0] + ct * m[0]), r * (st * e1[1] + ct * m[1]), r * (st * e1[2] + ct * m[2])];
+        p.push([cx + dot(P, eh) * S, cy - dot(P, ev) * S, dot(P, nh) > 0]);
+      }
+      return p;
+    };
+    const stroke = (p, front, style, w) => {
+      ctx.save(); ctx.strokeStyle = style; ctx.lineWidth = w; ctx.lineJoin = 'round';
+      let open = false; ctx.beginPath();
+      for (const q of p) {
+        if (q[2] !== front) { open = false; continue; }
+        if (!open) { ctx.moveTo(q[0], q[1]); open = true; } else ctx.lineTo(q[0], q[1]);
+      }
+      ctx.stroke(); ctx.restore();
+    };
 
-    // field lines
-    ctx.lineWidth = 1.1;
-    for (let k = 0; k < 5; k++) {
-      const L = R * (0.5 + k * 0.55);
-      const a = 0.16 - k * 0.02;
-      ctx.strokeStyle = `rgba(120,150,220,${a})`;
-      dipoleLine(cx, cy, R, L, spin, 1);
-      dipoleLine(cx, cy, R, L, spin, -1);
-    }
-
-    // white dwarf glow
-    const g = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.2, cx, cy, R * 1.5);
-    g.addColorStop(0, '#e8fbff');
-    g.addColorStop(0.5, '#e0a45c');
-    g.addColorStop(1, 'rgba(10,79,92,0)');
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(cx, cy, R * 1.5, 0, 7); ctx.fill();
-    ctx.fillStyle = '#dff7fc';
-    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill();
-
-    // accretion hot spots at the (rotating) magnetic poles
-    for (const sgn of [1, -1]) {
-      const px = cx + sgn * Math.sin(spin) * R;
-      const py = cy - sgn * Math.cos(spin) * R;
-      const hot = ctx.createRadialGradient(px, py, 0, px, py, R * 0.5);
-      hot.addColorStop(0, 'rgba(230,159,0,.9)');
-      hot.addColorStop(1, 'rgba(213,94,0,0)');
-      ctx.fillStyle = hot;
-      ctx.beginPath(); ctx.arc(px, py, R * 0.5, 0, 7); ctx.fill();
-    }
-
-    // incoming accretion stream from upper-right donor
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(230,159,0,.55)';
-    ctx.lineWidth = 2.4;
-    for (let i = 0; i <= 60; i++) {
-      const f = i / 60;
-      const ang = -0.55 + f * 2.0;                 // fixed donor->WD arc
-      const rr = w * 0.46 * (1 - f) + R * 1.05 * f;
-      const x = cx + Math.cos(ang) * rr;
-      const y = cy - Math.sin(ang) * rr * 0.8 - w * 0.02 * (1 - f);
-      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-    }
-    ctx.stroke();
-
-    // gas blobs travelling along the stream
-    if (!reduce) {
-      for (let b = 0; b < 4; b++) {
-        const f = ((t * 0.35 + b / 4) % 1);
-        const ang = -0.55 + f * 2.0;
-        const rr = w * 0.46 * (1 - f) + R * 1.05 * f;
-        const x = cx + Math.cos(ang) * rr;
-        const y = cy - Math.sin(ang) * rr * 0.8 - w * 0.02 * (1 - f);
-        ctx.fillStyle = `rgba(255,210,140,${0.85 - f * 0.4})`;
-        ctx.beginPath(); ctx.arc(x, y, 2.4, 0, 7); ctx.fill();
+    for (const req of [0.36, 0.55, 0.82, 1.15]) {
+      for (const az of [0, Math.PI / 2, Math.PI, 3 * Math.PI / 2]) {
+        const thF = Math.asin(Math.min(1, Math.sqrt(Math.min(1, R_WD / req))));
+        const L = lineOf(req, rot(e0, m, az), thF, Math.PI - thF, 40);
+        const a = 0.26 - (req - 0.36) * 0.14;
+        stroke(L, false, 'rgba(139,169,207,' + (a * 0.4).toFixed(3) + ')', 1);
+        stroke(L, true, 'rgba(139,169,207,' + a.toFixed(3) + ')', 1);
       }
     }
 
-    if (!reduce && visible && !document.hidden) {
-      const dt = now && last ? Math.min(2.5, (now - last) / 16.67) : 1;
-      if (now) last = now;
-      t += 0.016 * dt;
-      start();
-    } else {
-      raf = 0;
+    /* accretion curtain onto the northern footpoint */
+    const thF = Math.asin(Math.min(1, Math.sqrt(R_WD / R_MU)));
+    for (let s = -2; s <= 2; s++) {
+      const L = lineOf(R_MU * (1 + s * 0.05), rot(e0, m, s * 0.19), thF, Math.PI / 2.1, 26);
+      stroke(L, false, 'rgba(224,164,92,.13)', 2.2 - Math.abs(s) * 0.4);
+      stroke(L, true, 'rgba(240,190,120,.42)', 2.2 - Math.abs(s) * 0.4);
     }
+
+    /* the star */
+    FK.disc(ctx, cx, cy, R_WD * S, FK.RGB.wd, { u: 0.42, core: 0.98, bloom: 2.5 });
+
+    /* hot spot + beam */
+    const st = Math.sin(thF), ct = Math.cos(thF), r = R_MU * st * st;
+    const P = [r * (st * e0[0] + ct * m[0]), r * (st * e0[1] + ct * m[1]), r * (st * e0[2] + ct * m[2])];
+    if (dot(P, nh) > -0.02) {
+      const sx = cx + dot(P, eh) * S, sy = cy - dot(P, ev) * S;
+      const be1 = 3 * st * ct, bem = 2 * ct * ct - st * st, bn = Math.hypot(be1, bem) || 1;
+      const B = [(be1 * e0[0] + bem * m[0]) / bn, (be1 * e0[1] + bem * m[1]) / bn, (be1 * e0[2] + bem * m[2]) / bn];
+      const bright = 1 - Math.pow(FK.clamp(dot(B, nh), -1, 1), 2);
+      const ang = Math.atan2(-dot(B, ev), dot(B, eh));
+      const reach = S * 0.62 * (0.4 + 0.6 * bright);
+      for (const s of [1, -1]) {
+        const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, reach);
+        g.addColorStop(0, 'rgba(240,186,116,' + (0.24 * bright + 0.03) + ')');
+        g.addColorStop(1, 'rgba(240,186,116,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(sx, sy);
+        ctx.arc(sx, sy, reach, ang + s * Math.PI / 2 - 0.4, ang + s * Math.PI / 2 + 0.4);
+        ctx.closePath(); ctx.fill();
+      }
+      const hg = ctx.createRadialGradient(sx, sy, 0, sx, sy, R_WD * S * 0.9);
+      hg.addColorStop(0, 'rgba(255,226,176,.95)'); hg.addColorStop(1, 'rgba(224,140,70,0)');
+      ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(sx, sy, R_WD * S * 0.9, 0, 7); ctx.fill();
+    }
+
+    FK.kicker(ctx, 'Fig. 0 — magnetised white dwarf', 12, H - 12, { size: 8, fill: C.faint });
+    FK.text(ctx, 'β = 28°', W - 12, H - 12, { font: FK.mono(9), fill: C.faint, align: 'right' });
   }
 
-  function start() {
-    if (reduce || !visible || document.hidden || raf || timer) return;
-    timer = window.setTimeout(() => {
-      timer = 0;
-      raf = requestAnimationFrame((now) => {
-        raf = 0;
-        frame(now);
-      });
-    }, FRAME_MS);
-  }
-
-  function stop() {
-    if (raf) cancelAnimationFrame(raf);
-    if (timer) clearTimeout(timer);
-    raf = 0;
-    timer = 0;
-    last = 0;
-  }
-
-  resize();
-  visible = isVisible();
-  window.addEventListener('resize', () => {
-    resize();
-    visible = isVisible();
-    if (reduce || !visible || document.hidden) frame(); else start();
-  });
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      visible = entries[0].isIntersecting;
-      if (visible) start(); else stop();
-    }, { threshold: 0.05 });
-    io.observe(canvas);
-  }
-  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
-  if (reduce) frame(); else start();
+  resize(); frame();
+  FK.onResize(canvas, () => { resize(); frame(); });
+  const anim = FK.loop(canvas, dt => { t = (t + 0.0013 * dt) % 1; frame(); }, { fps: 30 });
+  anim.start();
 })();

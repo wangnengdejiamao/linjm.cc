@@ -1,69 +1,60 @@
 /* =================================================================
-   Square-wave eclipse — UPK 13-c2, a candidate disk-eclipsing binary.
-   A misaligned circumbinary disk has a localized (eccentric) occulting
-   edge. The binary orbits the common centre of mass; only the wider-
-   orbit component swings far enough to pass behind that edge, so just
-   ONE star is occulted per cycle (P = 36.71 d). It contributes ~40% of
-   the light, so the floor sits near 60% — the companion stays visible.
+   UPK 13-c2 — a candidate disk-eclipsing binary in a ~316 Myr cluster.
 
-   The slow, multi-day ingress is the key diagnostic: an extended star
-   gives a sloped trapezoid; a point-like white dwarf would give near-
-   vertical walls. Toggle the occulted source to compare.
+   Every 36.710719 d the system drops into a flat-bottomed "square
+   wave". A misaligned circumbinary disk presents a localized, sharp
+   inner edge; only the wider-orbit component swings behind it, so ONE
+   star is occulted while its companion keeps shining — which is why
+   the floor sits near 60 % instead of going to zero.
+
+   Two angles do all the work:
+     · the binary inclination i sets how much of the star the edge can
+       cover at all (and therefore the depth),
+     · the disk misalignment α sets the perpendicular crossing speed
+           v⊥ = v_orb sin α
+       and hence the ingress slope. The observed ingress takes ~2.5 d,
+       far too slow for a point-like white dwarf: switch the occulted
+       source and the walls snap vertical. That single comparison is
+       the argument that rules a WD out.
+
+   The light curve is real: ZTF g/r photometry folded on the period,
+   with the χ²-fitted trapezoid from fit_squarewave.py drawn behind the
+   live model. Stellar radii in the scene are exaggerated ~15× — at true
+   scale the stars would be sub-pixel — hence the magnified inset, which
+   is where the ingress geometry actually lives.
    ================================================================= */
 (function () {
   const canvas = document.getElementById('diskCanvas');
-  const lc = document.getElementById('diskLc');
-  if (!canvas || !lc) return;
+  const lcEl = document.getElementById('diskLc');
+  if (!canvas || !lcEl || !window.FK) return;
   const ctx = canvas.getContext('2d');
-  const lctx = lc.getContext('2d');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const FRAME_MS = 1000 / 30;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const lctx = lcEl.getContext('2d');
+  const C = FK.C, RGB = FK.RGB;
 
-  const elPhase = document.getElementById('diskPhase');
-  const elDays  = document.getElementById('diskDays');
-  const elFlux  = document.getElementById('diskFlux');
-  const elSpeed = document.getElementById('diskSpeed');
-  const elToggle= document.getElementById('diskToggle');
-  const elPause = document.getElementById('diskPause');
-  const elIncl  = document.getElementById('diskIncl');
-  const elAlpha = document.getElementById('diskAlpha');
-  const elDepth = document.getElementById('diskDepth');
-  const elIv    = document.getElementById('diskIv');
-  const elAlphaR= document.getElementById('diskAlphaR');
-  const elRin   = document.getElementById('diskRin');
+  const $ = id => document.getElementById(id);
+  const out = {
+    phase: $('diskPhase'), days: $('diskDays'), flux: $('diskFlux'), depth: $('diskDepth'),
+    iv: $('diskIv'), alpha: $('diskAlphaR'), rin: $('diskRin'), ing: $('diskIngress')
+  };
+  const inp = {
+    incl: $('diskIncl'), alpha: $('diskAlpha'), speed: $('diskSpeed'),
+    toggle: $('diskToggle'), pause: $('diskPause')
+  };
 
-  const DD = window.DISK_DATA || null;                     // real folded ZTF data (js/diskdata.js)
-  const P_DAYS = DD ? DD.period_days : 36.71;
-  const EDGES  = DD ? DD.model_edges : [0.34, 0.42, 0.66, 0.70];  // fitted ingress/egress phases
-  const DEPTH  = DD ? DD.bands.g.depth : 0.40;             // fractional flux drop (~0.40) at edge-on
-  const MID    = DD ? DD.mid_phase : 0.52;
-  // From Lin et al. (UPK 13-c2): a≈0.24 AU≈52 R_sun (Kepler, M_tot≈1.4 M_sun, P=36.71 d);
-  // tidal truncation (Artymowicz & Lubow 1994) sets the inner edge at R_in≈2–3 a.
-  const RIN_OVER_A = 2.5, A_RSUN = 52, RIN_RSUN = Math.round(RIN_OVER_A * A_RSUN); // ≈130 R_sun
-  const ALPHA0 = 13 * Math.PI / 180;                      // adopted misalignment (sets observed ingress)
-  let phase = 0, speed = 1, paused = false, extended = true;
-  let iv = (elIncl ? +elIncl.value : 82) * Math.PI / 180;  // viewing inclination (90°=edge-on)
-  let alphaMis = (elAlpha ? +elAlpha.value : 13) * Math.PI / 180; // disk tilt vs binary orbit
-  let W = 0, H = 0, LW = 0, LH = 0;
-  let visible = true, raf = 0, timer = 0, last = 0;
+  const DD = window.DISK_DATA || null;
+  const P_DAYS = DD ? DD.period_days : 36.710719;
+  const EDGES = DD ? DD.model_edges : [0.24, 0.37, 0.67, 0.70];
+  const DEPTH = DD ? DD.bands.g.depth : 0.40;
+  const RIN_OVER_A = 2.5, A_RSUN = 52, RIN_RSUN = Math.round(RIN_OVER_A * A_RSUN);
+  const ALPHA0 = FK.RAD(13);
 
-  function resize() {
-    W = canvas.clientWidth; H = canvas.clientHeight;
-    canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-    LW = lc.clientWidth; LH = lc.clientHeight;
-    lc.width = LW * dpr; lc.height = LH * dpr; lctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  function isVisible() {
-    const r = canvas.getBoundingClientRect();
-    return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
-  }
+  let phase = 0, speed = +(inp.speed && inp.speed.value || 1), extended = true;
+  let iv = FK.RAD(+(inp.incl && inp.incl.value || 82));
+  let alphaMis = FK.RAD(+(inp.alpha && inp.alpha.value || 13));
+  let W = 0, H = 0, LW = 0, LH = 0, lcAx = null, hover = null;
 
-  // grazing geometry (Lin+ UPK 13-c2): the perpendicular crossing speed is
-  // v_perp = v_orb·sin α, so the ingress duration scales as 1/sin α — a smaller
-  // disk misalignment gives the slow, multi-day ingress that rules out a WD.
-  function ingressK() { return Math.sin(ALPHA0) / Math.max(0.05, Math.sin(alphaMis)); }
-  // normalised dip (0…1). narrow = point-like WD; k scales the ingress/egress slope.
+  /* ---- flux model (unchanged: this is what the data constrain) ---- */
+  const ingressK = () => Math.sin(ALPHA0) / Math.max(0.05, Math.sin(alphaMis));
   function dipK(ph, narrow, k) {
     const p2 = EDGES[1], p3 = EDGES[2];
     let p1, p4;
@@ -71,249 +62,271 @@
     else { p1 = Math.max(0, p2 - (EDGES[1] - EDGES[0]) * k); p4 = Math.min(1, p3 + (EDGES[3] - EDGES[2]) * k); }
     ph = ((ph % 1) + 1) % 1;
     if (ph <= p1 || ph >= p4) return 0;
-    if (ph < p2)  return (ph - p1) / (p2 - p1);
+    if (ph < p2) return (ph - p1) / (p2 - p1);
     if (ph <= p3) return 1;
     return (p4 - ph) / (p4 - p3);
   }
-  function smoothstep(a, b, x) { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); }
-  // the circumbinary disk only occults near edge-on; depth falls off toward face-on.
-  function depthScale() { return smoothstep(52 * Math.PI / 180, 80 * Math.PI / 180, iv); }
-  const refFlux   = ph => 1 - DEPTH * dipK(ph, false, 1);                                  // observed fit (α≈13°)
+  const depthScale = () => FK.smooth(FK.RAD(52), FK.RAD(80), iv);
+  const refFlux = ph => 1 - DEPTH * dipK(ph, false, 1);
   const modelFlux = ph => 1 - DEPTH * depthScale() * dipK(ph, !extended, extended ? ingressK() : 1);
-  const cover1    = ph => depthScale() * dipK(ph, !extended, extended ? ingressK() : 1);   // fraction covered
+  const cover1 = ph => depthScale() * dipK(ph, !extended, extended ? ingressK() : 1);
+  function ingressDays() {
+    const k = extended ? ingressK() : 0;
+    const w = extended ? (EDGES[1] - EDGES[0]) * k : 0.006;
+    return w * P_DAYS;
+  }
 
-  // ---- scene ----
+  /* ================= scene ================= */
   function geom() {
-    const R = Math.min(W, H), cx = W * 0.44, cy = H * 0.5;
-    const sq = Math.max(0.05, Math.cos(iv));         // vertical squash set by the viewing angle
-    const a1 = R * 0.085, a2 = R * 0.06;             // tight binary: orbital radii about the COM
-    const a  = a1 + a2;                              // binary semi-major axis
-    const rin = RIN_OVER_A * a, rout = rin * 1.5;    // tidally-truncated inner edge ≈ 2.5 a
-    return { R, cx, cy, sq, a1, a2, a, rin, rout, alpha: alphaMis };
+    const cx = W * 0.5, cy = H * 0.53;
+    const a = Math.min(W * 0.112, H * 0.20);        // orbital separation, px
+    const sq = Math.max(0.045, Math.cos(iv));       // vertical squash from the viewing angle
+    const a1 = a * 0.58, a2 = a * 0.42;             // orbital radii about the COM
+    const rin = RIN_OVER_A * a, rout = rin * 1.5;
+    const rs = a * 0.20;                            // exaggerated stellar radius
+    return { cx, cy, a, a1, a2, sq, rin, rout, rs, rot: alphaMis };
   }
-  function orbit(cx, cy, a, sq, theta) {
-    return { x: cx + a * Math.cos(theta), y: cy + a * sq * Math.sin(theta) };
+  const orbit = (g, r, th) => ({ x: g.cx + r * Math.cos(th), y: g.cy + r * g.sq * Math.sin(th) });
+
+  function ringPath(g, rx, half) {
+    /* half: +1 near (lower) arc, -1 far (upper) arc, 0 full */
+    const p = new Path2D();
+    const A = half === 0 ? [0, Math.PI * 2] : half > 0 ? [0, Math.PI] : [Math.PI, Math.PI * 2];
+    p.ellipse(g.cx, g.cy, rx, rx * g.sq, g.rot, A[0], A[1]);
+    return p;
   }
 
-  function drawDisk(g) {
-    const { cx, cy, sq, rin, rout } = g, rot = g.alpha; // ring tilted by the misalignment
-    const rxO = rout, ryO = rxO * sq, rxI = rin, ryI = rxI * sq;
-    // dusty annulus (even-odd fill: outer minus inner)
+  function drawDisk(g, near) {
+    const { cx, cy, sq, rin, rout, rot } = g;
     ctx.save();
-    const grd = ctx.createRadialGradient(cx, cy, rxI, cx, cy, rxO);
-    grd.addColorStop(0, 'rgba(70,55,40,.0)');
-    grd.addColorStop(0.15, 'rgba(86,66,46,.55)');
-    grd.addColorStop(0.6, 'rgba(58,46,36,.7)');
-    grd.addColorStop(1, 'rgba(30,24,20,.15)');
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, rxO, ryO, rot, 0, Math.PI * 2);
-    ctx.ellipse(cx, cy, rxI, ryI, rot, 0, Math.PI * 2, true);
-    ctx.fillStyle = grd; ctx.fill('evenodd');
-    // concentric ring texture
-    for (let k = 1; k <= 4; k++) {
-      const t = k / 5, rx = rxI + (rxO - rxI) * t;
-      ctx.beginPath(); ctx.ellipse(cx, cy, rx, rx * sq, rot, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(150,120,90,.10)'; ctx.lineWidth = 1; ctx.stroke();
+    if (near) {
+      /* the near half of the annulus, drawn over the stars: this is the
+         material that does the occulting, so it reads as opaque dust */
+      const p = new Path2D();
+      p.ellipse(cx, cy, rout, rout * sq, rot, 0, Math.PI);
+      p.ellipse(cx, cy, rin, rin * sq, rot, Math.PI, 0, true);
+      p.closePath();
+      const gr = ctx.createLinearGradient(cx, cy - rout * sq, cx, cy + rout * sq);
+      gr.addColorStop(0, 'rgba(46,35,26,.94)');
+      gr.addColorStop(1, 'rgba(22,17,13,.99)');
+      ctx.fillStyle = gr; ctx.fill(p);
+      ctx.strokeStyle = 'rgba(198,158,112,.30)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.ellipse(cx, cy, rin, rin * sq, rot, 0, Math.PI); ctx.stroke();
+    } else {
+      /* far half: dust lit from the inside, fading outward */
+      const p = new Path2D();
+      p.ellipse(cx, cy, rout, rout * sq, rot, Math.PI, Math.PI * 2);
+      p.ellipse(cx, cy, rin, rin * sq, rot, Math.PI * 2, Math.PI, true);
+      p.closePath();
+      const gr = ctx.createRadialGradient(cx, cy, rin * 0.95, cx, cy, rout);
+      gr.addColorStop(0, 'rgba(126,96,66,.62)');
+      gr.addColorStop(0.45, 'rgba(84,64,46,.45)');
+      gr.addColorStop(1, 'rgba(40,31,24,.10)');
+      ctx.fillStyle = gr; ctx.fill(p);
+      for (let k = 1; k <= 4; k++) {
+        const rx = rin + (rout - rin) * k / 5;
+        ctx.strokeStyle = 'rgba(176,142,102,.09)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.ellipse(cx, cy, rx, rx * sq, rot, Math.PI, Math.PI * 2); ctx.stroke();
+      }
+      ctx.strokeStyle = 'rgba(206,168,120,.34)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.ellipse(cx, cy, rin, rin * sq, rot, Math.PI, Math.PI * 2); ctx.stroke();
     }
-    // bright inner rim (the tidally truncated edge)
-    ctx.beginPath(); ctx.ellipse(cx, cy, rxI, ryI, rot, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(190,150,110,.28)'; ctx.lineWidth = 1.5; ctx.stroke();
     ctx.restore();
-  }
-  function drawFrontRim(g) {
-    // the near (front, lower) half of the disk ring, drawn on top for depth
-    const { cx, cy, sq, rin, rout } = g, rot = g.alpha;
-    const rxO = rout, ryO = rxO * sq, rxI = rin, ryI = rxI * sq;
-    ctx.save();
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, rxO, ryO, rot, 0, Math.PI, false);   // outer lower arc
-    ctx.ellipse(cx, cy, rxI, ryI, rot, Math.PI, 0, true);    // inner lower arc back
-    ctx.closePath();
-    const grd = ctx.createLinearGradient(0, cy, 0, cy + ryO);
-    grd.addColorStop(0, 'rgba(40,31,24,.85)'); grd.addColorStop(1, 'rgba(20,15,12,.95)');
-    ctx.fillStyle = grd; ctx.fill();
-    ctx.restore();
-  }
-  function drawStar(x, y, r, inner, outer, alpha) {
-    ctx.globalAlpha = 0.55 * alpha;
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r * 2.4);
-    g.addColorStop(0, inner); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 2.4, 0, 7); ctx.fill();
-    ctx.globalAlpha = alpha;
-    const c = ctx.createRadialGradient(x - r*0.3, y - r*0.3, r*0.2, x, y, r);
-    c.addColorStop(0, inner); c.addColorStop(1, outer);
-    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
-    ctx.globalAlpha = 1;
   }
 
-  // the disk's sharp (knife-edge) near edge advancing across the wide star:
-  // cov=0 → edge tangent to the star; cov=1 → star fully behind the disk.
-  function drawOcculter(s1, r1, cov, g) {
+  /* the sharp inner edge sweeping across the star.
+     cov = 0 → edge tangent to the limb;  cov = 1 → star fully behind. */
+  function occult(x, y, r, cov, g, scale) {
     if (cov <= 0.003) return;
-    const Rocc = g.R * 0.42;                          // large curvature → a sharp, near-straight edge
-    const dir = Math.PI / 2 + g.alpha;                // edge advances from the disk side (tilted by α)
+    const Rocc = r * 26 * (scale || 1);              // huge radius ⇒ an effectively straight edge
+    const dir = Math.PI / 2 + g.rot;
     const ux = Math.cos(dir), uy = Math.sin(dir);
-    const reach = r1 * 1.25;                          // covers the stellar disk (+ a little glow)
-    const D = Rocc + reach - cov * (2 * reach);       // cov 0: tangent · cov 1: fully covering
-    const ox = s1.x + ux * D, oy = s1.y + uy * D;
+    const reach = r * 1.28;
+    const D = Rocc + reach - cov * 2 * reach;
+    const ox = x + ux * D, oy = y + uy * D;
     ctx.save();
-    ctx.beginPath(); ctx.arc(s1.x, s1.y, reach, 0, 7); ctx.clip();      // occult ONLY this star
-    ctx.fillStyle = '#241a11';                        // opaque dark disk material (knife edge)
+    ctx.beginPath(); ctx.arc(x, y, reach, 0, 7); ctx.clip();
+    ctx.fillStyle = '#1d160f';
     ctx.beginPath(); ctx.arc(ox, oy, Rocc, 0, 7); ctx.fill();
-    ctx.lineWidth = 2.2; ctx.strokeStyle = 'rgba(210,170,120,.85)';     // bright dust along the sharp edge
+    ctx.strokeStyle = 'rgba(214,172,120,.85)'; ctx.lineWidth = Math.max(1, r * 0.10);
     ctx.beginPath(); ctx.arc(ox, oy, Rocc, 0, 7); ctx.stroke();
     ctx.restore();
   }
 
   function drawScene() {
+    if (!W) return;
     ctx.clearRect(0, 0, W, H);
     const g = geom();
-    const R = g.R;
-    const th1 = phase * 2 * Math.PI;             // occulted star (wide orbit)
-    const th2 = th1 + Math.PI;                   // companion (opposite phase, tighter orbit)
-    const s1 = orbit(g.cx, g.cy, g.a1, g.sq, th1);
-    const s2 = orbit(g.cx, g.cy, g.a2, g.sq, th2);
-    const r1 = extended ? R * 0.05 : Math.max(2.5, R * 0.012);
-    const r2 = R * 0.052;
+    const th1 = phase * 2 * Math.PI, th2 = th1 + Math.PI;
+    const s1 = orbit(g, g.a1, th1);
+    const s2 = orbit(g, g.a2, th2);
+    const r1 = extended ? g.rs : Math.max(1.6, g.rs * 0.14);
+    const r2 = g.rs * 1.04;
     const cov = cover1(phase), ds = depthScale();
 
-    drawDisk(g);                                 // tilted ring; opens/closes with the viewing angle
+    drawDisk(g, false);
 
-    // faint orbit guides (binary plane)
-    ctx.strokeStyle = 'rgba(120,140,200,.10)'; ctx.lineWidth = 1; ctx.setLineDash([3,5]);
-    ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a1, g.a1*g.sq, 0, 0, 7); ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a2, g.a2*g.sq, 0, 0, 7); ctx.stroke();
-    ctx.setLineDash([]);
+    /* binary orbits */
+    ctx.save();
+    ctx.strokeStyle = 'rgba(139,169,207,.14)'; ctx.lineWidth = 1; ctx.setLineDash([2, 5]);
+    ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a1, g.a1 * g.sq, 0, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(g.cx, g.cy, g.a2, g.a2 * g.sq, 0, 0, 7); ctx.stroke();
+    ctx.restore();
 
-    // companion (always visible, ~60% of the light)
-    drawStar(s2.x, s2.y, r2, '#ffd9a8', '#c8631a', 1);
-    // occulted star at full brightness — the advancing disk edge does the dimming
-    drawStar(s1.x, s1.y, r1, extended ? '#ffd0a0' : '#eafcff', extended ? '#b8551a' : '#7fbfd0', 1);
-    drawOcculter(s1, r1, cov, g);                // sharp disk edge sweeps across it
-    drawFrontRim(g);                             // near edge of the ring (3-D depth cue)
+    /* stars, far one first */
+    const far = Math.sin(th1) < Math.sin(th2);
+    const drawS1 = () => {
+      FK.disc(ctx, s1.x, s1.y, r1, extended ? RGB.kdwarf : RGB.wd,
+        { u: 0.68, core: extended ? 0.95 : 1, bloom: extended ? 1.7 : 2.6 });
+      occult(s1.x, s1.y, r1, cov, g, 1);
+    };
+    const drawS2 = () => FK.disc(ctx, s2.x, s2.y, r2, RGB.donorC, { u: 0.66, core: 0.92, bloom: 1.7 });
+    if (far) { drawS1(); drawS2(); } else { drawS2(); drawS1(); }
 
-    if (cov > 0.25) {
-      ctx.fillStyle = 'rgba(255,190,130,.95)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText('occulted by disk edge', s1.x, s1.y - r1 - 10);
-    }
+    drawDisk(g, true);
+
+    /* --- magnified inset: the ingress geometry, 4× --- */
+    const iw = Math.min(178, W * 0.34), ih = iw * 0.62;
+    const ix = W - iw - 14, iy = 14, M = Math.min(4.2, (ih * 0.34) / Math.max(1.2, r1));
+    ctx.save();
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(ix, iy, iw, ih, 4); else ctx.rect(ix, iy, iw, ih);
+    ctx.fillStyle = 'rgba(18,15,10,.82)'; ctx.fill();
+    ctx.strokeStyle = C.rule2; ctx.lineWidth = 1; ctx.stroke();
+    ctx.clip();
+    const mx = ix + iw * 0.5, my = iy + ih * 0.56;
+    FK.disc(ctx, mx, my, r1 * M, extended ? RGB.kdwarf : RGB.wd, { u: 0.68, core: 1, bloom: 1.5 });
+    occult(mx, my, r1 * M, cov, g, 1);
+    ctx.restore();
+    FK.kicker(ctx, '×' + M.toFixed(1) + '  ingress ' + ingressDays().toFixed(1) + ' d',
+      ix + 7, iy + 13, { size: 8, fill: C.faint });
+    ctx.save();
+    ctx.strokeStyle = C.rule2; ctx.lineWidth = 1; ctx.setLineDash([2, 3]);
+    ctx.beginPath(); ctx.moveTo(s1.x, s1.y); ctx.lineTo(ix, iy + ih); ctx.stroke();
+    ctx.restore();
+
+    /* --- annotation --- */
+    FK.kicker(ctx, 'to observer', W * 0.5, H - 13, { align: 'center', size: 8.5 });
+    ctx.save();
+    ctx.strokeStyle = C.rule2; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(W * 0.5, H - 33); ctx.lineTo(W * 0.5, H - 21); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W * 0.5 - 3.5, H - 25); ctx.lineTo(W * 0.5, H - 20); ctx.lineTo(W * 0.5 + 3.5, H - 25);
+    ctx.stroke(); ctx.restore();
+
+    FK.kicker(ctx, 'circumbinary disk  ·  R_in ≈ 2.5 a', 14, 20, { size: 8.5 });
+    FK.text(ctx, 'i = ' + Math.round(FK.DEG(iv)) + '°   α = ' + Math.round(FK.DEG(alphaMis)) + '°' +
+      (ds < 0.04 ? '   face-on — no eclipse' : ''),
+      14, 34, { font: FK.mono(9.5), fill: ds < 0.04 ? '#e0a45c' : C.dim });
+
     if (!extended) {
-      ctx.fillStyle = 'rgba(214,203,182,.85)'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText('occulted source = white dwarf (point-like)', g.cx, g.cy - R*0.34);
+      FK.text(ctx, 'occulted source = white dwarf (point-like)', W * 0.5, H - 46,
+        { font: FK.mono(10), fill: '#dbe8f2', align: 'center' });
+    } else if (cov > 0.3) {
+      FK.text(ctx, 'occulted by the disk edge', s1.x, s1.y - r1 - 12,
+        { font: FK.mono(10), fill: '#f0bd86', align: 'center' });
     }
-    ctx.fillStyle = 'rgba(214,203,182,.7)'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('▼ to observer', g.cx, H - 24);
-    ctx.fillText('binary i = ' + Math.round(iv*180/Math.PI) + '°,  disk α = ' + Math.round(alphaMis*180/Math.PI) + '°'
-      + (ds < 0.04 ? '  (face-on — no eclipse)' : ''), g.cx, 20);
 
-    elPhase.textContent = phase.toFixed(2);
-    if (elDays) elDays.textContent = (phase * P_DAYS).toFixed(1) + ' d';
-    elFlux.textContent = Math.round(modelFlux(phase) * 100) + '%';
-    if (elDepth) elDepth.textContent = Math.round(DEPTH * ds * 100) + '%';
-    if (elIv) elIv.textContent = Math.round(iv*180/Math.PI) + '°';
-    if (elAlphaR) elAlphaR.textContent = Math.round(alphaMis*180/Math.PI) + '°';
-    if (elRin) elRin.textContent = '≈' + RIN_OVER_A + ' a ≈ ' + RIN_RSUN + ' R⊙';
+    /* scale bar */
+    const bx = 14, by = H - 14;
+    ctx.save(); ctx.strokeStyle = C.rule; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + g.a, by);
+    ctx.moveTo(bx, by - 3); ctx.lineTo(bx, by + 3);
+    ctx.moveTo(bx + g.a, by - 3); ctx.lineTo(bx + g.a, by + 3); ctx.stroke(); ctx.restore();
+    FK.text(ctx, 'a ≈ 0.24 AU', bx + g.a / 2, by - 5,
+      { font: FK.mono(9), fill: C.dim, align: 'center' });
+
+    /* readouts */
+    if (out.phase) out.phase.textContent = phase.toFixed(3);
+    if (out.days)  out.days.textContent = (phase * P_DAYS).toFixed(1) + ' d';
+    if (out.flux)  out.flux.textContent = Math.round(modelFlux(phase) * 100) + '%';
+    if (out.depth) out.depth.textContent = Math.round(DEPTH * ds * 100) + '%';
+    if (out.iv)    out.iv.textContent = Math.round(FK.DEG(iv)) + '°';
+    if (out.alpha) out.alpha.textContent = Math.round(FK.DEG(alphaMis)) + '°';
+    if (out.rin)   out.rin.textContent = '≈' + RIN_OVER_A + ' a ≈ ' + RIN_RSUN + ' R⊙';
+    if (out.ing)   out.ing.textContent = ingressDays().toFixed(1) + ' d';
   }
 
-  // ---- light curve: real folded ZTF data + fitted trapezoid + current model ----
+  /* ================= light curve ================= */
   function drawLC() {
+    if (!LW) return;
     lctx.clearRect(0, 0, LW, LH);
-    const x0 = 22, x1 = LW - 6, y0 = LH - 14, y1 = 8;
-    const lo = 1 - DEPTH - 0.12, hi = 1.07;
-    const Y = f => y0 - (y0 - y1) * (Math.max(lo, Math.min(hi, f)) - lo) / (hi - lo);
-    // grid + baseline
-    lctx.strokeStyle = 'rgba(255,255,255,.07)'; lctx.lineWidth = 1;
-    for (let g = 0; g <= 4; g++) { const gx = x0 + (x1-x0)*g/4;
-      lctx.beginPath(); lctx.moveTo(gx, y1); lctx.lineTo(gx, y0); lctx.stroke(); }
-    lctx.strokeStyle = 'rgba(255,255,255,.12)';
-    lctx.beginPath(); lctx.moveTo(x0, y0); lctx.lineTo(x1, y0); lctx.stroke();
-    // flux axis ticks (1.0 and floor)
-    lctx.fillStyle = 'rgba(214,203,182,.6)'; lctx.font = '9px sans-serif'; lctx.textAlign = 'right';
-    lctx.fillText('1.0', x0 - 3, Y(1.0) + 3);
-    lctx.fillText((1 - DEPTH).toFixed(1), x0 - 3, Y(1 - DEPTH) + 3);
-    // real folded ZTF points (g green, r vermillion)
-    function pts(arr, col) {
-      if (!arr) return; lctx.fillStyle = col;
-      for (const p of arr) { const X = x0+(x1-x0)*p[0], YY = Y(p[1]);
-        lctx.beginPath(); lctx.arc(X, YY, 1.7, 0, 7); lctx.fill(); }
+    const lo = 1 - DEPTH - 0.13, hi = 1.08;
+    const A = FK.axes(lctx, {
+      l: 36, t: 10, r: LW - 8, b: LH - 26,
+      x: { min: 0, max: 1, n: 4, label: 'phase  (P = 36.7107 d)', fmt: v => v.toFixed(2) },
+      y: { min: lo, max: hi, n: 3, label: 'relative flux', fmt: v => v.toFixed(1) },
+      grid: false, yTitleGap: 29
+    });
+    lcAx = A;
+    FK.inBox(lctx, A.box, () => {
+      const pts = (arr, col) => {
+        if (!arr) return;
+        lctx.fillStyle = col;
+        for (const p of arr) {
+          lctx.beginPath(); lctx.arc(A.X(p[0]), A.Y(p[1]), 1.8, 0, 7); lctx.fill();
+        }
+      };
+      if (DD) {
+        pts(DD.bands.r && DD.bands.r.points, 'rgba(217,112,60,.85)');
+        pts(DD.bands.g && DD.bands.g.points, 'rgba(99,179,148,.95)');
+      }
+      FK.curve(lctx, 240, t => [A.X(t), A.Y(refFlux(t))],
+        { stroke: 'rgba(216,206,180,.62)', width: 1.2, dash: [4, 3] });
+      FK.curve(lctx, 300, t => [A.X(t), A.Y(modelFlux(t))],
+        { stroke: extended ? C.amber : '#8ba9cf', width: 1.9 });
+    });
+    const ph = ((phase % 1) + 1) % 1;
+    lctx.save();
+    lctx.strokeStyle = 'rgba(244,238,226,.30)'; lctx.lineWidth = 1;
+    lctx.beginPath(); lctx.moveTo(FK.snap(A.X(ph)), A.box.t); lctx.lineTo(FK.snap(A.X(ph)), A.box.b); lctx.stroke();
+    lctx.fillStyle = C.ink;
+    lctx.beginPath(); lctx.arc(A.X(ph), A.Y(modelFlux(ph)), 3.4, 0, 7); lctx.fill();
+    lctx.restore();
+    FK.legend(lctx, A.box.l + 8, A.box.t + 13, [
+      { label: 'ZTF g', color: 'rgba(99,179,148,.95)', kind: 'dot' },
+      { label: 'ZTF r', color: 'rgba(217,112,60,.9)', kind: 'dot' }
+    ]);
+    if (hover != null) {
+      FK.chip(lctx, A.X(hover), A.Y(modelFlux(hover)),
+        [(hover * P_DAYS).toFixed(1) + ' d   φ = ' + hover.toFixed(3),
+         'model F = ' + modelFlux(hover).toFixed(3)], A.box);
     }
-    if (DD) { pts(DD.bands.r && DD.bands.r.points, 'rgba(213,94,0,.85)');
-              pts(DD.bands.g && DD.bands.g.points, 'rgba(0,158,115,.95)'); }
-    // fitted trapezoid (dashed) — what the data say
-    lctx.setLineDash([4,4]); lctx.strokeStyle = 'rgba(230,222,206,.75)'; lctx.lineWidth = 1.4;
-    lctx.beginPath();
-    for (let i = 0; i <= 200; i++) { const ph = i/200, X = x0+(x1-x0)*ph;
-      i ? lctx.lineTo(X, Y(refFlux(ph))) : lctx.moveTo(X, Y(refFlux(ph))); }
-    lctx.stroke(); lctx.setLineDash([]);
-    // current model (solid) — diverges from the fit only when WD is selected
-    lctx.strokeStyle = extended ? '#e0a45c' : '#e69f00'; lctx.lineWidth = 2; lctx.beginPath();
-    for (let i = 0; i <= 200; i++) { const ph = i/200, X = x0+(x1-x0)*ph;
-      i ? lctx.lineTo(X, Y(modelFlux(ph))) : lctx.moveTo(X, Y(modelFlux(ph))); }
-    lctx.stroke();
-    const mX = x0+(x1-x0)*(phase%1);
-    lctx.fillStyle = '#fff'; lctx.beginPath(); lctx.arc(mX, Y(modelFlux(phase)), 4, 0, 7); lctx.fill();
-    lctx.fillStyle = 'rgba(214,203,182,.7)'; lctx.font = '10px sans-serif';
-    lctx.textAlign='left'; lctx.fillText('0', x0, LH-3);
-    lctx.textAlign='center'; lctx.fillText(DD ? 'ZTF g/r folded · P = 36.711 d' : 'phase', (x0+x1)/2, LH-3);
-    lctx.textAlign='right'; lctx.fillText('phase 1', x1, LH-3);
   }
 
-  function canAnimate() {
-    return !reduce && !paused && speed > 0 && visible && !document.hidden;
+  /* ================= plumbing ================= */
+  function resize() {
+    const a = FK.fit(canvas, ctx); if (a) { W = a.w; H = a.h; }
+    const b = FK.fit(lcEl, lctx); if (b) { LW = b.w; LH = b.h; }
   }
-  function render() {
-    drawScene(); drawLC();
-  }
-  function loop(now) {
-    raf = 0;
-    if (canAnimate()) {
-      const dt = last ? Math.min(2.5, (now - last) / 16.67) : 1;
-      last = now;
-      phase = (phase + 0.0011 * speed * dt) % 1;
-    }
-    drawScene(); drawLC();
-    start();
-  }
-  function start() {
-    if (!canAnimate() || raf || timer) return;
-    timer = window.setTimeout(() => {
-      timer = 0;
-      raf = requestAnimationFrame(loop);
-    }, FRAME_MS);
-  }
-  function stop() {
-    if (raf) cancelAnimationFrame(raf);
-    if (timer) clearTimeout(timer);
-    raf = 0;
-    timer = 0;
-    last = 0;
-  }
+  function render() { drawScene(); drawLC(); }
 
-  elSpeed.addEventListener('input', () => { speed = +elSpeed.value; render(); start(); });
-  if (elIncl) elIncl.addEventListener('input', () => { iv = +elIncl.value * Math.PI / 180; render(); start(); });
-  if (elAlpha) elAlpha.addEventListener('input', () => { alphaMis = +elAlpha.value * Math.PI / 180; render(); start(); });
-  elToggle.addEventListener('click', () => {
+  resize(); render();
+  const anim = FK.loop(canvas, dt => { phase = (phase + 0.0011 * speed * dt) % 1; render(); });
+  FK.onResize(canvas, () => { resize(); render(); });
+  FK.onResize(lcEl, () => { resize(); render(); });
+
+  FK.pointer(canvas, { drag: p => { phase = ((p.x / Math.max(1, p.w)) % 1 + 1) % 1; render(); } });
+  FK.pointer(lcEl, {
+    move: p => { hover = lcAx ? FK.clamp(lcAx.invX(p.x), 0, 1) : null; drawLC(); },
+    leave: () => { hover = null; drawLC(); },
+    drag: p => { if (lcAx) { phase = FK.clamp(lcAx.invX(p.x), 0, 1); render(); } }
+  });
+
+  const on = (el, fn) => el && el.addEventListener('input', () => { fn(); render(); });
+  on(inp.speed, () => { speed = +inp.speed.value; });
+  on(inp.incl, () => { iv = FK.RAD(+inp.incl.value); });
+  on(inp.alpha, () => { alphaMis = FK.RAD(+inp.alpha.value); });
+  if (inp.toggle) inp.toggle.addEventListener('click', () => {
     extended = !extended;
-    elToggle.textContent = 'Occulted source: ' + (extended ? 'M/K dwarf' : 'white dwarf');
-    elToggle.setAttribute('aria-pressed', String(!extended));
-    render(); start();
+    inp.toggle.textContent = 'Occulted source: ' + (extended ? 'M/K dwarf' : 'white dwarf');
+    inp.toggle.setAttribute('aria-pressed', String(!extended));
+    render();
   });
-  elPause.addEventListener('click', () => {
-    paused = !paused; elPause.textContent = paused ? 'Play' : 'Pause';
-    elPause.setAttribute('aria-pressed', String(paused));
-    if (paused) { stop(); render(); } else { start(); }
+  if (inp.pause) inp.pause.addEventListener('click', () => {
+    anim.paused = !anim.paused;
+    inp.pause.textContent = anim.paused ? 'Play' : 'Pause';
+    inp.pause.setAttribute('aria-pressed', String(anim.paused));
+    render();
   });
-
-  resize();
-  visible = isVisible();
-  render();
-  window.addEventListener('resize', () => { resize(); visible = isVisible(); render(); start(); });
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      visible = entries[0].isIntersecting;
-      if (visible) start(); else stop();
-    }, { threshold: 0.05 });
-    io.observe(canvas);
-  }
-  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
-  start();
+  anim.start();
 })();

@@ -54,10 +54,28 @@
     { from:'source_research', to:'abnormal',          kind:'blocked'   }
   ];
 
+  /* One warm family, so the graph belongs to the same page as the rest
+     of the figures. The old palette ran blue → cyan → teal → violet,
+     which is the default plotly-ish spread every generated diagram
+     reaches for; here hue carries meaning instead: cool for I/O and
+     retrieval, warm for decisions, green for gates that pass, ember
+     for the one that doesn't. */
   const KIND_COLOR = {
-    io:'#7088e0', plan:'#52a8cb', gate:'#3bb07e', model:'#2bab9b',
-    dec:'#e0975a', draft:'#9a7adf', done:'#3bb07e', abort:'#e07145'
+    io:'#8ba9cf', plan:'#7fa8d0', gate:'#63b394', model:'#c98b6b',
+    dec:'#e0a45c', draft:'#b98bb4', done:'#63b394', abort:'#d9703c'
   };
+  const CV_FONT = '"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"PingFang SC",Arial,sans-serif';
+  const CV_MONO = '"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace';
+
+  /* The four acts of a run, drawn as regions behind the nodes. A
+     twelve-box state machine with no grouping reads as twelve boxes;
+     grouped, it reads as a method. */
+  const BANDS = [
+    { name: 'ACQUIRE',        keys: ['resolve', 'data_fetch'],                              c: '#8ba9cf' },
+    { name: 'PLAN & RETRIEVE', keys: ['structure_planner', 'retrieval', 'source_research'], c: '#7fa8d0' },
+    { name: 'MODEL & AUDIT',  keys: ['model_iter', 'model_supervisor', 'qa_gate'],          c: '#c98b6b' },
+    { name: 'DRAFT & REVIEW', keys: ['drafter', 'paper_qc', 'peer_review'],                 c: '#b98bb4' }
+  ];
   const STAGE = {
     resolve:'Acquire', data_fetch:'Acquire',
     structure_planner:'Plan & retrieve', retrieval:'Plan & retrieve', source_research:'Plan & retrieve',
@@ -173,6 +191,34 @@
     const b = box();
     const curFrom = seq[idx], curTo = seq[Math.min(idx + 1, seq.length - 1)];
 
+    // stage regions, behind everything
+    if (window.UI) {
+      BANDS.forEach(band => {
+        const pts = [];
+        band.keys.forEach(k => {
+          const c = pos(k);
+          pts.push([c.x - b.w / 2, c.y - b.h / 2], [c.x + b.w / 2, c.y - b.h / 2],
+                   [c.x + b.w / 2, c.y + b.h / 2], [c.x - b.w / 2, c.y + b.h / 2]);
+        });
+        const hull = window.UI.smoothHull(pts, 15);
+        ctx.save();
+        window.UI.hullPath(ctx, hull);
+        ctx.fillStyle = hexA(band.c, .045); ctx.fill();
+        ctx.setLineDash([3, 5]);
+        ctx.strokeStyle = hexA(band.c, .26); ctx.lineWidth = 1; ctx.stroke();
+        ctx.setLineDash([]);
+        let top = hull[0];
+        hull.forEach(p => { if (p[1] < top[1]) top = p; });
+        ctx.font = '500 8.5px ' + CV_MONO;
+        if ('letterSpacing' in ctx) ctx.letterSpacing = '.12em';
+        ctx.fillStyle = hexA(band.c, .8);
+        ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        ctx.fillText(band.name, top[0], top[1] - 6);
+        if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+        ctx.restore();
+      });
+    }
+
     // straight main edges
     ctx.lineWidth = 1.6;
     for (let i = 0; i < MAIN.length - 1; i++) {
@@ -200,11 +246,11 @@
     ctx.setLineDash([]);
 
     // edge labels for the loops
-    ctx.font = '600 10px ui-monospace,SFMono-Regular,Menlo,monospace';
+    ctx.font = '500 9.5px ' + CV_MONO;
     ctx.textAlign = 'center';
-    label('replan', pathPoint('qa_gate', 'structure_planner', 0.5), '#e69f00');
-    label('reflexion', pathPoint('paper_qc', 'drafter', 0.5), '#e69f00');
-    label('insufficient', pathPoint('source_research', 'abnormal', 0.5), '#d55e00');
+    label('replan ×2', pathPoint('qa_gate', 'structure_planner', 0.5), '#e0a45c');
+    label('reflexion ×2', pathPoint('paper_qc', 'drafter', 0.5), '#e0a45c');
+    label('insufficient', pathPoint('source_research', 'abnormal', 0.5), '#d9703c');
 
     // nodes
     const activeKey = (idx >= seq.length - 1) ? seq[idx] : (p > 0 ? curTo : seq[idx]);
@@ -212,27 +258,28 @@
       const n = NODE[key], c = pos(key), col = KIND_COLOR[n.kind];
       const isActive = key === activeKey;
       const done = visited.has(key);
+      /* the active node gets a crisp ring, not a bloom. A glow says
+         "neon"; a ring says "selected", which is what is happening. */
       if (isActive) {
-        const pulse = 0.5 + 0.5 * Math.sin(T * 3.2), ring = 5 + 3 * pulse;
-        ctx.fillStyle = hexA(col, 0.13 + 0.11 * pulse);
+        const pulse = 0.5 + 0.5 * Math.sin(T * 3.2);
+        const ring = 5 + 2.5 * pulse;
         roundRect(c.x - b.w / 2 - ring, c.y - b.h / 2 - ring, b.w + 2 * ring, b.h + 2 * ring, 14);
-        ctx.fill();
+        ctx.strokeStyle = hexA(col, .22 + .2 * pulse); ctx.lineWidth = 1;
+        ctx.stroke();
       }
       roundRect(c.x - b.w / 2, c.y - b.h / 2, b.w, b.h, 10);
       const g = ctx.createLinearGradient(0, c.y - b.h / 2, 0, c.y + b.h / 2);
-      g.addColorStop(0, 'rgba(42,35,21,.97)'); g.addColorStop(1, 'rgba(22,18,10,.97)');
+      g.addColorStop(0, 'rgba(38,32,22,.98)'); g.addColorStop(1, 'rgba(20,17,11,.98)');
       ctx.fillStyle = g; ctx.fill();
-      ctx.lineWidth = isActive ? 2.4 : 1.3;
-      ctx.strokeStyle = isActive ? col : (done ? hexA(col, .55) : 'rgba(190,180,150,.32)');
-      if (isActive) { ctx.shadowColor = col; ctx.shadowBlur = 16; }
+      ctx.lineWidth = isActive ? 1.8 : 1;
+      ctx.strokeStyle = isActive ? col : (done ? hexA(col, .5) : 'rgba(190,180,150,.26)');
       ctx.stroke();
-      ctx.shadowBlur = 0;
       // accent bar
-      ctx.fillStyle = isActive ? col : hexA(col, done ? .8 : .5);
+      ctx.fillStyle = isActive ? col : hexA(col, done ? .8 : .42);
       ctx.fillRect(c.x - b.w / 2 + 3, c.y - b.h / 2 + 6, 3, b.h - 12);
       // label
-      ctx.fillStyle = isActive ? '#fff' : (done ? '#e6dcc6' : '#8c8474');
-      ctx.font = '600 12px var(--font, system-ui), system-ui, sans-serif';
+      ctx.fillStyle = isActive ? '#f6f1e6' : (done ? '#d8ceb4' : '#8c8474');
+      ctx.font = (isActive ? '600 ' : '500 ') + '11.5px ' + CV_FONT;
       ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(n.label, c.x + 3, c.y);
       ctx.textBaseline = 'alphabetic';
@@ -250,15 +297,16 @@
     }
 
     // caption corner
-    ctx.fillStyle = 'rgba(206,196,172,.6)';
-    ctx.font = '11px ui-monospace,SFMono-Regular,Menlo,monospace';
+    ctx.fillStyle = 'rgba(206,196,172,.55)';
+    ctx.font = '10px ' + CV_MONO;
     ctx.textAlign = 'left';
-    ctx.fillText('analysis_agent · LangGraph state machine', 14, H - 14);
+    ctx.fillText('analysis_agent · 16-node LangGraph · node names mirror the source', 14, H - 14);
   }
   function label(text, pt, color) {
-    const w = ctx.measureText(text).width + 10;
-    ctx.fillStyle = 'rgba(24,21,13,.9)';
-    roundRect(pt.x - w / 2, pt.y - 8, w, 15, 6); ctx.fill();
+    const w = ctx.measureText(text).width + 12;
+    ctx.fillStyle = 'rgba(24,21,13,.94)';
+    roundRect(pt.x - w / 2, pt.y - 8.5, w, 17, 5); ctx.fill();
+    ctx.strokeStyle = hexA(color, .3); ctx.lineWidth = 1; ctx.stroke();
     ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(text, pt.x, pt.y); ctx.textBaseline = 'alphabetic';
   }

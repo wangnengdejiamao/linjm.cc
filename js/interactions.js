@@ -1,8 +1,23 @@
-/* High-end interaction layer: scroll progress, staggered reveal-on-scroll,
-   and scrollspy nav highlighting. Progressive enhancement — without JS the
-   page renders fully (reveal classes are only added here). */
+/* Interaction layer: scroll progress, staggered reveal-on-scroll, scrollspy,
+   and the live value + filled track on every slider. Progressive enhancement —
+   without JS the page still renders fully. */
 (function () {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- sliders: filled track + a formatted readout in the label ---- */
+  document.querySelectorAll('input[type=range]').forEach(r => {
+    const ctl = r.closest('.ctl');
+    const outEl = ctl && ctl.querySelector('output');
+    const dp = +(r.dataset.dp || 0);
+    const paint = () => {
+      const min = +r.min, max = +r.max;
+      const p = max > min ? ((+r.value - min) / (max - min)) * 100 : 0;
+      r.style.setProperty('--p', p.toFixed(2) + '%');
+      if (outEl) outEl.textContent = (r.dataset.prefix || '') + (+r.value).toFixed(dp) + (r.dataset.unit || '');
+    };
+    r.addEventListener('input', paint);
+    paint();
+  });
 
   /* ---- scroll progress bar ---- */
   const bar = document.createElement('div');
@@ -26,7 +41,7 @@
   const groups = [
     ['.section-head'],
     ['.cards .card', 80],
-    ['.cyc-stage', 0], ['.spec-stage', 0],
+    ['.fig', 0], ['.cyc-stage', 0], ['.spec-stage', 0],
     ['.ag-cards .card', 70],
     ['.kg-block'],
     ['.pub', 50],
