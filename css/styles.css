@@ -206,7 +206,7 @@ strong{color:var(--ink-strong);font-weight:600}
   overflow:hidden;position:relative;min-height:420px}
 /* absolute-fill so the canvas size never feeds back into the wrap height
    (the wrap's min-height / grid-stretch defines the box; the canvas fills it) */
-#cycCanvas,#diskCanvas,#agentCanvas,#cnnCanvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+#cycCanvas,#diskCanvas,#ceCanvas,#agentCanvas,#cnnCanvas{position:absolute;inset:0;display:block;width:100%;height:100%}
 #kgCanvas{position:absolute;inset:0;display:block;width:100%;height:100%;cursor:pointer}
 .cyc-legend{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:.35rem 1.05rem;
   margin:0;padding:.55rem .9rem;list-style:none;font-family:var(--mono);font-size:.67rem;
@@ -229,6 +229,7 @@ strong{color:var(--ink-strong);font-weight:600}
 .lc-wrap h4{font-family:var(--mono);font-size:.7rem;color:var(--ink-dim);text-transform:uppercase;
   letter-spacing:.1em;margin:0 0 .65rem;font-weight:500}
 #lcCanvas,#diskLc{display:block;width:100%;height:158px;background:var(--well);border-radius:4px}
+#ceTrack{display:block;width:100%;height:200px;background:var(--well);border-radius:4px}
 .cyc-controls,.spec-controls{display:flex;flex-direction:column;gap:.85rem;
   background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem}
 .cyc-controls label,.spec-controls label{display:flex;flex-direction:column;gap:.45rem;

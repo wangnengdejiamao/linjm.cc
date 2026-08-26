@@ -13,8 +13,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=32">
-<link rel="stylesheet" href="css/cosmic-theme.css?v=32">
+<link rel="stylesheet" href="css/styles.css?v=38">
+<link rel="stylesheet" href="css/cosmic-theme.css?v=38">
 </head>
 <body class="ai-body">
 
@@ -132,7 +132,7 @@
     <!-- ===== the figure + the math, side by side ===== -->
     <div class="fig-math">
       <figure class="paper-fig">
-        <img src="assets/attnres-architecture.png?v=32" alt="Three residual designs: (a) standard residuals add each block's output; (b) full-attention residuals; (c) block attention residuals, where an AttnRes operator α attends over earlier block states via a learnable pseudo-query w with keys/values from earlier blocks."
+        <img src="assets/attnres-architecture.png?v=38" alt="Three residual designs: (a) standard residuals add each block's output; (b) full-attention residuals; (c) block attention residuals, where an AttnRes operator α attends over earlier block states via a learnable pseudo-query w with keys/values from earlier blocks."
           loading="lazy">
         <figcaption><b>Fig. 1.</b> The three residual designs. <b>(a)</b> standard residuals sum each block's
         output; <b>(c)</b> <em>Block-AttnRes</em> replaces that sum with an attention operator&nbsp;<em>α</em> whose
@@ -208,7 +208,7 @@
     <!-- ===== block-count ablation figure ===== -->
     <div class="fig-math fig-math-rev">
       <figure class="paper-fig">
-        <img src="assets/attnres-blocks-ablation.png?v=32" alt="Bar-and-line chart: astronomy-task accuracy (bars) versus relative VRAM (line) as the model is split into N = 16, 8, 4, 2 blocks. Accuracy is 90.4, 89.5, 86.2, 84 percent while relative VRAM drops 100, 50, 25, 12.5 percent."
+        <img src="assets/attnres-blocks-ablation.png?v=38" alt="Bar-and-line chart: astronomy-task accuracy (bars) versus relative VRAM (line) as the model is split into N = 16, 8, 4, 2 blocks. Accuracy is 90.4, 89.5, 86.2, 84 percent while relative VRAM drops 100, 50, 25, 12.5 percent."
           loading="lazy">
         <figcaption><b>Fig. 2.</b> Block-count ablation — bars: astronomy-QA accuracy; line: relative VRAM of the
         depth-attention cache, as the 32 layers are grouped into <em>N</em>&nbsp;=&nbsp;16 → 2 blocks.</figcaption>
@@ -796,19 +796,19 @@
   <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
 </footer>
 
-<script src="js/figkit.js?v=32" defer></script>
-<script src="js/uikit.js?v=32" defer></script>
-<script src="js/aihero.js?v=32" defer></script>
-<script src="js/maoastro.js?v=32" defer></script>
-<script src="js/zte.js?v=32" defer></script>
-<script src="js/jindu.js?v=32" defer></script>
-<script src="js/astrostack.js?v=32" defer></script>
-<script src="js/astroagent.js?v=32" defer></script>
-<script src="js/kgdata.js?v=32" defer></script>
-<script src="js/kg.js?v=32" defer></script>
-<script src="js/ztfcnn.js?v=32" defer></script>
-<script src="js/interactions.js?v=32" defer></script>
-<script src="js/cosmic-ui.js?v=32" defer></script>
-<script src="js/main.js?v=32" defer></script>
+<script src="js/figkit.js?v=38" defer></script>
+<script src="js/uikit.js?v=38" defer></script>
+<script src="js/aihero.js?v=38" defer></script>
+<script src="js/maoastro.js?v=38" defer></script>
+<script src="js/zte.js?v=38" defer></script>
+<script src="js/jindu.js?v=38" defer></script>
+<script src="js/astrostack.js?v=38" defer></script>
+<script src="js/astroagent.js?v=38" defer></script>
+<script src="js/kgdata.js?v=38" defer></script>
+<script src="js/kg.js?v=38" defer></script>
+<script src="js/ztfcnn.js?v=38" defer></script>
+<script src="js/interactions.js?v=38" defer></script>
+<script src="js/cosmic-ui.js?v=38" defer></script>
+<script src="js/main.js?v=38" defer></script>
 </body>
 </html>
