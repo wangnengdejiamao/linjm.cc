@@ -16,6 +16,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css?v=38">
 <link rel="stylesheet" href="css/cosmic-theme.css?v=38">
+<link rel="stylesheet" href="css/binary-evolution.css?v=20260914">
+<link rel="stylesheet" href="css/binary-evolution-map.css?v=20260914">
 </head>
 <body>
 
@@ -31,7 +33,7 @@
     <a href="#cyclotron">Fig.&nbsp;1 Polar</a>
     <a href="#spectrum">Fig.&nbsp;2 Spectrum</a>
     <a href="#diskbinary">Fig.&nbsp;3 Eclipse</a>
-    <a href="#ceevol">Fig.&nbsp;4 Envelope</a>
+    <a href="#ceevol">Fig.&nbsp;4 Evolution</a>
     <a href="#publications">Publications</a>
     <a href="#about">About</a>
     <a href="ai.html" class="nav-cta">AI&nbsp;/&nbsp;Agents&nbsp;→</a>
@@ -56,10 +58,10 @@
         onto the spectrum.
       </p>
       <p class="hero-sub">
-        The four figures below are not illustrations. Each one solves the actual
-        geometry in your browser — Roche potentials, ballistic streams, dipole
-        curtains, radiative transfer through a cyclotron slab, a common envelope run
-        forwards — so every control moves the physics rather than a drawing.
+        Explore four interactive figures: Roche geometry and accretion streams,
+        cyclotron spectra, disk eclipses, and binary evolution on a cluster clock.
+        Each figure connects the visual model to its physical assumptions,
+        with observed constraints and schematic stages identified alongside it.
       </p>
       <div class="hero-links">
         <a class="btn btn-primary" href="#cyclotron">Open the figures <span aria-hidden="true">→</span></a>
@@ -547,167 +549,73 @@
     </figure>
   </section>
 
-  <!-- ============ FIG. 4 — COMMON-ENVELOPE EVOLUTION =============== -->
+  <!-- ============ FIG. 4 — BINARY EVOLUTION ON A CLUSTER CLOCK ============ -->
   <section id="ceevol" class="section">
     <div class="section-head">
-      <h2>Run the common envelope forwards</h2>
-      <p>NS&nbsp;Per is a dwarf nova sitting <em>inside</em> a cluster only a few hundred Myr old —
-      and that makes the cluster a clock. Whatever built this binary had to finish before the
-      cluster's own age, which turns the notoriously free common-envelope efficiency
-      <strong>α<sub>CE</sub></strong> into something you can bracket. Below α it merges; above it,
-      the orbit is left too wide to ever reach the <strong>6.2994&nbsp;h</strong> we measure.
-      Only a narrow band threads both. Drag α<sub>CE</sub> and go find it.</p>
-      <p>The first contact decides everything, and it has <strong>two ways to go</strong>. When the
-      donor's envelope cannot keep up with its own shrinking lobe the transfer runs away and the
-      envelope swallows both stars — that is the channel above. When it can, transfer stays stable,
-      the mass ratio reverses, and the same pair ends as a <strong>blue straggler</strong> with a
-      stripped core instead. Change where the primary first fills its lobe, or how heavy the
-      companion is, and the figure takes the other branch.</p>
+      <h2>Binary evolution on a cluster clock</h2>
+      <p>One initial binary, three possible outcomes. Too little envelope ejection ends
+      in a merger; a wider surviving orbit can run out of time before accretion begins.
+      Follow the red NS&nbsp;Per track to a dwarf nova within the 209&nbsp;Myr cluster age,
+      then explore the complementary merger and survival channels in HSC&nbsp;1224.</p>
     </div>
-
-    <figure class="fig">
-      <figcaption class="fig-head">
-        <span class="fig-no">Fig. 4</span>
-        <span class="fig-title">One first contact, two channels: a common envelope, or a blue straggler</span>
-        <span class="fig-meta">drag the scene to scrub the story</span>
+    <figure class="fig" id="binaryEvolution">
+      <figcaption class="fig-head"><span class="fig-no">Fig. 4</span>
+        <span class="fig-title">A cluster clock separates three evolutionary outcomes</span>
+        <span class="fig-meta">select a stage, then play</span>
       </figcaption>
-
-      <div class="fig-body fig-split">
+      <div class="be-cases" role="group" aria-label="Evolutionary channel">
+        <button class="chip is-on" type="button" data-evolution="nsper" aria-pressed="true">NS Per · three outcomes</button>
+        <button class="chip" type="button" data-evolution="tight" aria-pressed="false">HSC 1224 · BSS-1 / merger</button>
+        <button class="chip" type="button" data-evolution="wide" aria-pressed="false">HSC 1224 · BSS-2 / survival</button>
+      </div>
+      <div id="beStoryMap" aria-label="NS Per evolutionary channel overview"></div>
+      <div class="fig-body fig-split be-body">
         <div class="fig-main">
-          <div class="cyc-canvas-wrap">
-            <canvas id="ceCanvas" role="img"
-              aria-label="A binary whose primary expands until it fills its Roche lobe. If transfer is unstable the envelope engulfs both stars and they either merge or emerge as a close white dwarf pair that magnetic braking grinds into a cataclysmic variable; if it is stable the mass ratio reverses instead and the accretor becomes a blue straggler beside a stripped helium core."></canvas>
-            <ul class="cyc-legend">
-              <li><i class="dot" style="background:#cedcf4"></i>Primary → core</li>
-              <li><i class="dot" style="background:#f4ba80"></i>Companion</li>
-              <li><i class="dot" style="background:#b07a4e"></i>Common envelope</li>
-              <li><i class="dot" style="background:#e0a45c"></i>Accretion disk</li>
-            </ul>
+          <div class="cyc-canvas-wrap be-scene">
+            <canvas id="beCanvas" role="img" aria-label="Binary evolution in the orbital plane: the stars, critical Roche surfaces, stream and disk share one geometry."></canvas>
+            <div class="be-scene-head"><span id="beSceneTitle">NS Per · a surviving accreting binary</span><span>Orbital-plane view</span></div>
+            <div class="be-scene-foot" id="beScale">Model chronology; stage durations and orbital motion are compressed.</div>
           </div>
-          <div class="lc-wrap">
-            <h4>Orbital period against cluster age</h4>
-            <canvas id="ceTrack" role="img" aria-label="Orbital period plotted against time since cluster formation: a flat wide orbit, a near-vertical drop at the common envelope, then a magnetic-braking decay that must cross the measured 6.2994 hour period before the cluster age line."></canvas>
-            <p class="cap">The <span class="k-g">green</span> line is the measured period; the shaded
-            band is time the cluster has not lived yet. Faint tracks are the same channel at the four
-            efficiencies of the COSMIC grid — <b>α&nbsp;=&nbsp;0.5</b> and <b>1.0</b> never come down
-            in time, which is exactly why that grid produced zero systems there. On the stable branch
-            the track does the opposite: a shallow <b>V</b> — the orbit tightens until
-            q&nbsp;=&nbsp;1, then widens for good.</p>
+          <div class="cyc-controls be-controls">
+            <label class="ctl"><span class="ctl-row"><span>Evolutionary sequence</span><span id="beProgressLabel">1 / 7</span></span>
+              <input id="beProgress" type="range" min="0" max="1000" step="1" value="0" aria-label="Evolutionary sequence progress">
+            </label>
+            <div class="btn-row"><button class="btn btn-sm" id="bePlay" type="button">Play evolution</button><button class="btn btn-sm" id="bePrevious" type="button">Previous</button><button class="btn btn-sm" id="beNext" type="button">Next</button><button class="btn btn-sm" id="beOrbit" type="button" aria-pressed="false" title="Keep this stage fixed while the binary orbits">Animate orbit</button></div>
+            <div class="be-options"><label><input id="beLobes" type="checkbox" checked> Roche surfaces</label><label>Speed <select id="beSpeed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label></div>
+            <p class="be-motion-note" id="beMotionNote" hidden>Reduced motion is enabled. Select individual stages or use the timeline to explore.</p>
+          </div>
+          <ol class="be-rail" id="beStages" aria-label="Evolutionary stages"></ol>
+          <div class="lc-wrap be-track" id="beTrackWrap" hidden>
+            <div class="be-chart-head"><h4>Model orbital period</h4><button class="chip" id="beZoom" type="button" aria-pressed="true">Post-CE detail</button></div>
+            <canvas id="bePeriod" role="img" aria-label="The NS Per production track and a cursor driven by the same model state as the binary scene."></canvas>
+            <p class="cap">The representative track reaches contact before the cluster age. At 209&nbsp;Myr its period is about <b>6.208&nbsp;h</b>; the observed period is <b>6.29500&nbsp;±&nbsp;0.00050&nbsp;h</b>.</p>
           </div>
         </div>
-
-        <aside class="cyc-side">
-          <div class="readout">
-            <div class="readout-row"><span>Stage</span><b id="ceStage">—</b></div>
-            <div class="readout-row"><span>Channel</span><b id="ceChan">—</b></div>
-            <div class="readout-row"><span>Elapsed</span><b id="ceTime">—</b></div>
-            <div class="readout-row"><span>Separation <i>a</i></span><b id="ceSep">—</b></div>
-            <div class="readout-row"><span>Orbital period</span><b id="cePorb">—</b></div>
-            <div class="readout-row"><span id="ceMwdL">Core → white dwarf</span><b id="ceMwd">—</b></div>
-            <div class="readout-row"><span id="cePceL">Post-CE period <i>P</i><sub>CE</sub></span><b id="cePce">—</b></div>
-            <div class="readout-row"><span id="ceTdecL">Decay time</span><b id="ceTdec">—</b></div>
-            <div class="readout-row"><span id="ceLobeL">Donor lobe at contact</span><b id="ceLobe">—</b></div>
-            <div class="readout-row"><span>α<sub>CE</sub> window</span><b id="ceWindow">—</b></div>
-            <div class="readout-row"><span>Outcome</span><b id="ceVerdict">—</b></div>
+        <aside class="cyc-side be-side">
+          <div class="be-summary" aria-live="polite" aria-atomic="true"><span class="be-kind" id="beKind"></span><h3 id="beTitle"></h3><p id="beDescription"></p></div>
+          <div class="readout be-readout" aria-label="Current physical state">
+            <div class="readout-row"><span>Time</span><b id="beTime"></b></div>
+            <div class="readout-row"><span>Period</span><b id="beP"></b></div>
+            <div class="readout-row"><span>Separation</span><b id="beA"></b></div>
+            <div class="readout-row"><span>Stellar constraints</span><b id="beMass"></b></div>
+            <div class="readout-row"><span>Mass flow</span><b id="beFlow"></b></div>
           </div>
+          <div class="be-note" id="beNote"></div>
 
-          <div class="cyc-controls">
-            <label class="ctl">
-              <span class="ctl-row"><span>CE efficiency α<sub>CE</sub></span><output></output></span>
-              <input type="range" id="ceAlpha" min="0.08" max="1.2" step="0.01" value="0.30" data-dp="2">
-            </label>
-            <label class="ctl">
-              <span class="ctl-row"><span>Envelope structure λ</span><output></output></span>
-              <input type="range" id="ceLam" min="0.6" max="5" step="0.1" value="2.5" data-dp="1">
-            </label>
-            <label class="ctl">
-              <span class="ctl-row"><span>Progenitor M₁</span><output></output></span>
-              <input type="range" id="ceM1" min="4" max="8" step="0.1" value="6" data-dp="1" data-unit=" M⊙">
-            </label>
-            <label class="ctl">
-              <span class="ctl-row"><span>Companion M₂</span><output></output></span>
-              <input type="range" id="ceM2" min="0.4" max="5" step="0.05" value="0.55" data-dp="2" data-unit=" M⊙">
-            </label>
-            <label class="ctl">
-              <span class="ctl-row"><span>Speed</span><output></output></span>
-              <input type="range" id="ceSpeed" min="0" max="3" step="0.1" value="1" data-dp="1" data-unit="×">
-            </label>
-            <div class="btn-row">
-              <button class="btn btn-sm" id="ceCase">Case C · AGB</button>
-              <button class="btn btn-sm" id="ceAge">Cluster age: 400 Myr</button>
-              <button class="btn btn-sm" id="cePause" aria-pressed="false">Pause</button>
-            </div>
-          </div>
         </aside>
       </div>
-
       <div class="fig-notes">
-        <div class="note">
-          <span class="note-lab">What α<sub>CE</sub> actually buys</span>
-          <p class="eqn">α<sub>CE</sub>&nbsp;(<sup>GM<sub>c</sub>M₂</sup>⁄<sub>2a<sub>f</sub></sub>&nbsp;−&nbsp;<sup>GM₁M₂</sup>⁄<sub>2a<sub>i</sub></sub>)&nbsp;=&nbsp;<sup>GM₁M<sub>env</sub></sup>⁄<sub>λR₁</sub></p>
-          <p class="note-p">The envelope is unbound by the orbital energy the spiralling cores give
-          up. Solved for a<sub>f</sub> every frame. Only the product <b>α<sub>CE</sub>λ</b> enters, which
-          is why the two sliders trade off against one another — the classic degeneracy, and the reason
-          a cluster clock is worth having.</p>
-        </div>
-        <div class="note">
-          <span class="note-lab">Which channel it takes</span>
-          <p class="eqn">ζ<sub>L</sub>&nbsp;=&nbsp;2(q−1)&nbsp;+&nbsp;(1+q)&nbsp;<sup>dln f<sub>RL</sub></sup>⁄<sub>dln q</sub>&nbsp;&gt;&nbsp;ζ<sub>ad</sub>&nbsp;&nbsp;⟹&nbsp;&nbsp;CE</p>
-          <p class="note-p">A giant with a <b>deep convective envelope expands</b> as it loses mass, so
-          the lobe always outruns it. ζ<sub>ad</sub> is evaluated from the donor's own core fraction
-          (Hjellming&nbsp;&amp;&nbsp;Webbink 1987) rather than fixed at the coreless −1/3, which puts
-          q<sub>crit</sub> at <b>0.76</b> here — and Case&nbsp;C onto a 0.55&nbsp;M<sub>⊙</sub> dwarf at
-          q&nbsp;=&nbsp;10.9 is violently unstable either way. A donor still <b>radiative</b> contracts
-          instead and stays stable to q&nbsp;≈&nbsp;2–3 — that branch never makes an envelope at all.
-          Switch the case and watch the verdict flip.</p>
-        </div>
-        <div class="note">
-          <span class="note-lab">The other channel</span>
-          <p class="eqn">a&nbsp;∝&nbsp;(M₁M₂)<sup>−2</sup>&nbsp;&nbsp;at fixed&nbsp;J</p>
-          <p class="note-p">Stable conservative transfer shrinks the orbit until <b>q&nbsp;=&nbsp;1</b>, then
-          widens it — the V in the track. The donor is peeled to a stripped helium core and the accretor,
-          rejuvenated above the turnoff, is a <b>blue straggler</b>. Same first contact, opposite outcome:
-          this is the two-channel picture, and only the unstable branch can build NS&nbsp;Per.</p>
-        </div>
-        <div class="note">
-          <span class="note-lab">Why most of them merge</span>
-          <p class="eqn">R<sub>L,2</sub>(a<sub>f</sub>)&nbsp;&lt;&nbsp;R₂&nbsp;&nbsp;⟹&nbsp;&nbsp;merger</p>
-          <p class="note-p">Drive the spiral-in too deep and the companion overflows its own lobe while
-          still inside the envelope; the cluster gets a single white dwarf and nothing to look at.
-          In the COSMIC grid that is <b>87%</b> of systems. This is now the test the figure evaluates —
-          not "tighter than the orbit we measure", which is a different statement — so between the two
-          there is a band that survives and simply lands <em>short</em> of 6.30&nbsp;h. The Roche lobes
-          are the real equipotentials, traced through L₁ and drawn as the surface they are.</p>
-        </div>
-        <div class="note">
-          <span class="note-lab">The clock that closes it</span>
-          <p class="eqn">|ȧ|&nbsp;=&nbsp;<sup>7.6e−30&nbsp;R₂⁴GM²</sup>⁄<sub>M<sub>wd</sub>a⁴</sub>&nbsp;+&nbsp;<sup>64G³M₁M₂M</sup>⁄<sub>5c⁵a³</sub></p>
-          <p class="note-p">Rappaport–Verbunt–Joss braking plus the GR quadrupole, integrated as
-          t&nbsp;=&nbsp;∫da/|ȧ|. The progenitor's climb to the AGB is charged to the cluster clock
-          first, so the decay has only the remainder to cover — and because |ȧ|&nbsp;∝&nbsp;R₂⁴, it is
-          integrated with the donor's <em>own</em> near-ZAMS radius, not with the lobe it will
-          eventually fill. t<sub>decay</sub> is a steep function of where the CE left it.</p>
-        </div>
+        <div class="note"><span class="note-lab">One geometry for the flow</span><p class="note-p">The critical Roche surfaces meet at L₁. A stream appears only after the donor fills this surface. Its ballistic path is traced to impact or first closest approach, with all structures rotating in the same orbital plane.</p></div>
+        <div class="note"><span class="note-lab" id="beClock"></span><p class="note-p" id="beClockNote"></p></div>
       </div>
-
       <figcaption class="fig-foot">
-        Period <strong>P&nbsp;=&nbsp;6.2994&nbsp;h</strong> is a SDSS-V BOSS measurement; the donor
-        (0.55&nbsp;M<sub>⊙</sub>, K7–M0) is the Knigge (2011) semi-empirical CV sequence at that period;
-        the four faint tracks and the 87% merger fraction come from a COSMIC v3.6.1 grid of 924 systems
-        per α at [Fe/H]&nbsp;=&nbsp;−0.31. Core masses follow Cummings et&nbsp;al. (2018); lobes are
-        Eggleton (1983) and the traced Roche equipotential; the stream is RK4 in the co-rotating frame;
-        white-dwarf radii are Nauenberg (1972). The ring forms at the circularisation radius taken from
-        that stream's own angular momentum at pericentre, and the disk is truncated at
-        0.85&nbsp;R<sub>L1</sub> (Paczyński 1977; Ichikawa&nbsp;&amp;&nbsp;Osaki 1994), breathing across
-        the outburst cycle by the amount Smak (1984) measures in U&nbsp;Gem. <strong>Calibration parameters, not fits:</strong> the
-        radius at first contact for Case&nbsp;B and Case&nbsp;C (40&nbsp;/&nbsp;400&nbsp;R<sub>⊙</sub>;
-        Case&nbsp;A is computed from the main-sequence radius), the pre-contact lifetimes, and
-        λ&nbsp;=&nbsp;2.5 — and since only the product <b>α<sub>CE</sub>λ</b> enters, that choice trades
-        directly against α. The AGB wind is drawn but carries no mass in the model. The stable branch is
-        drawn fully conservative, which at q&nbsp;≈&nbsp;11 no accretor could really manage. Separations are compressed as
-        a<sup>0.18</sup> so a 250-fold spiral-in stays on screen, and the view zooms after the envelope
-        clears (the factor is printed on the plate) — but stellar radii are drawn as a fraction of the
-        Roche lobe, so lobe-filling is exact.
+        <strong>What is physical:</strong> Roche equipotentials and the pressure-free ballistic trajectory are calculated in the circular, co-rotating point-mass approximation. NS&nbsp;Per's chronology and orbital period come from the revised COSMIC production track. Its α<sub>CE</sub>&nbsp;=&nbsp;0.20 is the representative model choice, not the posterior centre.
+        <strong>What is schematic:</strong> common-envelope morphology, disk size, and unresolved stellar markers. Orbital speeds and stage durations are compressed. The orbital-plane view does not reproduce the measured viewing inclination. During a common envelope, equilibrium Roche surfaces are hidden.
+        <details class="be-sources"><summary>Model provenance and observational limits</summary>
+          <p><b>HSC 1224:</b> object identities follow the 12 September 2026 thesis revision. BSS-1 is near Roche contact: transfer may have just ended or continue slowly. WD4 and WD6 are independent merger-remnant candidates; WD2 is the double-white-dwarf candidate in the wider branch. These are different cluster members, not the future identities of BSS-1 or BSS-2. The BSS-2 orbit and the WD2 orbit remain unconfirmed.</p>
+          <p><b>NS Per:</b> <i>N_representative_track</i>, 11 September 2026; production grid <i>results_big</i>, binary 143961, Z&nbsp;=&nbsp;0.0132. BPP event nodes preserve the instantaneous CE jump; BCM samples are interpolated consistently for the scene, readouts and cursor. The 209&nbsp;Myr endpoint is interpolated between the 200 and 210&nbsp;Myr samples.</p>
+          <p><b>Geometry:</b> the <a href="https://www.aanda.org/articles/aa/pdf/2022/05/aa43094-22.pdf" target="_blank" rel="noopener">synchronous Roche potential</a>; ballistic motion follows Newton's equations in the rotating frame. Gas pressure, shocks, magnetism and envelope hydrodynamics are not simulated.</p>
+        </details>
       </figcaption>
     </figure>
   </section>
@@ -953,8 +861,11 @@
 <script src="js/spectrum.js?v=38" defer></script>
 <script src="js/diskdata.js?v=38" defer></script>
 <script src="js/diskbinary.js?v=38" defer></script>
-<script src="js/cedata.js?v=38" defer></script>
-<script src="js/ceevol.js?v=38" defer></script>
+<script src="js/roche-geometry.js?v=20260914" defer></script>
+<script src="js/binary-evolution-data.js?v=20260914" defer></script>
+<script src="js/binary-evolution-model.js?v=20260914" defer></script>
+<script src="js/binary-evolution-map.js?v=20260914" defer></script>
+<script src="js/binary-evolution.js?v=20260914" defer></script>
 <script src="js/interactions.js?v=38" defer></script>
 <script src="js/cosmic-ui.js?v=38" defer></script>
 <script src="js/main.js?v=38" defer></script>
