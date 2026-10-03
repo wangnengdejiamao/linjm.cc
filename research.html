@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/cosmic-theme.css?v=38">
 <link rel="stylesheet" href="css/binary-evolution.css?v=20260914">
 <link rel="stylesheet" href="css/binary-evolution-map.css?v=20260914">
+<link rel="stylesheet" href="css/superradiance.css?v=20261001d">
 </head>
 <body>
 
@@ -34,6 +35,7 @@
     <a href="#spectrum">Fig.&nbsp;2 Spectrum</a>
     <a href="#diskbinary">Fig.&nbsp;3 Eclipse</a>
     <a href="#ceevol">Fig.&nbsp;4 Evolution</a>
+    <a href="#superradiance">Fig.&nbsp;5 Black hole</a>
     <a href="#publications">Publications</a>
     <a href="#about">About</a>
     <a href="ai.html" class="nav-cta">AI&nbsp;/&nbsp;Agents&nbsp;→</a>
@@ -58,8 +60,8 @@
         onto the spectrum.
       </p>
       <p class="hero-sub">
-        Explore four interactive figures: Roche geometry and accretion streams,
-        cyclotron spectra, disk eclipses, and binary evolution on a cluster clock.
+        Explore five interactive figures: Roche geometry and accretion streams,
+        cyclotron spectra, disk eclipses, binary evolution on a cluster clock, and black-hole superradiance.
         Each figure connects the visual model to its physical assumptions,
         with observed constraints and schematic stages identified alongside it.
       </p>
@@ -635,6 +637,114 @@
     </div>
   </section>
 
+  <!-- ==================== BLACK-HOLE SUPERRADIANCE ==================== -->
+  <section id="superradiance" class="section sr-section" aria-labelledby="srTitle">
+    <div class="sr-heading">
+      <div>
+        <p class="sr-kicker">Interactive figure 05 · General relativity</p>
+        <h2 id="srTitle">When a black hole gives energy back.</h2>
+        <p>A rotating black hole can transfer energy to a wave. Can that wave remain trapped and keep growing? Explore the distinction at the heart of my work on <strong>superradiant stability</strong>.</p>
+      </div>
+      <a class="sr-paper" href="https://doi.org/10.1016/j.physletb.2021.136392" target="_blank" rel="noopener">Lin et al. · Physics Letters B, 2021 ↗</a>
+    </div>
+    <div class="sr-lab">
+      <div class="bh-view" id="bhView">
+        <div class="bh-topline"><span>Light around a black hole</span><span>Schwarzschild · a = 0</span></div>
+        <div class="bh-frame">
+          <canvas id="bhCanvas" tabindex="0" role="img" aria-label="Interactive view of a Schwarzschild black hole. A golden accretion disk bends above and below the dark shadow. Drag sideways to orbit; use the angle and zoom controls below. Keyboard: arrow keys orbit and tilt; plus and minus zoom."></canvas>
+          <div class="bh-fallback" id="bhFallback" hidden><p>Preparing the black-hole view…</p><span>Camera and zoom controls remain available.</span></div>
+          <div class="bh-corner"><span class="bh-dot"></span><span id="bhMode">Light bending · thin disk</span></div>
+          <div class="bh-gesture" aria-hidden="true">Drag sideways to orbit</div>
+        </div>
+        <div class="bh-tools">
+          <div class="bh-views" role="group" aria-label="Viewing angle presets">
+            <button type="button" data-bh-view="edge" aria-pressed="true">Near edge-on</button>
+            <button type="button" data-bh-view="tilt" aria-pressed="false">Inclined</button>
+            <button type="button" data-bh-view="top" aria-pressed="false">From above</button>
+          </div>
+          <div class="bh-actions">
+            <button type="button" id="bhDoppler" aria-pressed="true">Color shifts on</button>
+            <button type="button" id="bhPlay" aria-pressed="true">Pause</button>
+            <button type="button" id="bhFullscreen" aria-label="Enter full screen">Full screen ↗</button>
+          </div>
+        </div>
+        <div class="bh-tuning">
+          <label for="bhTilt">View above the disk <output id="bhTiltValue" for="bhTilt">8°</output><input type="range" id="bhTilt" min="3" max="85" step="1" value="8"></label>
+          <label for="bhZoom">Zoom <output id="bhZoomValue" for="bhZoom">1.0×</output><input type="range" id="bhZoom" min="0.8" max="1.7" step="0.05" value="1"></label>
+          <p>Follow the far side of the disk as gravity bends its light around the shadow.</p>
+        </div>
+        <p class="bh-note">A nonrotating optical view with an illustrative disk. Explore the rotating black holes and superradiance from my paper below.</p>
+      </div>
+
+      <div class="sr-toolbar">
+        <div class="sr-tabs" role="group" aria-label="Black-hole family">
+          <button class="sr-tab" type="button" data-sr-family="kerr" aria-pressed="true">Extremal Kerr</button>
+          <button class="sr-tab" type="button" data-sr-family="kn" aria-pressed="false">Extremal Kerr–Newman</button>
+        </div>
+        <button class="sr-play" id="srPlay" type="button" aria-pressed="true">Pause animation</button>
+      </div>
+      <div class="sr-stage-grid">
+        <div class="sr-visual">
+          <div class="sr-plate-label"><span>Near-horizon wave · schematic</span><span id="srGeometry">a/M = 1 · Q = 0</span></div>
+          <canvas id="srScene" role="img" aria-label="Local scalar-wave schematic around an extremal black hole. Blue wavefronts approach the horizon; amber paths indicate energy transfer when the superradiant condition holds."></canvas>
+          <div class="sr-legend"><span>Local scalar wave</span><span id="srEnergyLegend">Energy transfer from the black hole</span></div>
+          <p class="sr-visual-note">The colors trace a field and energy transfer, not visible light or an accretion disk. Wave amplitudes and animation time are illustrative.</p>
+        </div>
+        <div class="sr-controls">
+          <div class="sr-presets" role="group" aria-label="Example parameter choices">
+            <button class="sr-preset" type="button" data-sr-preset="stable" aria-pressed="true">Inside the proof</button>
+            <button class="sr-preset" type="button" data-sr-preset="unresolved" aria-pressed="false">Beyond the proof</button>
+            <button class="sr-preset" type="button" data-sr-preset="no-amplification" aria-pressed="false">No amplification</button>
+          </div>
+          <label class="sr-field" for="srMu"><span class="sr-field-head"><span>Scalar mass · Mμ</span><output id="srMuValue" for="srMu">0.80</output></span><input id="srMu" type="range" min="0.10" max="1.40" step="0.01" value="0.80"></label>
+          <label class="sr-field" for="srOmega"><span class="sr-field-head"><span>Wave frequency · Mω</span><output id="srOmegaValue" for="srOmega">0.30</output></span><input id="srOmega" type="range" min="0.02" max="1.00" step="0.01" value="0.30"></label>
+          <div id="srChargedControls" hidden>
+            <label class="sr-field" for="srSpin"><span class="sr-field-head"><span>Rotation · k = a/M</span><output id="srSpinValue" for="srSpin">0.60</output></span><input id="srSpin" type="range" min="0" max="0.98" step="0.01" value="0.60"></label>
+            <label class="sr-field" for="srCharge"><span class="sr-field-head"><span>Field–hole charge coupling · qQ</span><output id="srChargeValue" for="srCharge">0.30</output></span><input id="srCharge" type="range" min="-0.40" max="0.80" step="0.01" value="0.30"></label>
+          </div>
+          <p class="sr-assumption" id="srAssumptions">G = c = ℏ = 1 · m = 1 · a = M. The black hole is exactly extremal; only the scalar-field parameters vary.</p>
+          <div class="sr-result" id="srResult" data-status="stable" role="status" aria-live="polite" aria-atomic="true">
+            <strong id="srResultTitle">Covered by the stability proof</strong><p id="srResultText">The superradiant and bound-state conditions hold, but the paper excludes an exterior trapping well in this parameter range.</p>
+          </div>
+        </div>
+      </div>
+      <div class="sr-status-strip">
+        <div class="sr-status-cell"><span class="sr-step-number">01 / ENERGY EXTRACTION</span><h3>Can the horizon supply energy?</h3><span class="sr-equation" id="srWindowFormula">0 &lt; Mω &lt; m/2</span><span class="sr-check" id="srWindowCheck">Yes · 0.30 &lt; 0.50</span><p>The threshold fixes the sign of the horizon energy flux. It does not give an amplification percentage.</p></div>
+        <div class="sr-status-cell"><span class="sr-step-number">02 / CONFINEMENT</span><h3>Can the field decay at infinity?</h3><span class="sr-equation">Mω &lt; Mμ</span><span class="sr-check" id="srBoundCheck">Yes · 0.30 &lt; 0.80</span><p>This is required for a massive bound state. By itself, it does not establish a trapping well or a growing mode.</p></div>
+        <div class="sr-status-cell"><span class="sr-step-number">03 / THE PAPER'S RESULT</span><h3>Is a trapping well excluded?</h3><span class="sr-equation" id="srProofFormula">Mω &lt; Mμ / √3</span><span class="sr-check" id="srProofCheck">Yes · sufficient condition met</span><p id="srProofDescription">Within the superradiant window, this sufficient condition rules out the feedback needed for this instability.</p></div>
+      </div>
+      <div class="sr-map-grid">
+        <div class="sr-map-panel">
+          <div class="sr-map-title"><h3>The stability map</h3><span>Click or drag to choose parameters</span></div>
+          <canvas id="srMap" class="sr-map" role="img" aria-label="Parameter map of scalar mass versus wave frequency. Green marks the sufficient stability region; hatching marks the superradiant bound-state window beyond this proof. The same parameters can be changed with the labeled sliders."></canvas>
+          <div class="sr-map-key"><span><i></i>Covered by the proof</span><span><i></i>Not settled by this proof</span><span><i></i>Outside joint window</span></div>
+        </div>
+        <div class="sr-map-copy">
+          <p class="sr-kicker">Read the boundary</p><h3>Amplification does not guarantee an instability.</h3>
+          <p id="srMapExplanation">The green region meets the paper's sufficient stability condition within the superradiant and bound-state window. Moving outside green does not establish instability.</p>
+          <div class="sr-formula" id="srMapFormula">a = M, Q = 0<br>0 &lt; Mω &lt; m/2<br>Mω &lt; Mμ / √3</div>
+          <p>The hatched region needs further mode analysis. This figure evaluates the analytic inequalities; it does not compute a mode spectrum, a growth rate, or the evolution of a boson cloud.</p>
+        </div>
+      </div>
+      <details class="sr-sources">
+        <summary>Physics, assumptions &amp; visual references</summary>
+        <p><strong>What is calculated.</strong> The parameter map uses the strict inequalities in Lin et al. (2021), Eqs. (1), (16), (35), (48), (49), (57), and (68). Frequencies and scalar masses are expressed as Mω and Mμ, with G = c = ℏ = 1. The azimuthal number is fixed at m = 1; this does not select a radial or angular eigenmode. Equality boundaries are excluded from the stated sufficient proof.</p>
+        <p><strong>Charged case.</strong> Extremality enforces Q/M = √(1 − k²), with positive Q and 0 ≤ k &lt; 1. The qQ slider changes the scalar charge coupling. The sufficient condition requires qQ &gt; 0; the neutral or oppositely charged cases are not certified by that condition. The superradiant threshold is Mω<sub>c</sub> = (mk + qQ)/(1 + k²). Charge can supply energy as well as rotation.</p>
+        <p><strong>Optical view.</strong> The large view integrates Schwarzschild null geodesics with a fourth-order Runge–Kutta scheme, in units G = c = M = 1. The horizon is at r = 2M; the thin disk extends from 6M to 22M. A static observer at 36M uses a local orthonormal camera frame. The browser uses WebGL when available and otherwise a Canvas 2D renderer with cached ray geometry. Both use the same optical model. The software view first shows a fast preview, then refines it at the display resolution after the camera stops moving. The disk texture, color mapping, exposure and animation timing are illustrative; finite integration steps limit the higher-order images. It is not a Kerr image, an accretion-flow simulation or an image predicted by the superradiance paper. The color-shift toggle includes the frequency shift for circular disk motion and gravitational redshift, with artistic tone mapping and a small photographic glow.</p>
+        <p><strong>Wave illustration.</strong> The smaller panel is a local field schematic in a compressed radial layout, not ray tracing or a solution of the Klein–Gordon equation. No wave is drawn escaping from inside the horizon. For a bound-state choice, the blue field is local rather than an incoming propagating wave from infinity. No trapping well is invented for the unclassified region.</p>
+        <ol>
+          <li><a href="https://arxiv.org/abs/2105.02161" target="_blank" rel="noopener">Lin, Luo, Zheng, Yin &amp; Huang (2021) — original paper</a>: the analytic results implemented here.</li>
+          <li><a href="https://perimeterinstitute.ca/personal/weast/research.html" target="_blank" rel="noopener">William East — superradiance simulations</a>: a reference for showing energy transfer and separating scattering from bound-field growth. Those numerical simulations are not reproduced here.</li>
+          <li><a href="https://www.nasa.gov/universe/nasa-visualization-shows-a-black-holes-warped-world/" target="_blank" rel="noopener">NASA / Jeremy Schnittman — a black hole's warped world</a>: a reference for clear spatial annotations; accretion-disk lensing is a different phenomenon.</li>
+          <li><a href="https://www.alessandroroussel.com/creationsList/blackholestars/" target="_blank" rel="noopener">ScienceClic / Alessandro Roussel — Black Hole #4</a>: visual and interaction reference. No code or imagery is reused.</li>
+          <li><a href="https://ebruneton.github.io/black_hole_shader/" target="_blank" rel="noopener">Eric Bruneton — real-time black-hole rendering</a>: a reference for Schwarzschild light bending and browser interaction. Our renderer uses direct numerical integration rather than the precomputed beam-tracing method. No shader code or imagery is reused.</li>
+        </ol>
+      </details>
+    </div>
+    <p class="sr-caption"><strong>Figure 5 · Black-hole superradiance and stability.</strong> A Schwarzschild optical view introduces light bending. A separate schematic explains energy exchange in the rotating models; the linked map evaluates the sufficient stability bounds from my 2021 paper. Green is a proved region under the stated assumptions. Hatching means the present criterion does not decide.</p>
+    <noscript><p>This interactive figure requires JavaScript. The paper establishes a sufficient stable region for extremal Kerr when 0 &lt; ω &lt; mΩ<sub>H</sub> and ω &lt; μ/√3. The charged case and full assumptions are described in the linked paper.</p></noscript>
+  </section>
+
   <!-- ======================= PUBLICATIONS ========================= -->
   <section id="publications" class="section">
     <div class="section-head">
@@ -723,6 +833,7 @@
           <p class="pub-abs">Analytic superradiant-stability conditions for four-dimensional extremal
           Kerr and Kerr–Newman black holes under massive (and charged-massive) scalar perturbations —
           e.g. an extremal Kerr black hole is superradiantly stable when ω&nbsp;&lt;&nbsp;μ/√3.</p>
+          <a class="sr-home-link" href="#superradiance">Explore the interactive stability map →</a>
           <div class="pub-tags"><span>black holes</span><span>superradiance</span><span>Kerr–Newman</span><span>general relativity</span></div>
         </div>
       </li>
@@ -869,5 +980,11 @@
 <script src="js/interactions.js?v=38" defer></script>
 <script src="js/cosmic-ui.js?v=38" defer></script>
 <script src="js/main.js?v=38" defer></script>
+<script src="js/superradiance-model.js?v=20261001" defer></script>
+<script src="js/superradiance.js?v=20261001" defer></script>
+<script src="js/blackhole-software-core.js?v=20261001d" defer></script>
+<script src="js/blackhole-software-runner.js?v=20261001d" defer></script>
+<script src="js/blackhole-software.js?v=20261001d" defer></script>
+<script src="js/blackhole-optics.js?v=20261001d" defer></script>
 </body>
 </html>

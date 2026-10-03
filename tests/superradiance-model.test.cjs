@@ -1,0 +1,20 @@
+// Independent examples and strict boundaries from Lin et al. (2021).
+const assert = require('node:assert/strict');
+const {classify:c} = require('../js/superradiance-model.js');
+let tests=0;const check=(v,e)=>{assert.equal(v,e);tests++;};
+check(c({family:'kerr',mu:.8,omega:.3}).status,'stable');
+check(c({family:'kerr',mu:.6,omega:.45}).status,'unresolved');
+check(c({family:'kerr',mu:.8,omega:.7}).status,'no-amplification');
+check(c({family:'kerr',mu:.3,omega:.3}).status,'unbound');
+check(c({family:'kerr',mu:Math.sqrt(3)*.3,omega:.3}).stable,false);
+check(c({family:'kerr',mu:1,omega:.5}).superradiant,false);
+const kn={family:'kn',k:.6,eta:.3,m:1};
+check(c({...kn,mu:.4,omega:.2}).stable,true);
+check(c({...kn,mu:.5,omega:.4}).status,'unresolved');
+check(c({...kn,mu:.5,omega:.3}).stable,false);
+check(c({...kn,mu:.3*Math.sqrt(3.08/2.36),omega:.2}).stable,false);
+check(c({...kn,eta:0,mu:.5,omega:.2}).stable,false);
+check(c({...kn,eta:-.3,mu:.5,omega:.2}).stable,false);
+check(c({...kn,k:0,mu:.4,omega:.2}).stable,true);
+assert.throws(()=>c({...kn,k:1,mu:.4,omega:.2}),RangeError);tests++;
+console.log(`Passed ${tests} superradiance model checks.`);
