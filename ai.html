@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI / Agents · Jiamao Lin 林佳茂 — Fine-tuned Astronomy LLMs & Auditable Agents</title>
-<meta name="description" content="Jiamao Lin's AI / agent engineering: a locally fine-tuned 8B astronomy LLM (QLoRA + AttnRes), a knowledge-graph & experiment-design agent for materials science, the auditable A2A Astro Agent, and a lightweight ZTF CNN classifier.">
+<title>AI 项目 · 林佳茂 Jiamao Lin — 知识图谱、本体与智能体工程</title>
+<meta name="description" content="Jiamao Lin's AI engineering: evidence-grounded business knowledge graphs, enterprise ontologies and APS decision workbenches, astronomy LLMs, mobile GUI agents and research agents. Explore interactive project walkthroughs.">
 <meta name="author" content="Jiamao Lin">
 <meta property="og:title" content="AI / Agents · Jiamao Lin 林佳茂">
-<meta property="og:description" content="Locally fine-tuned astronomy LLMs, dual-track RAG, knowledge graphs, and auditable LangGraph research agents — four projects, fully visualized.">
+<meta property="og:description" content="From evidence to decisions: interactive business knowledge graphs, enterprise ontology workbenches, astronomy LLMs and auditable agents.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%23a85518'/><circle cx='62' cy='40' r='22' fill='%23140f08'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,23 +15,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css?v=38">
 <link rel="stylesheet" href="css/cosmic-theme.css?v=38">
+<link rel="stylesheet" href="css/ai-portfolio.css?v=20261013-1">
 </head>
 <body class="ai-body">
 
-<canvas id="cosmicBackdrop" class="cosmic-backdrop" aria-hidden="true"></canvas>
+<a class="skip-link" href="#selected">跳转到项目内容</a>
 
 <header class="nav" id="nav">
   <a class="brand" href="index.html">
     <span class="brand-mark" aria-hidden="true"></span>
     <span class="brand-name">Jiamao&nbsp;Lin<span class="brand-cn"> 林佳茂</span></span>
   </a>
-  <nav class="nav-links" aria-label="Primary">
-    <a href="index.html">Home</a>
-    <a href="#maoastro">8B&nbsp;LLM</a>
-    <a href="#zte">GUI&nbsp;Agent</a>
-    <a href="#jindu">KG&nbsp;Agent</a>
-    <a href="#astroagent">Astro&nbsp;Agent</a>
-    <a href="research.html" class="nav-cta">Research&nbsp;→</a>
+  <nav class="nav-links" aria-label="主导航">
+    <a href="index.html">首页</a>
+    <a href="#selected">精选项目</a>
+    <a href="#sustech">南科大 · 水晶球</a>
+    <a href="#enterprise">企业 · PKN</a>
+    <a href="#more-projects">更多工程</a>
+    <a href="index.html#cv" class="nav-cta">履历 ↗</a>
   </nav>
   <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -39,43 +40,91 @@
 </header>
 
 <main id="top">
-
-  <!-- ============================ AI HERO ============================ -->
-  <section class="ai-hero">
-    <div class="ai-hero-text">
-      <p class="eyebrow">AI / Agent Engineering</p>
-      <h1>Astronomy intelligence<br>you can <span class="accenty">audit</span></h1>
-      <p class="ai-lede">
-        Five projects, one thread: bring the <strong>evidence-first discipline of physics</strong>
-        into machine learning. A locally fine-tuned <strong>8B astronomy LLM</strong>, a
-        <strong>mobile GUI agent at ZTE</strong> (planner + worker A2A), a knowledge-graph &amp;
-        experiment-design agent with Peking University, an auditable research agent, and a lightweight
-        survey classifier — each built to refuse claims the evidence doesn't support.
-      </p>
-      <div class="ai-hero-chips">
-        <a href="#maoastro" class="ai-hchip"><b>01</b> maoAstro · 8B fine-tune <span>QLoRA + AttnRes</span></a>
-        <a href="#zte" class="ai-hchip"><b>02</b> ZTE mobile GUI agent <span>planner + worker A2A</span></a>
-        <a href="#jindu" class="ai-hchip"><b>03</b> KG &amp; experiment agent <span>北京大学 · Peking Univ.</span></a>
-        <a href="#astroagent" class="ai-hchip"><b>04</b> Astro Agent <span>LangGraph · self-evolving</span></a>
-        <a href="#cnn" class="ai-hchip"><b>05</b> ZTF classifier <span>lightweight CNN</span></a>
+  <section class="studio-hero" aria-labelledby="studioTitle">
+    <div class="studio-intro">
+      <p class="studio-eyebrow"><span></span> JIAMAO LIN / SELECTED AI ENGINEERING</p>
+      <h1 id="studioTitle">让知识连接，<br>让智能<span>发生。</span></h1>
+      <p class="studio-en">From knowledge to decisions.</p>
+      <p class="studio-lede">我构建大模型、知识图谱与智能体。<br>把散落在文档里的知识，变成可追溯、<br class="desktop-break">可交互、能参与实际工作的系统。</p>
+      <div class="studio-actions">
+        <a class="studio-btn primary" href="#selected">探索项目 <span aria-hidden="true">↗</span></a>
+        <a class="studio-btn text-btn" href="index.html#cv">查看履历 <span aria-hidden="true">→</span></a>
       </div>
+      <div class="hero-index"><span>01 / 知识与证据</span><span>02 / 规则与决策</span><span>03 / 智能体工程</span></div>
     </div>
-    <div class="ai-hero-visual" aria-label="A retrieval audit, animated">
-      <canvas id="aiHeroCanvas" role="img" aria-label="A question is answered by dual-track retrieval: twenty candidate passages from dense-vector and BM25 search are reranked down to five, the answer is written only from those five, and a third example question is refused outright because nothing retrieved supports it."></canvas>
-      <div class="ai-viz-head">
-        <span><i class="live-dot"></i> Dual-track RAG · audit</span>
-        <span>click to advance</span>
-      </div>
-      <div class="ai-viz-stages" aria-hidden="true">
-        <span>Recall</span><span>Rerank</span><span>Ground</span><span>Verdict</span>
+    <div class="studio-scene">
+      <div class="scene-caption"><span class="scene-dot"></span> THE KNOWLEDGE ENGINE <span class="scene-tag">交互示意</span></div>
+      <canvas id="knowledgeEngine" role="img" aria-label="三维知识引擎：来源、知识和决策三个相连的空间层。使用下方按钮切换观察层。">来源资料连接知识对象，知识对象连接决策。下方三个按钮提供同等的分层说明。</canvas>
+      <div class="scene-annotation" aria-live="polite"><span id="sceneNumber">01 — 03</span><strong id="sceneTitle">每一个决策，都有来处。</strong><p id="sceneDescription">文档 → 知识 → 推理 → 行动</p></div>
+      <div class="scene-controls" role="group" aria-label="知识引擎观察层">
+        <button type="button" data-scene="all" aria-pressed="true">全景</button>
+        <button type="button" data-scene="source" aria-pressed="false">来源</button>
+        <button type="button" data-scene="knowledge" aria-pressed="false">知识</button>
+        <button type="button" data-scene="decision" aria-pressed="false">决策</button>
+        <button type="button" id="scenePause" aria-pressed="false" aria-label="暂停空间动画">暂停</button>
       </div>
     </div>
   </section>
 
-  <!-- =============================================================== -->
-  <!-- §01  maoAstro — 8B astronomy LLM fine-tuning                    -->
-  <!-- =============================================================== -->
-  <section id="maoastro" class="section">
+  <div class="studio-affiliations" aria-label="项目领域"><span>ACROSS RESEARCH & INDUSTRY</span><span>南方科技大学 <small>SUSTech</small></span><span>海通安恒 <small>Enterprise AI</small></span><span>大模型 · 智能体 <small>LLMs & Agents</small></span></div>
+
+  <section class="studio-section selected-projects" id="selected" aria-labelledby="selectedTitle">
+    <div class="studio-section-heading"><div><p class="studio-eyebrow">01 / SELECTED WORK</p><h2 id="selectedTitle">从真实问题出发。</h2></div><p>两个领域，同一条主线：<br>让系统的判断能够被理解、被检验。</p></div>
+    <div class="project-pair">
+      <a class="project-cover cover-research" href="#sustech">
+        <div class="cover-heading"><span>01 / RESEARCH INTELLIGENCE</span><span aria-hidden="true">↗</span></div>
+        <div class="cover-art" aria-hidden="true"><svg viewBox="0 0 540 200"><defs><radialGradient id="sphereFill"><stop stop-color="#214356" stop-opacity=".3"/><stop offset="1" stop-color="#10212b" stop-opacity=".15"/></radialGradient></defs><circle cx="270" cy="100" r="85" fill="url(#sphereFill)" stroke="#70b8d0" stroke-opacity=".35"/><ellipse cx="270" cy="100" rx="130" ry="28" fill="none" stroke="#74a8bc" stroke-opacity=".4" transform="rotate(-20 270 100)"/><ellipse cx="270" cy="100" rx="52" ry="85" fill="none" stroke="#74a8bc" stroke-opacity=".25"/><path d="M178 91L240 56 307 70 349 123 273 153 217 129 240 56 270 103 307 70M178 91L270 103 349 123M217 129L270 103 273 153" fill="none" stroke="#9db9c5" stroke-opacity=".7"/><g fill="#afdce6"><circle cx="178" cy="91" r="4"/><circle cx="240" cy="56" r="5"/><circle cx="307" cy="70" r="4"/><circle cx="349" cy="123" r="4"/><circle cx="273" cy="153" r="4"/><circle cx="217" cy="129" r="4"/><circle cx="270" cy="103" r="8"/></g><path d="M74 78H145M382 140H464" stroke="#416476"/><text x="68" y="67" fill="#83a3b5" font-size="10">EVIDENCE</text><text x="395" y="160" fill="#83a3b5" font-size="10">REASONING</text></svg></div>
+        <div class="cover-copy"><p>南方科技大学 · 商学院项目</p><h3>水晶球 <span>Crystal Ball</span></h3><p class="cover-desc">把企业材料、专家知识和推理结论<br>连接成可追溯的研究工作台。</p><div class="cover-bottom"><span>Knowledge Graph / Graph RAG</span><b>进入证据工作台 →</b></div></div>
+      </a>
+      <a class="project-cover cover-enterprise" href="#enterprise">
+        <div class="cover-heading"><span>02 / INDUSTRIAL INTELLIGENCE</span><span aria-hidden="true">↗</span></div>
+        <div class="cover-art" aria-hidden="true"><svg viewBox="0 0 540 200"><g fill="none" stroke="#84735d" stroke-opacity=".4"><path d="M125 55L270 18 415 55 270 94Z M125 105L270 68 415 105 270 144Z M125 155L270 118 415 155 270 194Z"/><path d="M125 55V155M270 94V194M415 55V155" stroke-dasharray="3 5"/></g><g fill="#172c30" stroke="#6abaae"><path d="M171 55L214 44 247 53 204 64Z"/><path d="M282 55L343 40 376 49 315 64Z"/></g><g fill="#2b2b29" stroke="#d0ac76"><path d="M198 107L285 85 318 94 231 116Z"/><path d="M263 149L338 130 373 139 297 159Z"/></g><g fill="#a6c9c3"><circle cx="171" cy="55" r="3"/><circle cx="318" cy="94" r="3"/><circle cx="297" cy="159" r="3"/></g><path d="M204 64V83L231 90V116M318 94V116L297 122V159" fill="none" stroke="#b8a074"/><text x="62" y="112" fill="#9aaea8" font-size="10">RULES</text><text x="407" y="149" fill="#b6a48c" font-size="10">SCHEDULE</text></svg></div>
+        <div class="cover-copy"><p>海通安恒 · 企业工程项目</p><h3>PKN <span>Ontology & APS</span></h3><p class="cover-desc">把业务对象、规则与资源约束<br>连接成可解释的计划与决策。</p><div class="cover-bottom"><span>Ontology / Decision / Scheduling</span><b>进入排程工作台 →</b></div></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="studio-section case-study" id="sustech" aria-labelledby="sustechTitle">
+    <div class="case-intro"><div><p class="studio-eyebrow">CASE 01 / 南方科技大学 · SUSTECH</p><h2 id="sustechTitle">结论背后，<br><span>看得见证据。</span></h2></div><div class="case-description"><p>商业计划书中的一句话，如何成为可信的判断？水晶球将原文、结构化事实与专家条件连接起来，让研究者沿着推理路径核对证据，并找到下一步需要补问的问题。</p><div class="case-tags"><span>材料抽取</span><span>知识图谱</span><span>证据溯源</span><span>专家协作</span></div></div></div>
+    <div class="demo-workbench research-workbench" id="researchDemo">
+      <div class="workbench-top"><div class="workbench-brand"><span class="crystal-mark" aria-hidden="true">◇</span><strong>水晶球 <small>研究工作台</small></strong></div><span class="demo-label">交互演示 · 全部为虚构材料</span></div>
+      <div class="workbench-query"><span class="query-icon" aria-hidden="true">⌕</span><div><span>当前研究问题</span><strong>这家企业，已经完成商业化验证了吗？</strong></div><span class="query-badge">示例项目 A</span></div>
+      <div class="workbench-tabs" role="tablist" aria-label="研究工作台视图">
+        <button type="button" role="tab" id="tab-evidence" aria-controls="panel-evidence" aria-selected="true" data-research-view="evidence">01 证据网络</button>
+        <button type="button" role="tab" id="tab-reasoning" aria-controls="panel-reasoning" aria-selected="false" tabindex="-1" data-research-view="reasoning">02 推理路径</button>
+        <button type="button" role="tab" id="tab-report" aria-controls="panel-report" aria-selected="false" tabindex="-1" data-research-view="report">03 研究摘要</button>
+      </div>
+      <div class="research-toolbar"><p><i class="legend-dot cyan"></i> 来源 <i class="legend-dot blue"></i> 事实 <i class="legend-dot amber"></i> 判断 <span>点击节点，查看原文与依据</span></p><button type="button" class="demo-btn" id="addEvidence" aria-pressed="false">＋ 加入补充证据</button></div>
+      <div role="tabpanel" id="panel-evidence" aria-labelledby="tab-evidence">
+        <div class="evidence-layout"><div class="graph-viewport"><div class="evidence-graph" id="evidenceGraph" aria-label="证据网络，点击节点查看详情"></div></div><aside class="evidence-inspector" id="evidenceInspector" aria-label="选中节点的证据详情" aria-live="polite"></aside></div>
+      </div>
+      <div role="tabpanel" id="panel-reasoning" aria-labelledby="tab-reasoning" hidden><div id="reasoningContent" class="reasoning-content"></div></div>
+      <div role="tabpanel" id="panel-report" aria-labelledby="tab-report" hidden><div id="reportContent" class="report-content"></div></div>
+      <div class="research-result" role="status" aria-live="polite"><span class="result-icon" id="researchResultIcon">!</span><div><strong id="researchVerdict">试点部署 ≠ 商业化验证</strong><p id="researchNext">还需要合同、验收与回款证据，才能继续判断。</p></div><span class="result-count" id="researchCoverage">1 / 3 条件有材料</span></div>
+    </div>
+    <div class="contribution-strip"><span>我的工作 <small>CONTRIBUTION</small></span><p><strong>知识管线</strong>材料解析、事实抽取、来源定位</p><p><strong>推理组织</strong>图谱检索、条件关联、证据缺口</p><p><strong>研究交互</strong>原文回读、专家复核、研究摘要</p></div>
+    <p class="case-footnote">基于实际项目架构重制的浏览器演示；企业名称、原文片段和判断均为合成示例。演示展示证据组织方式，不执行线上模型或投资评估。</p>
+  </section>
+
+  <section class="studio-section case-study" id="enterprise" aria-labelledby="enterpriseTitle">
+    <div class="case-intro"><div><p class="studio-eyebrow">CASE 02 / 海通安恒 · ENTERPRISE AI</p><h2 id="enterpriseTitle">规则不再静止，<br><span>影响清晰可见。</span></h2></div><div class="case-description"><p>一批物料晚到，会影响哪张订单？我将 PKN 本体建模、规则治理与 APS 试排连接成可检查的工作流：从业务对象出发，看到约束如何传导到资源和交期。</p><div class="case-tags"><span>PKN 本体</span><span>规则治理</span><span>有限产能试排</span><span>方案对比</span></div></div></div>
+    <div class="demo-workbench enterprise-workbench" id="enterpriseDemo">
+      <div class="workbench-top"><div class="workbench-brand"><span class="pkn-mark" aria-hidden="true">P</span><strong>PKN <small>本体与排程工作台</small></strong></div><span class="demo-label">交互演示 · 虚构订单与资源</span></div>
+      <div class="enterprise-layout">
+        <aside class="scenario-controls"><p class="panel-kicker">SCENARIO LAB</p><h3>如果物料晚到了？</h3><p class="panel-description">调整订单 A 的到料延迟，观察资源占用与交期变化。</p><label for="materialDelay">到料延迟 <output id="delayValue" for="materialDelay">0 天</output></label><input type="range" min="0" max="4" value="0" step="1" id="materialDelay"><div class="range-labels"><span>按计划到料</span><span>延迟 4 天</span></div><fieldset><legend>排程策略</legend><label class="radio-option"><input type="radio" name="scheduleStrategy" value="fixed" checked><span><strong>保留订单顺序</strong><small>A → B → C</small></span></label><label class="radio-option"><input type="radio" name="scheduleStrategy" value="ready"><span><strong>就绪订单优先</strong><small>优先使用已到料订单填补空档</small></span></label></fieldset><button type="button" class="demo-btn reset-scenario" id="resetSchedule">↺ 重置场景</button><div class="scenario-assumptions"><span>演示约束</span><p>3 张订单 · 2 个共享资源<br>每项工序 1 天 · 每个资源同时处理 1 项<br>交期 A/B/C 分别为 D+3/4/5</p></div></aside>
+        <div class="operations-main"><div class="workbench-tabs" role="tablist" aria-label="企业工作台视图"><button type="button" role="tab" id="tab-schedule" aria-controls="panel-schedule" aria-selected="true" data-operations-view="schedule">01 排程与影响</button><button type="button" role="tab" id="tab-ontology" aria-controls="panel-ontology" aria-selected="false" tabindex="-1" data-operations-view="ontology">02 本体关系</button></div>
+          <div role="tabpanel" id="panel-schedule" aria-labelledby="tab-schedule"><div class="schedule-metrics"><div><span>按期完成</span><strong id="onTimeValue">3<span>/ 3</span></strong></div><div><span>最大晚交</span><strong id="lateValue">0<span>天</span></strong></div><div><span>较固定顺序提前完工</span><strong id="gainValue">0<span>天</span></strong></div></div><div class="gantt-heading"><div><strong>资源甘特图</strong><span>点击工序查看约束</span></div><p><i class="legend-dot cyan"></i>A <i class="legend-dot blue"></i>B <i class="legend-dot amber"></i>C <span class="baseline-legend"></span> 原计划</p></div><div class="gantt-scroll"><div id="scheduleGantt" class="schedule-gantt" aria-label="资源占用甘特图"></div></div><div class="schedule-order-summary" id="orderSummary"></div><div class="operation-detail" id="operationDetail" aria-live="polite"></div></div>
+          <div role="tabpanel" id="panel-ontology" aria-labelledby="tab-ontology" hidden><div class="ontology-explanation"><span class="panel-kicker">A CONNECTED BUSINESS MODEL</span><h3>对象之间的关系，决定变化如何传播。</h3><p>选择对象，追踪从原始资料到计划审核的连接。</p></div><div id="operationsGraph" class="operations-graph"></div><div id="ontologyDetail" class="ontology-detail" aria-live="polite"></div></div>
+          <div class="schedule-verdict" role="status" aria-live="polite"><span class="status-dot"></span><p id="scheduleVerdict">物料按计划到达，所有订单可以按期完成。</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="contribution-strip"><span>我的工作 <small>CONTRIBUTION</small></span><p><strong>本体建模</strong>来源、对象、关系与规则的结构化</p><p><strong>决策工程</strong>规则提案、试算用例、人工复核</p><p><strong>计划交互</strong>资源甘特、场景比较、影响解释</p></div>
+    <p class="case-footnote">浏览器使用简化的确定性排程模型，仅演示到料、工序前置和资源互斥约束。公司项目包含本体工作台与 APS 试点；此处不连接生产系统，也不代表工厂生产验收。</p>
+  </section>
+
+  <section class="studio-section engineering-collection" id="more-projects" aria-labelledby="moreTitle"><div class="studio-section-heading"><div><p class="studio-eyebrow">02 / MORE ENGINEERING</p><h2 id="moreTitle">同一份好奇心，<br>更多系统的可能。</h2></div><p>大模型训练、界面操作与科学研究。<br>展开项目，继续探索原有交互演示。</p></div>
+  <details class="archive-project" id="maoastro"><summary><span class="archive-number">03</span><div><h3>maoAstro · 领域大模型</h3><p>天文语料、QLoRA 微调与检索增强</p></div><span class="archive-tech">QLoRA / AttnRes / RAG</span><span class="archive-plus" aria-hidden="true">+</span></summary>  <section id="maoastro-detail" class="section">
     <div class="section-head">
       <h2>maoAstro — an 8B astronomy LLM, fine-tuned on one 12&nbsp;GB GPU</h2>
       <p>An end-to-end domain LLM: <strong>8&nbsp;GB of ADS papers</strong> distilled into a two-stage
@@ -307,12 +356,8 @@
         </tbody>
       </table>
     </div>
-  </section>
-
-  <!-- =============================================================== -->
-  <!-- §02  ZTE — mobile GUI agent (the real A2A)                       -->
-  <!-- =============================================================== -->
-  <section id="zte" class="section">
+  </section></details>
+<details class="archive-project" id="zte"><summary><span class="archive-number">04</span><div><h3>ZTE · 移动端 GUI Agent</h3><p>从屏幕理解到跨应用任务执行</p></div><span class="archive-tech">Multimodal / Planner–Worker</span><span class="archive-plus" aria-hidden="true">+</span></summary>  <section id="zte-detail" class="section">
     <div class="section-head">
       <h2>ZTE — a mobile GUI agent that operates the phone for you</h2>
       <p>At <strong>ZTE Corporation</strong> I build a <strong>phone-side GUI agent</strong>: you say what you
@@ -428,12 +473,8 @@
         exactly the multi-step errands people don't want to do by hand.</p>
       </article>
     </div>
-  </section>
-
-  <!-- =============================================================== -->
-  <!-- §03  Jindu — KG + experiment-design agent (materials science)   -->
-  <!-- =============================================================== -->
-  <section id="jindu" class="section">
+  </section></details>
+<details class="archive-project" id="jindu"><summary><span class="archive-number">05</span><div><h3>北京大学 · 材料实验智能体</h3><p>知识图谱驱动的电解液实验设计</p></div><span class="archive-tech">Graph RAG / Lab Agent</span><span class="archive-plus" aria-hidden="true">+</span></summary>  <section id="jindu-detail" class="section">
     <div class="section-head">
       <h2>Peking University — a knowledge-graph &amp; experiment-design agent</h2>
       <p>As <strong>algorithm lead</strong> I built a materials-science research platform for
@@ -540,12 +581,8 @@
     <p class="cap cap-wide">The same architecture generalizes: literature → clean chunks → schema-based
     triples → audited, deduplicated, community-organized graph → Neo4j — reused across both the materials
     agent here and the astronomy Astro&nbsp;Agent below.</p>
-  </section>
-
-  <!-- =============================================================== -->
-  <!-- §03  Astro Agent — A2A, multi-stack, auditable                  -->
-  <!-- =============================================================== -->
-  <section id="astroagent" class="section">
+  </section></details>
+<details class="archive-project" id="astroagent"><summary><span class="archive-number">06</span><div><h3>Astro Agent · 科研智能体</h3><p>检索、建模、审查与可追溯研究流程</p></div><span class="archive-tech">LangGraph / Open source</span><span class="archive-plus" aria-hidden="true">+</span></summary>  <section id="astroagent-detail" class="section">
     <div class="section-head">
       <h2>Astro&nbsp;Agent — an auditable, self-evolving research agent</h2>
       <p>My open-source flagship (<a href="https://github.com/wangnengdejiamao/Astro_Agent" target="_blank" rel="noopener">github.com/wangnengdejiamao/Astro_Agent</a>):
@@ -722,12 +759,8 @@
         </aside>
       </div>
     </div>
-  </section>
-
-  <!-- =============================================================== -->
-  <!-- §04  CNN classifier (brief, reused viz)                         -->
-  <!-- =============================================================== -->
-  <section id="cnn" class="section">
+  </section></details>
+<details class="archive-project" id="cnn"><summary><span class="archive-number">07</span><div><h3>ZTF · 时域光变分类</h3><p>从光变曲线到轻量卷积网络</p></div><span class="archive-tech">GhostNet / MobileNetV2</span><span class="archive-plus" aria-hidden="true">+</span></summary>  <section id="cnn-detail" class="section">
     <div class="section-head">
       <h2>ZTF light-curve classifier — a lightweight CNN</h2>
       <p>Where it started: turn every phase-folded ZTF light curve into a 224×224 <strong>image</strong>,
@@ -786,7 +819,10 @@
     <p class="cap cap-wide">Real pipeline: ZTF g/r photometry from IRSA, a Lomb–Scargle period, phase-folding, then a
     1×224×224 render fed to GhostNet or MobileNetV2. Accuracies and the confusion matrix are the repository's
     reported values; the forward-pass animation is schematic.</p>
+  </section></details>
   </section>
+
+  <section class="studio-section studio-contact"><p class="studio-eyebrow">LET'S BUILD SOMETHING THAT MATTERS</p><h2>从一个问题，<br>到一个可用的系统。</h2><div><a class="studio-btn primary" href="index.html#cv">完整履历 ↗</a><a class="studio-btn text-btn" href="mailto:linjm66@mail2.sysu.edu.cn">联系我 →</a></div></section>
 
 </main>
 
@@ -798,7 +834,8 @@
 
 <script src="js/figkit.js?v=38" defer></script>
 <script src="js/uikit.js?v=38" defer></script>
-<script src="js/aihero.js?v=38" defer></script>
+<script src="js/ai-demo-model.js?v=20261013-1" defer></script>
+<script src="js/ai-portfolio.js?v=20261013-1" defer></script>
 <script src="js/maoastro.js?v=38" defer></script>
 <script src="js/zte.js?v=38" defer></script>
 <script src="js/jindu.js?v=38" defer></script>
@@ -808,7 +845,7 @@
 <script src="js/kg.js?v=38" defer></script>
 <script src="js/ztfcnn.js?v=38" defer></script>
 <script src="js/interactions.js?v=38" defer></script>
-<script src="js/cosmic-ui.js?v=38" defer></script>
+
 <script src="js/main.js?v=38" defer></script>
 </body>
 </html>
