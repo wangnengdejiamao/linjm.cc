@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const {schedule,research,orders} = require('../js/ai-demo-model.js');
+const {schedule,research,orders,validateTasks} = require('../js/ai-demo-model.js');
 
 // Independent constraints: release dates, precedences, resource exclusivity and due dates.
 for (let delay=0;delay<=4;delay++) for (const strategy of ['fixed','ready']) {
@@ -23,7 +23,19 @@ for (let delay=0;delay<=4;delay++) for (const strategy of ['fixed','ready']) {
   }
   assert.equal(result.onTime,result.results.filter(o=>o.end<=o.due).length);
   assert.equal(result.makespan,Math.max(...result.tasks.map(t=>t.end)));
+  assert.ok(validateTasks(result.tasks).every(r=>r.violations.length===0));
 }
+
+// A correct schedule is not enough: malformed examples must actually fail validation.
+const overlap=schedule(0,'fixed').tasks.map(t=>({...t}));
+Object.assign(overlap.find(t=>t.id==='B-0'),{start:0,end:1});
+assert.deepEqual(validateTasks(overlap).find(r=>r.id==='R-CAP').violations,['A-0 / B-0']);
+const early=schedule(4,'ready').tasks.map(t=>({...t}));
+early.find(t=>t.id==='A-0').start=3;
+assert.deepEqual(validateTasks(early).find(r=>r.id==='R-MAT').violations,['A-0']);
+const outOfOrder=schedule(0,'fixed').tasks.map(t=>({...t}));
+outOfOrder.find(t=>t.id==='A-1').start=0;
+assert.deepEqual(validateTasks(outOfOrder).find(r=>r.id==='R-PRE').violations,['A-1']);
 
 // A late material may delay A, but a ready-first strategy must not idle for A at t=0.
 assert.equal(schedule(4,'fixed').onTime,0);

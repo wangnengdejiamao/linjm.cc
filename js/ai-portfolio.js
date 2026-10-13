@@ -4,8 +4,6 @@
   const $ = id => document.getElementById(id);
   const model = window.PortfolioModel;
   if (!model || !$('researchDemo')) return;
-  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
   // Roving tab focus, including arrows / Home / End. Native buttons handle Enter.
   function wireTabs(attribute, onChange) {
@@ -23,8 +21,8 @@
       button.addEventListener('click',()=>activate(button));
       button.addEventListener('keydown',event=>{
         let next;
-        if(event.key==='ArrowRight') next=(index+1)%buttons.length;
-        if(event.key==='ArrowLeft') next=(index+buttons.length-1)%buttons.length;
+        if(event.key==='ArrowRight'||event.key==='ArrowDown') next=(index+1)%buttons.length;
+        if(event.key==='ArrowLeft'||event.key==='ArrowUp') next=(index+buttons.length-1)%buttons.length;
         if(event.key==='Home') next=0;
         if(event.key==='End') next=buttons.length-1;
         if(next===undefined)return;
@@ -36,7 +34,7 @@
 
   let supplemented = false, selectedNode = 'judgment', reasoningTimer = 0;
   const selectResearchView = wireTabs('data-research-view',()=>stopReasoning());
-  wireTabs('data-operations-view');
+  wireTabs('data-pkn-view');
 
   function relatedNodes(data, id) {
     const related = new Set([id]);
@@ -122,12 +120,17 @@
     stopReasoning();supplemented=!supplemented;
     $('addEvidence').setAttribute('aria-pressed',String(supplemented));
     $('addEvidence').textContent=supplemented?'− 移除补充证据':'＋ 加入补充证据';
-    renderEvidence();renderReasoning();renderReport();
+    renderEvidence();renderReasoning();renderReport();renderMaterials();
   });
-  renderEvidence();renderReasoning();renderReport();
+  function renderMaterials(){
+    const sources=model.research(supplemented).nodes.filter(n=>n.kind==='source');
+    $('researchMaterials').innerHTML='<span class="panel-kicker">MATERIAL ROOM / 示例项目 A</span><h3>每条事实，都保留一份来源。</h3>'+sources.map(n=>`<article class="research-source-card"><div><span>${n.code}</span><h4>${n.label}</h4><p>${n.citation}</p></div><span class="material-status">${n.status}</span><button type="button" class="demo-btn" data-material-source="${n.id}">查看原文 →</button></article>`).join('');
+  }
+  $('researchMaterials').addEventListener('click',event=>{const b=event.target.closest('[data-material-source]');if(b){selectResearchView('evidence');setNode(b.dataset.materialSource,true);}});
+  renderEvidence();renderReasoning();renderReport();renderMaterials();
 
   // One small scheduling model feeds the chart, KPI values, explanations and graph.
-  let selectedTask='A-0',selectedObject='material';
+  let selectedTask='A-0';
   function currentSchedule(){return model.schedule($('materialDelay').value,document.querySelector('[name=scheduleStrategy]:checked').value);}
   function renderSchedule(){
     const data=currentSchedule(),baseline=model.schedule(0,'fixed'),fixed=model.schedule(data.delay,'fixed');
@@ -144,7 +147,6 @@
     const summary=data.maxLate?`${data.results.filter(o=>o.late).map(o=>o.id).join('、')} 有晚交，最大 ${data.maxLate} 天。${data.strategy==='fixed'?'可切换“就绪订单优先”，比较空档利用与订单交期。':'就绪订单填补了空档，但缺料订单仍受最早开工时间约束。'}`:data.delay?'当前策略下所有订单按期完成。继续增加延迟，可观察交期缓冲何时耗尽。':'物料按计划到达，所有订单可以按期完成。';
     $('scheduleVerdict').textContent=summary;
     document.querySelector('.schedule-verdict').classList.toggle('has-delay',data.maxLate>0);
-    renderObjectDetail();
   }
   function renderTaskDetail(data){
     const task=data.tasks.find(t=>t.id===selectedTask), name=task.resource?'检测':'加工';
@@ -162,41 +164,12 @@
   $('resetSchedule').addEventListener('click',()=>{
     $('materialDelay').value=0;document.querySelector('[name=scheduleStrategy][value=fixed]').checked=true;selectedTask='A-0';renderSchedule();
   });
-  const objects=[
-    {id:'source',x:15,y:25,label:'来源资料',en:'SOURCE'},
-    {id:'material',x:15,y:74,label:'物料',en:'MATERIAL'},
-    {id:'order',x:49,y:25,label:'订单',en:'ORDER'},
-    {id:'operation',x:49,y:74,label:'工序',en:'OPERATION'},
-    {id:'resource',x:83,y:25,label:'资源',en:'RESOURCE'},
-    {id:'review',x:83,y:74,label:'计划审核',en:'REVIEW'}
-  ];
-  function renderObjectGraph(){
-    $('operationsGraph').innerHTML='<svg viewBox="0 0 750 240" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#567e87" stroke-width="1.2"><path d="M113 60H368V178H622V60H368M113 60V178H368"/><path d="M622 60V178" stroke-dasharray="4 4"/></g></svg>'+objects.map(o=>`<button type="button" class="object-node" data-object="${o.id}" style="left:${o.x}%;top:${o.y}%" aria-pressed="${o.id===selectedObject}">${o.label}<small>${o.en}</small></button>`).join('');
-  }
-  function renderObjectDetail(){
-    const d=currentSchedule();
-    const copy={
-      source:['来源资料 → 对象与规则','资料中的字段映射到订单、物料与资源，并保留原始出处。当前演示使用合成数据，规则不来自客户实际生产文件。'],
-      material:['物料 → 工序最早开工',`订单 A 的物料可用时点为 D+${d.delay}。加工必须等待到料；之后检测还需等待加工完成与检测资源空闲。`],
-      order:['订单 → 交期与工序','A、B、C 的交期分别是 D+3、D+4、D+5。每张订单包含加工和检测两道工序，交期不是可以突破工序约束的理由。'],
-      operation:['工序 → 前置依赖','每道工序耗时 1 天。开始时间取物料/前序完成与资源可用时点的较晚值。检测不能早于加工完成。'],
-      resource:['共享资源 → 互斥约束','加工单元与检测单元各只有一个资源槽，同一资源同时只能处理一个任务。甘特图由这条约束逐项计算。'],
-      review:['候选计划 → 人工审核',`当前示例 ${d.onTime}/3 订单按期，最大晚交 ${d.maxLate} 天。试算结果应连同假设和约束交给计划员复核；演示不会批准或下达生产任务。`]
-    };
-    $('ontologyDetail').innerHTML=`<strong>${copy[selectedObject][0]}</strong><br>${copy[selectedObject][1]}`;
-  }
-  $('operationsGraph').addEventListener('click',event=>{
-    const b=event.target.closest('[data-object]');if(!b)return;
-    selectedObject=b.dataset.object;
-    document.querySelectorAll('[data-object]').forEach(el=>el.setAttribute('aria-pressed',String(el===b)));
-    renderObjectDetail();
-  });
-  renderObjectGraph();renderSchedule();
+  renderSchedule();
 
   // Existing public anchors continue to open the appropriate original demo.
   function resolveAnchor(){
     const hash=location.hash.slice(1);
-    const aliases={ontology:'sustech','ontology-operations':'enterprise'};
+    const aliases={'ontology-operations':'enterprise'};
     const target=$(aliases[hash]||hash);
     if(!target)return;
     const detail=target.matches('details')?target:target.closest('details');
@@ -208,81 +181,4 @@
   }));
   window.addEventListener('hashchange',resolveAnchor);resolveAnchor();
 
-  // A projected 3D structure, drawn in Canvas so the portfolio has no WebGL/CDN dependency.
-  const canvas=$('knowledgeEngine'),ctx=canvas.getContext('2d');
-  if(!ctx)return;
-  let width=1,height=1,phase=.38,raf=0,lastTime=0,visible=true,paused=motion.matches,layer='all';
-  const colors=['#8dcccc','#91b3d8','#d2b48a'];
-  const layerNodes=Array.from({length:3},(_,level)=>Array.from({length:9},(_,i)=>{
-    const angle=i*2*Math.PI/8;
-    const r=i===8?0:[117,139,88][level];
-    return {x:Math.cos(angle)*r,z:Math.sin(angle)*r,y:(level-1)*104,level,i};
-  }));
-  function project(p){
-    const yaw=phase*.22;
-    const x=p.x*Math.cos(yaw)-p.z*Math.sin(yaw),z=p.x*Math.sin(yaw)+p.z*Math.cos(yaw);
-    const tilt=.53;
-    const y=p.y*Math.cos(tilt)-z*Math.sin(tilt),depth=p.y*Math.sin(tilt)+z*Math.cos(tilt);
-    const scale=Math.min(width/540,height/510)*1.02*(700/(700+depth));
-    return {x:width*.51+x*scale,y:height*.42+y*scale,depth,scale};
-  }
-  function opacity(level){return layer==='all'||['source','knowledge','decision'][level]===layer?1:.16;}
-  function path3d(points,color,alpha,lineWidth,closed){
-    ctx.beginPath();points.forEach((p,i)=>{const q=project(p);if(i)ctx.lineTo(q.x,q.y);else ctx.moveTo(q.x,q.y);});if(closed)ctx.closePath();ctx.strokeStyle=color;ctx.globalAlpha=alpha;ctx.lineWidth=lineWidth;ctx.stroke();ctx.globalAlpha=1;
-  }
-  function paint(){
-    ctx.clearRect(0,0,width,height);
-    const unit=Math.min(width/540,height/510),cx=width*.51,cy=height*.41;
-    const halo=ctx.createRadialGradient(cx,cy,12,cx,cy,225*unit);halo.addColorStop(0,'#24424d33');halo.addColorStop(.73,'#1c334c18');halo.addColorStop(1,'#17344600');ctx.fillStyle=halo;ctx.fillRect(0,0,width,height);
-    // A faint enclosing sphere and orbital curves provide depth without hiding labels.
-    ctx.strokeStyle='#446574';ctx.globalAlpha=.28;ctx.lineWidth=.7;ctx.beginPath();ctx.arc(cx,cy,190*unit,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;
-    for(let r=0;r<3;r++){
-      const pts=Array.from({length:97},(_,i)=>{const a=i/96*Math.PI*2;return {x:Math.cos(a)*(196+r*10),y:Math.sin(a)*35,z:Math.sin(a)*(196+r*10)};});
-      path3d(pts,r===1?'#bda780':'#607b8b',r===1?.36:.17,.8,false);
-    }
-    // Structured links carry animated pulses between adjacent knowledge layers.
-    for(let l=0;l<2;l++)for(let i=0;i<8;i++){
-      const a=layerNodes[l][i],b=layerNodes[l+1][(i+(l?1:0))%8];
-      const alpha=Math.max(opacity(l),opacity(l+1));
-      path3d([a,b],colors[l],.23*alpha,.8,false);
-      const progress=(phase*.22+i*.123)%1;
-      const p=project({x:a.x+(b.x-a.x)*progress,y:a.y+(b.y-a.y)*progress,z:a.z+(b.z-a.z)*progress});
-      ctx.globalAlpha=.8*alpha;ctx.fillStyle=colors[l];ctx.beginPath();ctx.arc(p.x,p.y,1.45*unit,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-    }
-    layerNodes.forEach((nodes,l)=>{
-      const alpha=opacity(l);
-      path3d(nodes.slice(0,8),colors[l],.48*alpha,.8,true);
-      const circle=Array.from({length:65},(_,i)=>{const a=i/64*Math.PI*2;return {x:Math.cos(a)*[138,156,107][l],y:nodes[0].y,z:Math.sin(a)*[138,156,107][l]};});
-      path3d(circle,colors[l],.26*alpha,.6,false);
-      for(let i=0;i<8;i+=2)path3d([nodes[i],nodes[8],nodes[(i+3)%8]],colors[l],.21*alpha,.6,false);
-    });
-    const projected=layerNodes.flat().map(p=>({...p,q:project(p)})).sort((a,b)=>b.q.depth-a.q.depth);
-    projected.forEach(p=>{
-      const q=p.q,s=q.scale,alpha=opacity(p.level),r=p.i===8?10:5;
-      ctx.globalAlpha=alpha;ctx.fillStyle='#132936';ctx.strokeStyle=colors[p.level];ctx.lineWidth=.8;
-      ctx.beginPath();ctx.moveTo(q.x-r*s,q.y-3*s);ctx.lineTo(q.x,q.y-8*s);ctx.lineTo(q.x+r*s,q.y-3*s);ctx.lineTo(q.x+r*s,q.y+4*s);ctx.lineTo(q.x,q.y+9*s);ctx.lineTo(q.x-r*s,q.y+4*s);ctx.closePath();ctx.fill();ctx.stroke();
-      ctx.fillStyle=colors[p.level];ctx.beginPath();ctx.arc(q.x,q.y,p.i===8?2.8*s:1.5*s,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-    });
-    const labels=[['SOURCE','来源资料',-.99,-1.04],['KNOWLEDGE','知识对象',1.02,-.08],['DECISION','推理与行动',-.9,.94]];
-    labels.forEach((label,l)=>{
-      const x=cx+label[2]*184*unit,y=cy+label[3]*132*unit;
-      const align=label[2]>0?'right':'left';
-      ctx.globalAlpha=opacity(l);ctx.textAlign=align;ctx.fillStyle=colors[l];ctx.font='9px ui-monospace,monospace';ctx.fillText(label[0],x,y);ctx.fillStyle='#88a7b8';ctx.font='10px -apple-system,BlinkMacSystemFont,sans-serif';ctx.fillText(label[1],x,y+17);ctx.globalAlpha=1;
-    });
-  }
-  function animate(time){raf=0;if(!visible||document.hidden||paused){lastTime=0;return;}if(lastTime)phase+=Math.min((time-lastTime)/1000,.05);lastTime=time;paint();raf=requestAnimationFrame(animate);}
-  function updateAnimation(){cancelAnimationFrame(raf);raf=0;lastTime=0;paint();if(visible&&!document.hidden&&!paused)raf=requestAnimationFrame(animate);}
-  function resize(){const rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);width=Math.max(1,rect.width);height=Math.max(1,rect.height);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);paint();}
-  new ResizeObserver(resize).observe(canvas);
-  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;updateAnimation();},{threshold:.02}).observe(canvas);
-  document.addEventListener('visibilitychange',()=>{updateAnimation();if(document.hidden)stopReasoning();});
-  function updatePause(){ $('scenePause').setAttribute('aria-pressed',String(paused));$('scenePause').setAttribute('aria-label',paused?'播放空间动画':'暂停空间动画');$('scenePause').textContent=paused?'播放':'暂停';updateAnimation(); }
-  $('scenePause').addEventListener('click',()=>{paused=!paused;updatePause();});
-  motion.addEventListener('change',event=>{paused=event.matches;updatePause();});
-  const layerCopy={all:['01 — 03','每一个决策，都有来处。','文档 → 知识 → 推理 → 行动'],source:['01 / SOURCE','让原始资料成为可引用的证据。','保留原文、版本与定位'],knowledge:['02 / KNOWLEDGE','让孤立的事实建立连接。','对象 · 关系 · 条件 · 规则'],decision:['03 / DECISION','让变化有解释，让行动有依据。','追踪影响 · 比较方案 · 人工判断']};
-  document.querySelectorAll('[data-scene]').forEach(button=>button.addEventListener('click',()=>{
-    layer=button.dataset.scene;document.querySelectorAll('[data-scene]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    $('sceneNumber').textContent=layerCopy[layer][0];$('sceneTitle').textContent=layerCopy[layer][1];$('sceneDescription').textContent=layerCopy[layer][2];paint();
-  }));
-  resize();updatePause();
 })();

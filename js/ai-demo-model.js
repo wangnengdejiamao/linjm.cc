@@ -54,7 +54,25 @@
       edges:[['bp','pilot'],['interview','contract'],['supplement','contract'],['supplement','payment'],['pilot','rule'],['contract','rule'],['payment','rule'],['rule','judgment']]
     };
   }
-  const api = Object.freeze({schedule,research,orders});
+  // Validate the task intervals themselves, independently of cached scheduler fields.
+  function validateTasks(tasks) {
+    const material=[], capacity=[], precedence=[];
+    tasks.forEach(t=>{
+      if(t.resource===0 && t.start<t.materialReady) material.push(t.id);
+      if(t.resource===1) {
+        const previous=tasks.find(p=>p.order===t.order&&p.resource===0);
+        if(!previous||t.start<previous.end) precedence.push(t.id);
+      }
+    });
+    for(let i=0;i<tasks.length;i++) for(let j=i+1;j<tasks.length;j++) {
+      const a=tasks[i],b=tasks[j];
+      if(a.resource===b.resource&&a.start<b.end&&b.start<a.end) capacity.push(a.id+' / '+b.id);
+    }
+    return [{id:'R-MAT',label:'物料可用',violations:material},
+      {id:'R-CAP',label:'资源互斥',violations:capacity},
+      {id:'R-PRE',label:'工序前置',violations:precedence}];
+  }
+  const api = Object.freeze({schedule,research,orders,validateTasks});
   if(typeof module==='object'&&module.exports)module.exports=api;
   else root.PortfolioModel=api;
 })(typeof window!=='undefined'?window:globalThis);
