@@ -528,6 +528,11 @@
     if (el.step) el.step.textContent = (i + 1) + ' / ' + n;
     if (el.conf) el.conf.textContent = b.conf == null ? '—' : b.conf.toFixed(2);
     pushBus(b.bus || []);
+    /* the A2A swimlane figure (viz-zte.js) follows the phone beat by beat */
+    canvas.dispatchEvent(new CustomEvent('zte:beat', { bubbles: true, detail: {
+      scenario: scen, step: i, n, agent: b.ag, goal: b.goal, action: b.act || '',
+      conf: b.conf == null ? null : b.conf, bus: (b.bus || []).slice(), hold: !!b.hold
+    } }));
   }
 
   /* The plan chips the Planner emits, drawn on the screen it read.

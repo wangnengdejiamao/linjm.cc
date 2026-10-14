@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI / Agents · Jiamao Lin 林佳茂 — Fine-tuned Astronomy LLMs & Auditable Agents</title>
-<meta name="description" content="Jiamao Lin's AI / agent engineering: a locally fine-tuned 8B astronomy LLM (QLoRA + AttnRes), a knowledge-graph & experiment-design agent for materials science, the auditable A2A Astro Agent, and a lightweight ZTF CNN classifier.">
+<title>AI for Science &amp; Industry · Jiamao Lin 林佳茂 — Chemistry, Business, Astronomy, Manufacturing</title>
+<meta name="description" content="Jiamao Lin's applied AI across four domains: AI for Chemistry (battery-electrolyte knowledge graph and experiment-design agent), AI for Business (evidence-grounded due-diligence reasoning), AI for Astronomy (8B astronomy LLM, Astro Studio research workbench, agents) and AI for Manufacturing (enterprise ontology and APS scheduling).">
 <meta name="author" content="Jiamao Lin">
-<meta property="og:title" content="AI / Agents · Jiamao Lin 林佳茂">
-<meta property="og:description" content="Locally fine-tuned astronomy LLMs, dual-track RAG, knowledge graphs, and auditable LangGraph research agents — four projects, fully visualized.">
+<meta property="og:title" content="AI for Science &amp; Industry · Jiamao Lin 林佳茂">
+<meta property="og:description" content="One evidence-first method, four domains: chemistry, business, astronomy and manufacturing — with live, interactive system figures.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%23a85518'/><circle cx='62' cy='40' r='22' fill='%23140f08'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css?v=38">
 <link rel="stylesheet" href="css/cosmic-theme.css?v=38">
+<link rel="stylesheet" href="css/techviz.css?v=40">
 </head>
 <body class="ai-body">
 
@@ -27,10 +28,11 @@
   </a>
   <nav class="nav-links" aria-label="Primary">
     <a href="index.html">Home</a>
-    <a href="#maoastro">8B&nbsp;LLM</a>
-    <a href="#zte">GUI&nbsp;Agent</a>
-    <a href="#jindu">KG&nbsp;Agent</a>
-    <a href="#astroagent">Astro&nbsp;Agent</a>
+    <a href="#chemistry">Chemistry</a>
+    <a href="#business">Business</a>
+    <a href="#astronomy">Astronomy</a>
+    <a href="#manufacturing">Manufacturing</a>
+    <a href="#agents">Agents</a>
     <a href="research.html" class="nav-cta">Research&nbsp;→</a>
   </nav>
   <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
@@ -40,44 +42,242 @@
 
 <main id="top">
 
+
   <!-- ============================ AI HERO ============================ -->
   <section class="ai-hero">
     <div class="ai-hero-text">
-      <p class="eyebrow">AI / Agent Engineering</p>
-      <h1>Astronomy intelligence<br>you can <span class="accenty">audit</span></h1>
+      <p class="eyebrow">AI for Science &amp; Industry</p>
+      <h1>Evidence-first AI,<br><span class="accenty">four domains.</span></h1>
       <p class="ai-lede">
-        Five projects, one thread: bring the <strong>evidence-first discipline of physics</strong>
-        into machine learning. A locally fine-tuned <strong>8B astronomy LLM</strong>, a
-        <strong>mobile GUI agent at ZTE</strong> (planner + worker A2A), a knowledge-graph &amp;
-        experiment-design agent with Peking University, an auditable research agent, and a lightweight
-        survey classifier — each built to refuse claims the evidence doesn't support.
+        I build AI systems that turn messy sources into <strong>structured, checkable knowledge</strong> —
+        and keep a person at every decision that matters. The same discipline runs through
+        battery-electrolyte chemistry, investment due diligence, survey astronomy and factory scheduling.
       </p>
-      <div class="ai-hero-chips">
-        <a href="#maoastro" class="ai-hchip"><b>01</b> maoAstro · 8B fine-tune <span>QLoRA + AttnRes</span></a>
-        <a href="#zte" class="ai-hchip"><b>02</b> ZTE mobile GUI agent <span>planner + worker A2A</span></a>
-        <a href="#jindu" class="ai-hchip"><b>03</b> KG &amp; experiment agent <span>北京大学 · Peking Univ.</span></a>
-        <a href="#astroagent" class="ai-hchip"><b>04</b> Astro Agent <span>LangGraph · self-evolving</span></a>
-        <a href="#cnn" class="ai-hchip"><b>05</b> ZTF classifier <span>lightweight CNN</span></a>
+      <div class="domain-tiles">
+        <a href="#chemistry" class="dtile" data-domain="chem"><span class="dn">01 · AI for</span><strong>Chemistry</strong><span>Electrolyte KG · Graph-RAG · experiment design</span></a>
+        <a href="#business" class="dtile" data-domain="biz"><span class="dn">02 · AI for</span><strong>Business</strong><span>Due-diligence KG · expert rules · 3-valued reasoning</span></a>
+        <a href="#astronomy" class="dtile" data-domain="astro"><span class="dn">03 · AI for</span><strong>Astronomy</strong><span>8B LLM · Astro Studio · agents · CNN</span></a>
+        <a href="#manufacturing" class="dtile" data-domain="mfg"><span class="dn">04 · AI for</span><strong>Manufacturing</strong><span>Enterprise ontology · decision tables · APS</span></a>
       </div>
     </div>
-    <div class="ai-hero-visual" aria-label="A retrieval audit, animated">
-      <canvas id="aiHeroCanvas" role="img" aria-label="A question is answered by dual-track retrieval: twenty candidate passages from dense-vector and BM25 search are reranked down to five, the answer is written only from those five, and a third example question is refused outright because nothing retrieved supports it."></canvas>
-      <div class="ai-viz-head">
-        <span><i class="live-dot"></i> Dual-track RAG · audit</span>
-        <span>click to advance</span>
+    <div class="ai-hero-visual tv-hero" id="heroDomains"></div>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- 01  AI for Chemistry                                              -->
+  <!-- =============================================================== -->
+  <section id="chemistry" class="section domain" data-domain="chem">
+    <header class="domain-head">
+      <div>
+        <p class="domain-num">01 · AI for Chemistry</p>
+        <h2>AI for <i>Chemistry</i></h2>
+        <p class="domain-lede">With Peking University collaborators I lead the algorithms of a battery-electrolyte research platform: literature becomes an <strong>audited knowledge graph</strong>, and a Graph-RAG agent turns it into <strong>experiment protocols</strong> for an automated synthesis platform.</p>
       </div>
-      <div class="ai-viz-stages" aria-hidden="true">
-        <span>Recall</span><span>Rerank</span><span>Ground</span><span>Verdict</span>
+      <div class="domain-facts">
+        <div><b>3&thinsp;+&thinsp;1</b><span>LLM extraction stages, the last one a quality gate</span></div>
+        <div><b>θ&nbsp;=&nbsp;0.5</b><span>score threshold every triple must clear</span></div>
+        <div><b>2</b><span>frontends · lab agent + KG studio</span></div>
       </div>
+      <div class="domain-stack"><span class="lab">Stack</span><b class="k">Graph-RAG</b><b class="k">Neo4j</b><b class="k">graspologic Leiden</b><b>Schema-based LLM extraction</b><b>LLM-as-judge QC</b><b>Union-Find dedup</b><b>PubChem CID</b><b>PyMuPDF</b><b>Nanocraft protocol export</b></div>
+    </header>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- 01 · Chemistry — Jindu KG + experiment-design agent             -->
+  <!-- =============================================================== -->
+  <section id="jindu" class="section sub" data-domain="chem">
+    <div class="section-head">
+      <h2 data-k="Chemistry · Peking University">A knowledge-graph &amp; experiment-design agent for electrolytes</h2>
+      <p>As <strong>algorithm lead</strong> I built a materials-science research platform for
+      <strong>battery-electrolyte R&amp;D with Peking University</strong>. It ships as <strong>two frontends</strong>:
+      a <strong>Lab Intelligent Agent System</strong> (a Graph-RAG assistant with Q&amp;A, knowledge-graph and
+      experiment-execution modes) and a <strong>Knowledge-Graph Visualization System</strong> (build, manage
+      and quality-score the graphs). Below: the product framework, an experiment-design walkthrough, and the
+      extraction pipeline behind it.</p>
+    </div>
+
+    <!-- the two real frontends -->
+    <div class="frontends">
+      <div class="frontend-card">
+        <span class="frontend-tag">System 1 · <span class="fe-mono">:3001</span></span>
+        <h4>Lab Intelligent Agent System</h4>
+        <p class="fe-sub">Graph Retrieval-Augmented System · 实验室智能体系统</p>
+        <div class="fe-modes">
+          <span class="fe-mode is-on">问答 · Q&amp;A</span>
+          <span class="fe-mode">知识图谱 · KG</span>
+          <span class="fe-mode">实验执行 · Execute</span>
+        </div>
+        <ul class="fe-feats">
+          <li>Answers grounded in a chosen graph + literature</li>
+          <li>Retrieval depth: <b>quick · deep · wide-area reasoning</b></li>
+          <li>Experiment-design mode → protocol for the <b>Nanocraft</b> auto-synthesis platform</li>
+        </ul>
+      </div>
+      <div class="frontend-card">
+        <span class="frontend-tag">System 2 · <span class="fe-mono">:6700</span></span>
+        <h4>Knowledge-Graph Visualization System</h4>
+        <p class="fe-sub">图谱可视化系统 · build · manage · assess</p>
+        <div class="fe-modes">
+          <span class="fe-mode is-on">图谱可视化</span>
+          <span class="fe-mode">图谱管理</span>
+          <span class="fe-mode">质量评估</span>
+        </div>
+        <ul class="fe-feats">
+          <li>file / content / <b>pipeline</b> graph generation · meta-graph · merge</li>
+          <li>Sub-graph &amp; shortest-path queries, JSON/CSV export</li>
+          <li>Quality score per triple: <b>accuracy · triple-support · usefulness</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- product frontend mock — experiment-design mode -->
+    <div class="app-mock">
+      <div class="app-chrome">
+        <span class="app-mark" aria-hidden="true"></span>
+        <span class="app-name">实验室智能体系统<em>Lab Agent</em></span>
+        <span class="app-tabs" aria-hidden="true">
+          <span>问答</span><span>知识图谱</span><span class="is-on">实验执行</span>
+        </span>
+        <span class="app-ds"><i></i>electrolyte_2026 · 4 812 triples</span>
+      </div>
+      <div class="app-body">
+        <!-- left: request + analysis path -->
+        <div class="app-col app-left">
+          <div class="app-lab">User question · experiment-design mode</div>
+          <div class="app-goal" id="labGoal">Design an experiment to determine whether <b>FEC</b> or <b>VC</b>
+            more significantly improves SEI-film stability in a <b>LiPF₆ / EC / DMC</b> electrolyte.</div>
+          <div class="app-lab">Agent workflow</div>
+          <ol class="lab-steps" id="labSteps">
+            <li data-step="analyze"><span class="ls-ico">◇</span><b>Analysis path</b><i>decompose goal → sub-tasks</i></li>
+            <li data-step="rag"><span class="ls-ico">▤</span><b>Graph-RAG retrieval</b><i>deep reasoning over KG + papers</i></li>
+            <li data-step="design"><span class="ls-ico">⚗</span><b>Generate protocol</b><i>controls · cell build · testing</i></li>
+            <li data-step="verify"><span class="ls-ico">✓</span><b>Validate</b><i>evidence &amp; consistency check</i></li>
+          </ol>
+          <button class="btn btn-sm" id="labRun">▸ Run workflow</button>
+        </div>
+        <!-- center: knowledge graph -->
+        <div class="app-col app-center">
+          <div class="app-lab">Knowledge graph · Leiden communities <em>hover a node</em></div>
+          <canvas id="jinduKG" role="img" aria-label="A battery-electrolyte knowledge graph: solvents, lithium salts, additives, interphase properties and characterisation methods, grouped into Leiden communities drawn as shaded regions, with named relations on the edges."></canvas>
+          <div class="kg-mini-legend" id="jinduLegend"></div>
+        </div>
+        <!-- right: generated protocol -->
+        <div class="app-col app-right">
+          <div class="app-lab">Generated protocol <em>→ Nanocraft</em></div>
+          <div class="proto" id="labProto"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- extraction pipeline -->
+    <div class="feature-head">
+      <span class="feature-kicker">Behind the graph</span>
+      <h3>Schema-based extraction · a 3 + 1 pipeline with quality gates</h3>
+      <p>Every triple in the graph is earned. A four-stage LLM pipeline extracts and then <em>audits</em>
+      it, two dedup passes fold synonyms and PubChem CIDs together, and Leiden community detection plus
+      LLM enrichment organize the result before it lands in Neo4j.</p>
+    </div>
+    <div id="chemRefinery" data-domain="chem"></div>
+    <p class="cap cap-wide">The same architecture generalizes: literature → clean chunks → schema-based
+    triples → audited, deduplicated, community-organized graph → Neo4j — reused across both the materials
+    agent here and the astronomy Astro&nbsp;Agent below.</p>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- 02  AI for Business                                               -->
+  <!-- =============================================================== -->
+  <section id="business" class="section domain" data-domain="biz">
+    <header class="domain-head">
+      <div>
+        <p class="domain-num">02 · AI for Business</p>
+        <h2>AI for <i>Business</i></h2>
+        <p class="domain-lede"><strong>Crystal Ball (水晶球)</strong> is a due-diligence assistant built with a business-school team. Business plans and expert interviews become a knowledge graph of <strong>verbatim-sourced facts, expert decision cards and executable rules</strong> — and the reasoner says “unknown” instead of guessing.</p>
+      </div>
+      <div class="domain-facts">
+        <div><b>1,067</b><span>expert decision cards, from 30 interviewed experts</span></div>
+        <div><b>557</b><span>IF-THEN rules, evaluated in three-valued logic</span></div>
+        <div><b>14</b><span>reasoning stages → a three-tier screen, no fake score</span></div>
+      </div>
+      <div class="domain-stack"><span class="lab">Stack</span><b class="k">PostgreSQL 17 + pgvector</b><b class="k">OpenSearch BM25 → RRF</b><b class="k">Neo4j projection</b><b>FastAPI</b><b>Pydantic 2</b><b>Vue 3 + TypeScript</b><b>three.js</b><b>bge-m3 + reranker</b><b>Qwen / DeepSeek cross-check</b><b>Docker Compose</b><b>OIDC</b></div>
+    </header>
+
+    <div class="proj-head">
+      <div>
+        <span class="proj-kicker">Evidence graph &amp; reasoning · 2026</span>
+        <h3>From a business plan to a question worth asking</h3>
+        <p>Every extracted fact keeps its page and its exact quote — a deterministic check rejects any quote that is
+        not a verbatim substring of the source. Expert knowledge is modelled as cards, rules and cases with their
+        conditions and counter-examples. The reasoner freezes facts as <em>self-reported</em>, <em>forecast</em> or
+        <em>in conflict</em>, runs the rules, and turns what is missing into follow-up questions.
+        <strong>Switch between the evidence graph and the 14-stage pipeline.</strong></p>
+      </div>
+      <div class="proj-meta"><b>30</b> experts · <b>111</b> cases<br><b>268</b> slots · <b>2,774</b> edges<br><b>1,244</b> facts from 12 BPs</div>
+    </div>
+    <div id="bizReasoning" data-domain="biz"></div>
+
+    <div class="principles">
+      <div class="principle"><code>missing ≠ no</code><h4>Unknown stays unknown</h4><p>Rules run in three-valued logic; an absent fact can block a conclusion but never counts as a “no”.</p></div>
+      <div class="principle"><code>self-reported ≠ verified</code><h4>Claims carry their status</h4><p>A pilot described in the plan is a claim of the plan until a contract or payment record says otherwise.</p></div>
+      <div class="principle"><code>compiled ≠ confirmed</code><h4>Experts sign the rules</h4><p>Machine-compiled rules stay drafts until the expert who said them confirms the card.</p></div>
+      <div class="principle"><code>preference ≠ probability</code><h4>No fake precision</h4><p>The output is a three-tier screen plus the missing facts that would change it — not a funding score.</p></div>
+    </div>
+    <div class="proj-head">
+      <div>
+        <span class="proj-kicker">Industry &amp; policy radar</span>
+        <h3>Trend context without a model in the loop</h3>
+        <p>A sector tree of <strong>325 nodes</strong> and a policy library monitored across <strong>nine official sources</strong>
+        (U.S. and Chinese regulators). Change detection is a deterministic diff with A/B/C evidence tiers — the
+        language model only explains, it never discovers.</p>
+      </div>
+    </div>
+    <p class="boundary"><b>Scope.</b> Research system in pilot. Counts are from the project's internal report (Sep 2026);
+    quality metrics so far come from small samples and are not claimed here. Company and expert identities are
+    fictional in the figure. It screens and asks — it does not make investment decisions.</p>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- 03  AI for Astronomy                                              -->
+  <!-- =============================================================== -->
+  <section id="astronomy" class="section domain" data-domain="astro">
+    <header class="domain-head">
+      <div>
+        <p class="domain-num">03 · AI for Astronomy</p>
+        <h2>AI for <i>Astronomy</i></h2>
+        <p class="domain-lede">My home field. I fine-tuned an <strong>8B astronomy LLM</strong> on one consumer GPU, built <strong>星图 Astro Studio</strong> — a research workbench that plans, queries the survey archives and shows every step — plus an auditable LangGraph research agent and a lightweight light-curve CNN.</p>
+      </div>
+      <div class="domain-facts">
+        <div><b>8B</b><span>astronomy LLM, fine-tuned on a 12&nbsp;GB GPU</span></div>
+        <div><b>43</b><span>registered tools · 12 pipelines · 562 tests</span></div>
+        <div><b>99.4%</b><span>held-out accuracy, ZTF light-curve CNN</span></div>
+      </div>
+      <div class="domain-stack"><span class="lab">Stack</span><b class="k">QLoRA + AttnRes</b><b class="k">LangGraph</b><b class="k">astropy · astroquery</b><b>FastAPI</b><b>Gaia DR3 · SIMBAD · VizieR</b><b>IRSA ZTF · MAST TESS</b><b>galpy</b><b>scikit-learn</b><b>ECharts</b><b>Aladin Lite</b><b>PyTorch</b></div>
+    </header>
+
+    <div class="proj-head">
+      <div>
+        <span class="proj-kicker">Research platform · 2026</span>
+        <h3>星图 Astro Studio — a research workbench that shows its work</h3>
+        <p>Type a research topic. A planner picks one of the registered pipelines — and may only use parameters that
+        appear <em>verbatim</em> in your query — then the platform queries the archives and renders every step as a card
+        with live progress, figures, tables, logs and sources. <strong>Pick a pipeline and watch a run.</strong></p>
+      </div>
+      <div class="proj-meta"><b>12</b> pipelines · <b>43</b> tools<br><b>562</b> offline tests · ~2 min<br>14 public demos · 7 themes</div>
+    </div>
+    <div id="astroStudio" data-domain="astro"></div>
+    <div class="principles">
+      <div class="principle"><code>planner ⊂ registry</code><h4>The LLM can't improvise</h4><p>It chooses among registered pipelines; a parameter not found verbatim in the query is rejected.</p></div>
+      <div class="principle"><code>BLS 0.94152 d</code><h4>Checked against the literature</h4><p>WASP-18 b from TESS SPOC photometry vs. 0.941453&nbsp;d published — the period search is validated, not assumed.</p></div>
+      <div class="principle"><code>5 / 5 · 0 FP</code><h4>Membership that refuses</h4><p>Five open clusters recovered; zero false positives on three empty control fields under a strict four-criterion gate.</p></div>
+      <div class="principle"><code>IRSA → ALeRCE</code><h4>Degrades honestly</h4><p>If the ZTF light-curve service is down it falls back to alert photometry — with a visible warning and no cache.</p></div>
     </div>
   </section>
 
   <!-- =============================================================== -->
-  <!-- §01  maoAstro — 8B astronomy LLM fine-tuning                    -->
+  <!-- 03 · Astronomy — maoAstro 8B LLM                                 -->
   <!-- =============================================================== -->
-  <section id="maoastro" class="section">
+  <section id="maoastro" class="section sub" data-domain="astro">
     <div class="section-head">
-      <h2>maoAstro — an 8B astronomy LLM, fine-tuned on one 12&nbsp;GB GPU</h2>
+      <h2 data-k="Astronomy · LLM">maoAstro — an 8B astronomy LLM, fine-tuned on one 12&nbsp;GB GPU</h2>
       <p>An end-to-end domain LLM: <strong>8&nbsp;GB of ADS papers</strong> distilled into a two-stage
       fine-tune with my own architecture tweak — <strong>QLoRA&nbsp;+&nbsp;AttnRes</strong> — then wrapped in a
       four-step dual-track RAG. The whole pipeline (training and 4-bit serving) runs on a single
@@ -310,246 +510,13 @@
   </section>
 
   <!-- =============================================================== -->
-  <!-- §02  ZTE — mobile GUI agent (the real A2A)                       -->
+  <!-- 03 · Astronomy — Astro Agent                                     -->
   <!-- =============================================================== -->
-  <section id="zte" class="section">
+  <section id="astroagent" class="section sub" data-domain="astro">
     <div class="section-head">
-      <h2>ZTE — a mobile GUI agent that operates the phone for you</h2>
-      <p>At <strong>ZTE Corporation</strong> I build a <strong>phone-side GUI agent</strong>: you say what you
-      want in natural language, and it drives the real UI — opening apps, tapping, typing, scrolling — to get it
-      done. It is a genuine <strong>agent-to-agent (A2A)</strong> system with two specialised models: a
-      <strong>Planner</strong> that understands your screen and installed apps and decomposes the task, and a
-      self-trained <strong>32B Worker</strong> that grounds each step into concrete touches. Orchestrated on the
-      <strong>OpenClaw</strong> framework.</p>
-    </div>
-
-    <!-- planner ↔ worker A2A -->
-    <div class="a2a-split">
-      <div class="a2a-agent a2a-planner">
-        <span class="a2a-role">Planner agent</span>
-        <h4>4B multimodal · plans</h4>
-        <p>Reads a screenshot of the current screen and the set of <strong>installed apps</strong>, then a large
-        LLM decomposes the request into an ordered chain of executable sub-goals — choosing <em>which</em> app and
-        <em>what</em> to do next.</p>
-        <ul class="a2a-caps">
-          <li>Multimodal screen + app-inventory understanding</li>
-          <li>High-level task → sub-goal chain</li>
-          <li>Re-plans when the screen doesn't match expectation</li>
-        </ul>
-      </div>
-      <div class="a2a-bridge" aria-hidden="true">
-        <span class="a2a-bridge-lab">A2A · OpenClaw</span>
-        <span class="a2a-arrow a2a-arrow-down">sub-goal ▾</span>
-        <span class="a2a-arrow a2a-arrow-up">▴ screen&nbsp;state</span>
-      </div>
-      <div class="a2a-agent a2a-worker">
-        <span class="a2a-role">Worker agent</span>
-        <h4>32B · operates <span class="a2a-tag">self-trained</span></h4>
-        <p>A GUI-grounding model I trained to convert one sub-goal + the current screen into a concrete
-        <strong>action</strong> — tap, swipe, type — with pixel coordinates, then reports the resulting screen back
-        to the Planner to close the loop.</p>
-        <ul class="a2a-caps">
-          <li>Sub-goal + screenshot → grounded UI action</li>
-          <li>tap · swipe · long-press · type</li>
-          <li>Reports new screen → Planner verifies / advances</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- animated phone GUI-agent demo -->
-    <div class="zte-stage">
-      <div class="phone-wrap">
-        <div class="phone-frame">
-          <span class="phone-glare" aria-hidden="true"></span>
-          <canvas id="zteScreen" role="img"
-            aria-label="A phone screen: the GUI agent reads the home screen, plans sub-goals, then opens Luckin, picks a coconut latte, pauses at the payment gate for a human confirmation, and reports the receipt back."></canvas>
-        </div>
-        <p class="phone-cap">Screens are redrawn, not screenshots — but the loop is the real one:
-        <b>perceive → plan → ground → act → verify</b>, with a human gate before it spends money.</p>
-      </div>
-      <aside class="cyc-side">
-        <div class="readout">
-          <div class="readout-row"><span>User task</span><b id="zteTask">—</b></div>
-          <div class="readout-row"><span>Active agent</span><b id="zteAgent">Planner · 4B</b></div>
-          <div class="readout-row"><span>Sub-goal</span><b id="zteGoal">perceive apps</b></div>
-          <div class="readout-row"><span>Grounded action</span><b id="zteAction">—</b></div>
-          <div class="readout-row"><span>Grounding confidence</span><b id="zteConf">—</b></div>
-          <div class="readout-row"><span>Step</span><b id="zteStep">0 / 8</b></div>
-        </div>
-        <div class="lc-wrap">
-          <h4>A2A message bus · OpenClaw</h4>
-          <div id="zteBus" class="ag-log" style="height:150px"></div>
-          <p class="cap">Planner emits sub-goals; Worker returns grounded actions and the resulting screen — the same
-          hand-off the phone runs on-device. Confidences are illustrative.</p>
-        </div>
-        <div class="cyc-controls">
-          <div class="morph-presets">
-            <span class="ctl-label">Task scenario</span>
-            <div class="preset-row" id="zteScenarios">
-              <button class="chip active" data-task="coffee">Order coffee</button>
-              <button class="chip" data-task="message">Reply &amp; set timer</button>
-            </div>
-          </div>
-          <label class="ctl">
-            <span class="ctl-row"><span>Speed</span><output></output></span>
-            <input type="range" id="zteSpeed" min="0" max="3" step="0.1" value="1" data-dp="1" data-unit="×">
-          </label>
-          <div class="btn-row">
-            <button class="btn btn-sm" id="ztePause" aria-pressed="false">Pause</button>
-            <button class="btn btn-sm" id="zteStepBtn">Step ▸</button>
-          </div>
-        </div>
-      </aside>
-    </div>
-
-    <div class="cards ai-detail-cards">
-      <article class="card">
-        <span class="stack-tag">Planner · 4B</span>
-        <h3>Understands your installed apps</h3>
-        <p>A compact <strong>4B multimodal</strong> model perceives the live screen and the app inventory, so the
-        plan is grounded in what's actually on <em>your</em> phone — not a generic script.</p>
-      </article>
-      <article class="card">
-        <span class="stack-tag">Worker · 32B</span>
-        <h3>A GUI model I trained</h3>
-        <p>The <strong>32B</strong> worker is self-trained for UI grounding: sub-goal&nbsp;+&nbsp;screenshot →
-        exact tap / swipe / type. Splitting perception-planning from execution is what makes it a real A2A system.</p>
-      </article>
-      <article class="card">
-        <span class="stack-tag">OpenClaw</span>
-        <h3>The orchestration layer</h3>
-        <p>Built on the <strong>OpenClaw</strong> agent framework — a typed message bus carries sub-goals down and
-        screen states back up, with a verify-and-replan loop between the two agents.</p>
-      </article>
-      <article class="card">
-        <span class="stack-tag">On-device</span>
-        <h3>Real UI, real control</h3>
-        <p>The agent drives the actual interface end-to-end — cross-app tasks that chain several apps together,
-        exactly the multi-step errands people don't want to do by hand.</p>
-      </article>
-    </div>
-  </section>
-
-  <!-- =============================================================== -->
-  <!-- §03  Jindu — KG + experiment-design agent (materials science)   -->
-  <!-- =============================================================== -->
-  <section id="jindu" class="section">
-    <div class="section-head">
-      <h2>Peking University — a knowledge-graph &amp; experiment-design agent</h2>
-      <p>As <strong>algorithm lead</strong> I built a materials-science research platform for
-      <strong>battery-electrolyte R&amp;D with Peking University</strong>. It ships as <strong>two frontends</strong>:
-      a <strong>Lab Intelligent Agent System</strong> (a Graph-RAG assistant with Q&amp;A, knowledge-graph and
-      experiment-execution modes) and a <strong>Knowledge-Graph Visualization System</strong> (build, manage
-      and quality-score the graphs). Below: the product framework, an experiment-design walkthrough, and the
-      extraction pipeline behind it.</p>
-    </div>
-
-    <!-- the two real frontends -->
-    <div class="frontends">
-      <div class="frontend-card">
-        <span class="frontend-tag">System 1 · <span class="fe-mono">:3001</span></span>
-        <h4>Lab Intelligent Agent System</h4>
-        <p class="fe-sub">Graph Retrieval-Augmented System · 实验室智能体系统</p>
-        <div class="fe-modes">
-          <span class="fe-mode is-on">问答 · Q&amp;A</span>
-          <span class="fe-mode">知识图谱 · KG</span>
-          <span class="fe-mode">实验执行 · Execute</span>
-        </div>
-        <ul class="fe-feats">
-          <li>Answers grounded in a chosen graph + literature</li>
-          <li>Retrieval depth: <b>quick · deep · wide-area reasoning</b></li>
-          <li>Experiment-design mode → protocol for the <b>Nanocraft</b> auto-synthesis platform</li>
-        </ul>
-      </div>
-      <div class="frontend-card">
-        <span class="frontend-tag">System 2 · <span class="fe-mono">:6700</span></span>
-        <h4>Knowledge-Graph Visualization System</h4>
-        <p class="fe-sub">图谱可视化系统 · build · manage · assess</p>
-        <div class="fe-modes">
-          <span class="fe-mode is-on">图谱可视化</span>
-          <span class="fe-mode">图谱管理</span>
-          <span class="fe-mode">质量评估</span>
-        </div>
-        <ul class="fe-feats">
-          <li>file / content / <b>pipeline</b> graph generation · meta-graph · merge</li>
-          <li>Sub-graph &amp; shortest-path queries, JSON/CSV export</li>
-          <li>Quality score per triple: <b>accuracy · triple-support · usefulness</b></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- product frontend mock — experiment-design mode -->
-    <div class="app-mock">
-      <div class="app-chrome">
-        <span class="app-mark" aria-hidden="true"></span>
-        <span class="app-name">实验室智能体系统<em>Lab Agent</em></span>
-        <span class="app-tabs" aria-hidden="true">
-          <span>问答</span><span>知识图谱</span><span class="is-on">实验执行</span>
-        </span>
-        <span class="app-ds"><i></i>electrolyte_2026 · 4 812 triples</span>
-      </div>
-      <div class="app-body">
-        <!-- left: request + analysis path -->
-        <div class="app-col app-left">
-          <div class="app-lab">User question · experiment-design mode</div>
-          <div class="app-goal" id="labGoal">Design an experiment to determine whether <b>FEC</b> or <b>VC</b>
-            more significantly improves SEI-film stability in a <b>LiPF₆ / EC / DMC</b> electrolyte.</div>
-          <div class="app-lab">Agent workflow</div>
-          <ol class="lab-steps" id="labSteps">
-            <li data-step="analyze"><span class="ls-ico">◇</span><b>Analysis path</b><i>decompose goal → sub-tasks</i></li>
-            <li data-step="rag"><span class="ls-ico">▤</span><b>Graph-RAG retrieval</b><i>deep reasoning over KG + papers</i></li>
-            <li data-step="design"><span class="ls-ico">⚗</span><b>Generate protocol</b><i>controls · cell build · testing</i></li>
-            <li data-step="verify"><span class="ls-ico">✓</span><b>Validate</b><i>evidence &amp; consistency check</i></li>
-          </ol>
-          <button class="btn btn-sm" id="labRun">▸ Run workflow</button>
-        </div>
-        <!-- center: knowledge graph -->
-        <div class="app-col app-center">
-          <div class="app-lab">Knowledge graph · Leiden communities <em>hover a node</em></div>
-          <canvas id="jinduKG" role="img" aria-label="A battery-electrolyte knowledge graph: solvents, lithium salts, additives, interphase properties and characterisation methods, grouped into Leiden communities drawn as shaded regions, with named relations on the edges."></canvas>
-          <div class="kg-mini-legend" id="jinduLegend"></div>
-        </div>
-        <!-- right: generated protocol -->
-        <div class="app-col app-right">
-          <div class="app-lab">Generated protocol <em>→ Nanocraft</em></div>
-          <div class="proto" id="labProto"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- extraction pipeline -->
-    <div class="feature-head">
-      <span class="feature-kicker">Behind the graph</span>
-      <h3>Schema-based extraction · a 3 + 1 pipeline with quality gates</h3>
-      <p>Every triple in the graph is earned. A four-stage LLM pipeline extracts and then <em>audits</em>
-      it, two dedup passes fold synonyms and PubChem CIDs together, and Leiden community detection plus
-      LLM enrichment organize the result before it lands in Neo4j.</p>
-    </div>
-    <div class="pipe-flow" id="kgPipe">
-      <div class="pipe-node" data-k="s1"><span class="pipe-no">Stage 1</span><h5>Entity recognition</h5><p>Schema: entity_types, relation_types, attributes</p></div>
-      <div class="pipe-node" data-k="s2"><span class="pipe-no">Stage 2</span><h5>Relation extraction</h5><p>typed relations between entities</p></div>
-      <div class="pipe-node" data-k="s3"><span class="pipe-no">Stage 3</span><h5>Attribute extraction</h5><p>properties &amp; measured values</p></div>
-      <div class="pipe-node pipe-gate" data-k="s4"><span class="pipe-no">Stage 4 · QC</span><h5>LLM validation</h5><p>score every triple: <b>accuracy · triple-support · usefulness</b>; drop hallucinations <b>(θ=0.5)</b></p></div>
-    </div>
-    <div class="pipe-flow pipe-flow-2">
-      <div class="pipe-node" data-k="d1"><span class="pipe-no">Dedup 1</span><h5>Union-Find</h5><p>abbreviation synonym graph → lexicographically-smallest canonical name</p></div>
-      <div class="pipe-node" data-k="d2"><span class="pipe-no">Dedup 2</span><h5>PubChem CID</h5><p>local SQLite compound-ID alignment; drop redundant abbreviation triples</p></div>
-      <div class="pipe-node" data-k="c1"><span class="pipe-no">Community</span><h5>hierarchical Leiden</h5><p>graspologic partition → LLM names Top-20 members &amp; Top-10 relations</p></div>
-      <div class="pipe-node pipe-out" data-k="n1"><span class="pipe-no">Store</span><h5>Neo4j import</h5><p>MERGE nodes by (label,name), CREATE parallel edges, 500 triples / txn</p></div>
-    </div>
-    <p class="cap cap-wide">The same architecture generalizes: literature → clean chunks → schema-based
-    triples → audited, deduplicated, community-organized graph → Neo4j — reused across both the materials
-    agent here and the astronomy Astro&nbsp;Agent below.</p>
-  </section>
-
-  <!-- =============================================================== -->
-  <!-- §03  Astro Agent — A2A, multi-stack, auditable                  -->
-  <!-- =============================================================== -->
-  <section id="astroagent" class="section">
-    <div class="section-head">
-      <h2>Astro&nbsp;Agent — an auditable, self-evolving research agent</h2>
+      <h2 data-k="Astronomy · Agent">Astro&nbsp;Agent — an auditable, self-evolving research agent</h2>
       <p>My open-source flagship (<a href="https://github.com/wangnengdejiamao/Astro_Agent" target="_blank" rel="noopener">github.com/wangnengdejiamao/Astro_Agent</a>):
-      a <strong>16-node LangGraph</strong> that resolves a target, pulls multi-survey data, models it through
+      a <strong>LangGraph state machine</strong> that resolves a target, pulls multi-survey data, models it through
       <strong>three mandatory iterations</strong>, audits every claim, and — only when the QA gate clears —
       drafts an ApJ-style manuscript. It uses <strong>filesystem-as-memory</strong> for a diff-able audit
       trail, and a <strong>delegation loop</strong> that turns new methods from papers into tested, registered
@@ -652,7 +619,7 @@
       <div class="tb-group" data-layer="Agent layer">
         <span class="tb-glab">Agent</span>
         <div class="tb-chips">
-          <button class="tb-chip" data-d="StateGraph orchestrating the 16-node workflow.">LangGraph</button>
+          <button class="tb-chip" data-d="StateGraph orchestrating the analysis workflow.">LangGraph</button>
           <button class="tb-chip" data-d="Provider-agnostic: DeepSeek / Kimi / Gemini / Fox behind one OpenAI-compatible abstraction.">Multi-provider LLM</button>
           <button class="tb-chip" data-d="A2A hand-off: delegates tool coding to Claude Code.">claude_code_delegate</button>
           <button class="tb-chip" data-d="Filesystem-as-memory: numbered JSON checkpoints, no MemorySaver.">FS-as-memory</button>
@@ -725,11 +692,11 @@
   </section>
 
   <!-- =============================================================== -->
-  <!-- §04  CNN classifier (brief, reused viz)                         -->
+  <!-- 03 · Astronomy — ZTF CNN classifier                             -->
   <!-- =============================================================== -->
-  <section id="cnn" class="section">
+  <section id="cnn" class="section sub" data-domain="astro">
     <div class="section-head">
-      <h2>ZTF light-curve classifier — a lightweight CNN</h2>
+      <h2 data-k="Astronomy · Deep learning">ZTF light-curve classifier — a lightweight CNN</h2>
       <p>Where it started: turn every phase-folded ZTF light curve into a 224×224 <strong>image</strong>,
       then let a mobile-grade convolutional net read its shape. It sorts each star into <strong>EA</strong>
       (detached), <strong>EW</strong> (contact) or <strong>Non-EB</strong> — reaching <strong>99.4–99.6%</strong>
@@ -788,19 +755,222 @@
     reported values; the forward-pass animation is schematic.</p>
   </section>
 
+  <!-- =============================================================== -->
+  <!-- 04  AI for Manufacturing                                          -->
+  <!-- =============================================================== -->
+  <section id="manufacturing" class="section domain" data-domain="mfg">
+    <header class="domain-head">
+      <div>
+        <p class="domain-num">04 · AI for Manufacturing</p>
+        <h2>AI for <i>Manufacturing</i></h2>
+        <p class="domain-lede">In industry I build an <strong>enterprise ontology workbench</strong>: ERP exports, process documents and expert notes become typed, source-traced objects and decision tables that are <strong>tested before anyone signs them</strong> — feeding a finite-capacity <strong>APS</strong> that proposes plans and has them independently validated.</p>
+      </div>
+      <div class="domain-facts">
+        <div><b>3,500+</b><span>automated test functions in the workbench</span></div>
+        <div><b>8</b><span>domain modules · MRO, production chain, MM / PP / SD</span></div>
+        <div><b>5-step</b><span>readiness ladder from draft to signed</span></div>
+      </div>
+      <div class="domain-stack"><span class="lab">Stack</span><b class="k">Ontology · YAML + Markdown</b><b class="k">DMN-lite decision tables</b><b class="k">OR-Tools CP-SAT</b><b>Python 3.12</b><b>FastAPI</b><b>Pydantic</b><b>SQLite FTS5</b><b>MCP server</b><b>Claude / DeepSeek routing</b><b>Docker</b></div>
+    </header>
+
+    <div class="proj-head">
+      <div>
+        <span class="proj-kicker">Ontology workbench</span>
+        <h3>From a spreadsheet row to a rule someone can sign</h3>
+        <p>Sources are ingested with stable ids and versions; evidence becomes entities, a wiki of claims, typed core
+        items and finally a data &amp; business ontology. Business logic lives in <strong>decision tables</strong> with
+        positive and negative test cases, and climbs a <strong>readiness ladder</strong> that only a person can finish.
+        Agents read it through a read-only <strong>MCP server</strong>. <strong>Hover a layer; pick an order to evaluate.</strong></p>
+      </div>
+      <div class="proj-meta">Evidence → Entity → Wiki<br>→ CoreItem → Ontology<br>→ Decision · PackBinding</div>
+    </div>
+    <div id="mfgOntology" data-domain="mfg"></div>
+
+    <div class="proj-head">
+      <div>
+        <span class="proj-kicker">APS trial scheduling</span>
+        <h3>A plan is a proposal until it passes the validator</h3>
+        <p>A deterministic heuristic places every operation by due date, priority and kit readiness; an OR-Tools
+        <strong>CP-SAT</strong> pass then minimises <code>1000 × late orders + late minutes</code>. A separate validator
+        re-checks precedence, capacity, calendars and references before anything reaches a human.
+        <strong>Insert a rush order, take a machine down or delay a material — the plan below is recomputed in your browser.</strong></p>
+      </div>
+      <div class="proj-meta">V-PREC · V-CAP<br>V-CAL · V-REF<br>soft: V-DUE · V-UNSCHED</div>
+    </div>
+    <div id="mfgAps" data-domain="mfg"></div>
+
+    <div class="principles">
+      <div class="principle"><code>source_id@version</code><h4>Every fact has an address</h4><p>Objects keep the file, sheet and version they came from, so a reviewer can always open the original.</p></div>
+      <div class="principle"><code>hit_policy: first</code><h4>A rule is a table with tests</h4><p>Decision cards evaluate deterministically and ship with positive and negative cases that must pass.</p></div>
+      <div class="principle"><code>feasible ≠ approved</code><h4>Validation is independent</h4><p>The scheduler and the validator are separate code paths; a plan that passes is still only a proposal.</p></div>
+      <div class="principle"><code>human-gated RSI</code><h4>Self-improvement with a gate</h4><p>The system proposes rule and ontology changes from gaps; it never rewrites the ontology on its own.</p></div>
+    </div>
+    <p class="boundary"><b>Scope.</b> Industry engagement, 2026. The figures use a fictional plant; client names, data and
+    volumes are confidential. Workbench and pilot scope — not a claim of production factory deployment.</p>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- +  Agent engineering                                              -->
+  <!-- =============================================================== -->
+  <section id="agents" class="section domain" data-domain="agent">
+    <header class="domain-head">
+      <div>
+        <p class="domain-num">Across domains · Agent engineering</p>
+        <h2>Agents that <i>act</i></h2>
+        <p class="domain-lede">Every domain above ends in the same pattern: a planner that understands context, a specialised
+        worker that acts, and a human gate before anything irreversible. At <strong>ZTE</strong> I built that pattern for the phone itself.</p>
+      </div>
+      <div class="domain-facts">
+        <div><b>4B</b><span>multimodal planner · screen + app inventory</span></div>
+        <div><b>32B</b><span>self-trained GUI-grounding worker</span></div>
+        <div><b>A2A</b><span>typed message bus on OpenClaw</span></div>
+      </div>
+    </header>
+  </section>
+
+  <!-- =============================================================== -->
+  <!-- Agents — ZTE mobile GUI agent                                    -->
+  <!-- =============================================================== -->
+  <section id="zte" class="section sub" data-domain="agent">
+    <div class="section-head">
+      <h2 data-k="Agents · ZTE Corporation">ZTE — a mobile GUI agent that operates the phone for you</h2>
+      <p>At <strong>ZTE Corporation</strong> I build a <strong>phone-side GUI agent</strong>: you say what you
+      want in natural language, and it drives the real UI — opening apps, tapping, typing, scrolling — to get it
+      done. It is a genuine <strong>agent-to-agent (A2A)</strong> system with two specialised models: a
+      <strong>Planner</strong> that understands your screen and installed apps and decomposes the task, and a
+      self-trained <strong>32B Worker</strong> that grounds each step into concrete touches. Orchestrated on the
+      <strong>OpenClaw</strong> framework.</p>
+    </div>
+
+    <!-- planner ↔ worker A2A -->
+    <div class="a2a-split">
+      <div class="a2a-agent a2a-planner">
+        <span class="a2a-role">Planner agent</span>
+        <h4>4B multimodal · plans</h4>
+        <p>Reads a screenshot of the current screen and the set of <strong>installed apps</strong>, then a large
+        LLM decomposes the request into an ordered chain of executable sub-goals — choosing <em>which</em> app and
+        <em>what</em> to do next.</p>
+        <ul class="a2a-caps">
+          <li>Multimodal screen + app-inventory understanding</li>
+          <li>High-level task → sub-goal chain</li>
+          <li>Re-plans when the screen doesn't match expectation</li>
+        </ul>
+      </div>
+      <div class="a2a-bridge" aria-hidden="true">
+        <span class="a2a-bridge-lab">A2A · OpenClaw</span>
+        <span class="a2a-arrow a2a-arrow-down">sub-goal ▾</span>
+        <span class="a2a-arrow a2a-arrow-up">▴ screen&nbsp;state</span>
+      </div>
+      <div class="a2a-agent a2a-worker">
+        <span class="a2a-role">Worker agent</span>
+        <h4>32B · operates <span class="a2a-tag">self-trained</span></h4>
+        <p>A GUI-grounding model I trained to convert one sub-goal + the current screen into a concrete
+        <strong>action</strong> — tap, swipe, type — with pixel coordinates, then reports the resulting screen back
+        to the Planner to close the loop.</p>
+        <ul class="a2a-caps">
+          <li>Sub-goal + screenshot → grounded UI action</li>
+          <li>tap · swipe · long-press · type</li>
+          <li>Reports new screen → Planner verifies / advances</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- animated phone GUI-agent demo -->
+    <div class="zte-stage">
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <span class="phone-glare" aria-hidden="true"></span>
+          <canvas id="zteScreen" role="img"
+            aria-label="A phone screen: the GUI agent reads the home screen, plans sub-goals, then opens Luckin, picks a coconut latte, pauses at the payment gate for a human confirmation, and reports the receipt back."></canvas>
+        </div>
+        <p class="phone-cap">Screens are redrawn, not screenshots — but the loop is the real one:
+        <b>perceive → plan → ground → act → verify</b>, with a human gate before it spends money.</p>
+      </div>
+      <aside class="cyc-side">
+        <div class="readout">
+          <div class="readout-row"><span>User task</span><b id="zteTask">—</b></div>
+          <div class="readout-row"><span>Active agent</span><b id="zteAgent">Planner · 4B</b></div>
+          <div class="readout-row"><span>Sub-goal</span><b id="zteGoal">perceive apps</b></div>
+          <div class="readout-row"><span>Grounded action</span><b id="zteAction">—</b></div>
+          <div class="readout-row"><span>Grounding confidence</span><b id="zteConf">—</b></div>
+          <div class="readout-row"><span>Step</span><b id="zteStep">0 / 8</b></div>
+        </div>
+        <div class="lc-wrap">
+          <h4>A2A message bus · OpenClaw</h4>
+          <div id="zteBus" class="ag-log" style="height:150px"></div>
+          <p class="cap">Planner emits sub-goals; Worker returns grounded actions and the resulting screen — the same
+          hand-off the phone runs on-device. Confidences are illustrative.</p>
+        </div>
+        <div class="cyc-controls">
+          <div class="morph-presets">
+            <span class="ctl-label">Task scenario</span>
+            <div class="preset-row" id="zteScenarios">
+              <button class="chip active" data-task="coffee">Order coffee</button>
+              <button class="chip" data-task="message">Reply &amp; set timer</button>
+            </div>
+          </div>
+          <label class="ctl">
+            <span class="ctl-row"><span>Speed</span><output></output></span>
+            <input type="range" id="zteSpeed" min="0" max="3" step="0.1" value="1" data-dp="1" data-unit="×">
+          </label>
+          <div class="btn-row">
+            <button class="btn btn-sm" id="ztePause" aria-pressed="false">Pause</button>
+            <button class="btn btn-sm" id="zteStepBtn">Step ▸</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="zteLanes" data-domain="agent"></div>
+
+    <div class="cards ai-detail-cards">
+      <article class="card">
+        <span class="stack-tag">Planner · 4B</span>
+        <h3>Understands your installed apps</h3>
+        <p>A compact <strong>4B multimodal</strong> model perceives the live screen and the app inventory, so the
+        plan is grounded in what's actually on <em>your</em> phone — not a generic script.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">Worker · 32B</span>
+        <h3>A GUI model I trained</h3>
+        <p>The <strong>32B</strong> worker is self-trained for UI grounding: sub-goal&nbsp;+&nbsp;screenshot →
+        exact tap / swipe / type. Splitting perception-planning from execution is what makes it a real A2A system.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">OpenClaw</span>
+        <h3>The orchestration layer</h3>
+        <p>Built on the <strong>OpenClaw</strong> agent framework — a typed message bus carries sub-goals down and
+        screen states back up, with a verify-and-replan loop between the two agents.</p>
+      </article>
+      <article class="card">
+        <span class="stack-tag">On-device</span>
+        <h3>Real UI, real control</h3>
+        <p>The agent drives the actual interface end-to-end — cross-app tasks that chain several apps together,
+        exactly the multi-step errands people don't want to do by hand.</p>
+      </article>
+    </div>
+  </section>
+
 </main>
 
 <footer class="footer">
   <p>© <span id="year">2026</span> Jiamao Lin · 林佳茂 — <a href="https://linjm.cc">linjm.cc</a> ·
   <a href="research.html">Research track</a></p>
-  <p class="footer-note">Built as a static site. Visualizations are schematic and run entirely in your browser.</p>
+  <p class="footer-note">Built as a static site. Visualizations are schematic, use illustrative data unless stated, and run entirely in your browser.</p>
 </footer>
 
 <script src="js/figkit.js?v=38" defer></script>
 <script src="js/uikit.js?v=38" defer></script>
-<script src="js/aihero.js?v=38" defer></script>
+<script src="js/techviz.js?v=40" defer></script>
+<script src="js/viz-hero.js?v=40" defer></script>
+<script src="js/viz-chem.js?v=40" defer></script>
+<script src="js/viz-biz.js?v=40" defer></script>
+<script src="js/viz-astro.js?v=40" defer></script>
+<script src="js/aps-model.js?v=40" defer></script>
+<script src="js/viz-mfg.js?v=40" defer></script>
+<script src="js/viz-zte.js?v=40" defer></script>
 <script src="js/maoastro.js?v=38" defer></script>
-<script src="js/zte.js?v=38" defer></script>
+<script src="js/zte.js?v=40" defer></script>
 <script src="js/jindu.js?v=38" defer></script>
 <script src="js/astrostack.js?v=38" defer></script>
 <script src="js/astroagent.js?v=38" defer></script>
