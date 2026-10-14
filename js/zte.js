@@ -520,8 +520,8 @@
     if (el.agent) {
       el.agent.textContent = b.ag === 'worker' ? 'Worker · 32B'
         : b.ag === 'human' ? 'You · gate' : 'Planner · 4B';
-      el.agent.style.color = b.ag === 'worker' ? '#c07f36'
-        : b.ag === 'human' ? '#b9491f' : '#5c7ba4';
+      el.agent.style.color = b.ag === 'worker' ? '#e8a85f'
+        : b.ag === 'human' ? '#e2794a' : '#8fb3dc';
     }
     if (el.goal) el.goal.textContent = b.goal;
     if (el.action) el.action.textContent = b.act || '—';

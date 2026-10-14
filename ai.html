@@ -15,7 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,560;0,6..72,600;1,6..72,400;1,6..72,500&family=Hanken+Grotesk:wght@400;500;550;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css?v=38">
 <link rel="stylesheet" href="css/cosmic-theme.css?v=38">
-<link rel="stylesheet" href="css/techviz.css?v=40">
+<link rel="stylesheet" href="css/techviz.css?v=41">
 </head>
 <body class="ai-body">
 
@@ -523,52 +523,8 @@
       tools by handing the implementation to a second coding agent.</p>
     </div>
 
-    <!-- LangGraph run (reused viz) -->
-    <div class="cyc-stage">
-      <div class="cyc-canvas-wrap">
-        <canvas id="agentCanvas" role="img"
-          aria-label="Animated schematic of the Astro Agent LangGraph pipeline flowing from target resolution and data fetching through retrieval, three modelling iterations, a QA gate, drafting and peer review, with replan and reflexion self-healing loops."></canvas>
-        <div class="cyc-legend">
-          <span><i class="dot" style="background:#56b4e9"></i>Acquire / plan</span>
-          <span><i class="dot" style="background:#009e73"></i>Evidence gate</span>
-          <span><i class="dot" style="background:#e69f00"></i>Self-heal loop</span>
-          <span><i class="dot" style="background:#cc79a7"></i>Draft</span>
-          <span><i class="dot" style="background:#d55e00"></i>Halt</span>
-        </div>
-      </div>
-      <aside class="cyc-side">
-        <div class="readout">
-          <div class="readout-row"><span>Current node</span><b id="agNode">resolve</b></div>
-          <div class="readout-row"><span>Stage</span><b id="agStage">Acquire</b></div>
-          <div class="readout-row"><span>Modelling iteration</span><b id="agIter">0 / 3</b></div>
-          <div class="readout-row"><span>Run status</span><b id="agStatus" class="ag-status ag-run">running</b></div>
-        </div>
-        <div class="lc-wrap">
-          <h4>Run log · filesystem-as-memory</h4>
-          <div id="agLog" class="ag-log" aria-live="polite"></div>
-          <p class="cap">Each node writes a numbered JSON checkpoint — a human-readable provenance chain you can <code>diff</code> between runs.</p>
-        </div>
-        <div class="cyc-controls">
-          <div class="morph-presets">
-            <span class="ctl-label">Run scenario</span>
-            <div class="preset-row">
-              <button class="chip active" data-scenario="clear">Clear → paper</button>
-              <button class="chip" data-scenario="mismatch">Model mismatch → replan</button>
-              <button class="chip" data-scenario="reflexion">QC fail → reflexion</button>
-              <button class="chip" data-scenario="blocked">Insufficient data → halt</button>
-            </div>
-          </div>
-          <label>Speed
-            <input type="range" id="agSpeed" min="0" max="3" step="0.1" value="1">
-          </label>
-          <div class="toggle-row">
-            <button class="btn btn-sm" id="agPause" aria-pressed="false">Pause</button>
-            <button class="btn btn-sm" id="agStep">Step ▸</button>
-          </div>
-        </div>
-      </aside>
-    </div>
-    <p class="cap cap-wide">Schematic of the real <code>analysis_agent</code> graph — node names mirror the implementation. The hard cap of three modelling iterations, two replans and two reflexion rewrites is exactly how the agent refuses to over-claim.</p>
+    <!-- LangGraph run -->
+    <div id="agentGraph" data-domain="astro"></div>
 
     <!-- controlled auto-learning / delegation loop -->
     <div class="feature-head">
@@ -579,26 +535,7 @@
       (<code>claude_code_delegate</code>) as a second coding agent. The tool is only registered as a new Skill when its
       <strong>tests pass</strong> — with a human review gate. <strong>Watch the hand-off</strong>.</p>
     </div>
-    <div class="cyc-stage a2a-stage">
-      <div class="cyc-canvas-wrap" style="min-height:360px">
-        <canvas id="a2aCanvas" role="img"
-          aria-label="Agent-to-agent loop: the orchestrator collects evidence, extracts a method spec, generates a tool-development task, delegates implementation to Claude Code, and registers the new skill only when tests pass."></canvas>
-      </div>
-      <aside class="cyc-side">
-        <div class="readout">
-          <div class="readout-row"><span>Orchestrator</span><b id="a2aOrch">analysis_agent</b></div>
-          <div class="readout-row"><span>Worker agent</span><b id="a2aWorker">Claude Code</b></div>
-          <div class="readout-row"><span>Current step</span><b id="a2aStep">evidence</b></div>
-          <div class="readout-row"><span>Tests</span><b id="a2aTests">—</b></div>
-          <div class="readout-row"><span>Skill registry</span><b id="a2aReg">stable</b></div>
-        </div>
-        <div class="lc-wrap">
-          <h4>A2A message · task spec</h4>
-          <div id="a2aMsg" class="ag-log" style="height:150px"></div>
-          <p class="cap">Boundary: a human review gate stays in the loop, and only tools with literature evidence that pass a smoke test enter the registry.</p>
-        </div>
-      </aside>
-    </div>
+    <div id="agentDelegate" data-domain="astro"></div>
 
     <!-- tech-stack toolbox -->
     <div class="feature-head">
@@ -965,15 +902,15 @@
 <script src="js/viz-hero.js?v=40" defer></script>
 <script src="js/viz-chem.js?v=40" defer></script>
 <script src="js/viz-biz.js?v=40" defer></script>
-<script src="js/viz-astro.js?v=40" defer></script>
+<script src="js/viz-astro.js?v=41" defer></script>
 <script src="js/aps-model.js?v=40" defer></script>
 <script src="js/viz-mfg.js?v=40" defer></script>
 <script src="js/viz-zte.js?v=40" defer></script>
+<script src="js/viz-agent.js?v=41" defer></script>
 <script src="js/maoastro.js?v=38" defer></script>
-<script src="js/zte.js?v=40" defer></script>
+<script src="js/zte.js?v=41" defer></script>
 <script src="js/jindu.js?v=38" defer></script>
 <script src="js/astrostack.js?v=38" defer></script>
-<script src="js/astroagent.js?v=38" defer></script>
 <script src="js/kgdata.js?v=38" defer></script>
 <script src="js/kg.js?v=38" defer></script>
 <script src="js/ztfcnn.js?v=38" defer></script>

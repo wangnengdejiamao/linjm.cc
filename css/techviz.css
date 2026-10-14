@@ -170,3 +170,35 @@
 .hub-domain-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media (max-width:900px){.hub-domain-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.hub-domain-tiles{grid-template-columns:1fr}}
+
+/* ================================================================
+   Legacy interactive stages on ai.html, re-plated to match the new
+   figures: one dark instrument plate, dark side panels, dark chips.
+   ================================================================ */
+.ai-body .cyc-stage,.ai-body .spec-stage,.ai-body .zte-stage,.ai-body .toolbox{
+  background:#0f0d0a;border:1px solid #2a241b;border-radius:14px;color:#d6ccb4;
+  box-shadow:0 40px 90px -50px rgba(30,20,8,.75),inset 0 1px 0 rgba(255,255,255,.05);
+  --ink-strong:#f4eee2;--ink:#e9e1cf;--ink-soft:#d6ccb4;--ink-dim:#958c77;--line:rgba(236,224,200,.1);--line-strong:rgba(236,224,200,.18)}
+.ai-body .cyc-stage .cyc-canvas-wrap{border-color:rgba(236,224,200,.08);border-radius:10px}
+.ai-body .readout,.ai-body .lc-wrap,.ai-body .cyc-controls,.ai-body .spec-controls,.ai-body .spec-presets,.ai-body .tb-group{
+  background:rgba(236,224,200,.03);border:1px solid rgba(236,224,200,.1);border-radius:10px}
+.ai-body .readout-row{color:#958c77;border-bottom-color:rgba(236,224,200,.07)}
+.ai-body .readout-row b{color:#f4eee2}
+.ai-body .lc-wrap h4,.ai-body .ctl-label,.ai-body .tb-glab{color:var(--dl,#e8a85f)}
+.ai-body .cyc-stage .cap,.ai-body .zte-stage .cap,.ai-body .lc-wrap .cap{color:#857d69}
+.ai-body .cyc-stage code,.ai-body .lc-wrap code{background:rgba(236,224,200,.07);color:#e9e1cf;border-color:transparent}
+.ai-body .cyc-controls label,.ai-body .cyc-controls,.ai-body .cyc-controls output{color:#bdb29a}
+.ai-body .cyc-stage .chip,.ai-body .zte-stage .chip,.ai-body .cyc-stage .btn-sm,.ai-body .zte-stage .btn-sm,.ai-body .tb-chip{
+  background:rgba(236,224,200,.04);border:1px solid rgba(236,224,200,.16);color:#d6ccb4}
+.ai-body .cyc-stage .chip:hover,.ai-body .zte-stage .chip:hover,.ai-body .cyc-stage .btn-sm:hover,.ai-body .zte-stage .btn-sm:hover,.ai-body .tb-chip:hover{
+  border-color:var(--dl,#e8a85f);color:#fff;background:rgba(236,224,200,.07)}
+.ai-body .cyc-stage .chip.active,.ai-body .zte-stage .chip.active,.ai-body .cyc-stage .btn-sm[aria-pressed="true"],.ai-body .zte-stage .btn-sm[aria-pressed="true"],.ai-body .tb-chip.is-active{
+  background:var(--dl,#e8a85f);border-color:var(--dl,#e8a85f);color:#15110b}
+.ai-body .cyc-stage input[type=range],.ai-body .zte-stage input[type=range]{background:rgba(236,224,200,.18)}
+.ai-body .cyc-stage input[type=range]::-webkit-slider-thumb,.ai-body .zte-stage input[type=range]::-webkit-slider-thumb{background:#0f0d0a;border-color:var(--dl,#e8a85f)}
+.ai-body .zte-stage .phone-cap{color:#958c77}
+.ai-body .zte-stage .phone-cap b{color:#e9e1cf}
+.ai-body .toolbox{padding:clamp(1rem,2vw,1.4rem)}
+.ai-body .tb-detail{background:rgba(236,224,200,.03);border-color:rgba(236,224,200,.1);border-radius:10px}
+.ai-body .ag-log{background:rgba(0,0,0,.35);border:1px solid rgba(236,224,200,.08)}
+.ai-body{--well:#0f0d0a;--well-line:rgba(236,224,200,.08)}
