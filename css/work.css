@@ -1,0 +1,170 @@
+/* work.linjm.cc：作品集站样式。令牌与 www.linjm.cc 主页一致（暖白纸面 + 深色图版）。 */
+:root{
+  --bg:#f6f4ef;--bg-2:#efece3;--surface:#fff;--surface-2:#f3f1ea;--line:#e1dccf;--line-strong:#ccc6b5;
+  --ink:#211d15;--ink-soft:#4f4a3e;--ink-dim:#756e5d;--ink-strong:#16130c;
+  --accent:#a85518;--accent-soft:#c2722a;--accent-deep:#823f10;--brand:#205c47;
+  --mint:#1f9e78;--steel:#3a63b8;--ember:#cf5a2c;--plum:#a4548a;--gold:#b38600;
+  --serif:"Newsreader",Georgia,"Songti SC","STSong","SimSun",serif;
+  --sans:"Hanken Grotesk",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --maxw:1180px;--ease:cubic-bezier(.22,.61,.36,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12100c;--bg-2:#17140f;--surface:#1b1813;--surface-2:#211d17;--line:#2e2920;--line-strong:#3d362b;
+  --ink:#ece5d6;--ink-soft:#c3baa5;--ink-dim:#958c77;--ink-strong:#f6f0e3;--accent:#e08a4a;--accent-deep:#f0a565;--brand:#6fbf9f;
+}}
+:root[data-theme="dark"]{
+  --bg:#12100c;--bg-2:#17140f;--surface:#1b1813;--surface-2:#211d17;--line:#2e2920;--line-strong:#3d362b;
+  --ink:#ece5d6;--ink-soft:#c3baa5;--ink-dim:#958c77;--ink-strong:#f6f0e3;--accent:#e08a4a;--accent-deep:#f0a565;--brand:#6fbf9f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 var(--sans);overflow-x:hidden}
+img,svg{max-width:100%}
+a{color:var(--accent-deep);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+@media (max-width:640px){.wrap{padding:0 16px}}
+
+/* 导航 */
+.nav{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:1.4rem;height:56px}
+.brand{font-family:var(--serif);font-size:1.12rem;color:var(--ink-strong);white-space:nowrap;display:flex;align-items:center;gap:.5rem}
+.brand i{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f0b27a,var(--accent) 60%,#3a1c08);box-shadow:0 0 12px rgba(168,85,24,.45)}
+.brand small{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--ink-dim);text-transform:uppercase}
+.nav-links{display:flex;gap:1.1rem;margin-left:auto;font-family:var(--mono);font-size:.74rem;letter-spacing:.04em}
+.nav-links a{color:var(--ink-soft)}
+.nav-links a.on,.nav-links a:hover{color:var(--accent-deep);text-decoration:none}
+.nav-links .ext{color:var(--accent-deep)}
+@media (max-width:860px){.nav-links{overflow-x:auto;scrollbar-width:none;gap:.9rem}.nav .wrap{gap:.8rem}.brand small{display:none}}
+
+/* 首屏 */
+.hero{padding:72px 0 40px;position:relative}
+.kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-deep);display:flex;align-items:center;gap:.7rem}
+.kicker::before{content:"";width:28px;height:1px;background:currentColor}
+h1,h2,h3{font-family:var(--serif);color:var(--ink-strong);font-weight:500;letter-spacing:-.01em}
+h1{font-size:clamp(2.1rem,4.6vw,3.4rem);line-height:1.12;margin:.6rem 0 1rem}
+h1 em,h2 em{font-style:italic;color:var(--accent)}
+.lead{font-size:1.08rem;color:var(--ink-soft);max-width:60ch;margin:0 0 1.4rem}
+.lead b{color:var(--ink-strong)}
+.cta{display:flex;flex-wrap:wrap;gap:.7rem;margin:1.2rem 0 0}
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.78rem;padding:.6rem 1rem;border-radius:8px;
+  border:1px solid var(--line-strong);color:var(--ink);background:var(--surface);transition:all .2s var(--ease)}
+.btn:hover{border-color:var(--accent);color:var(--accent-deep);text-decoration:none;transform:translateY(-1px)}
+.btn.pri{background:var(--ink-strong);color:var(--bg);border-color:var(--ink-strong)}
+.btn.pri:hover{background:var(--accent-deep);border-color:var(--accent-deep);color:#fff}
+.btn small{opacity:.7}
+
+/* 数字条 */
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:28px 0 0}
+.stats div{background:var(--surface);padding:16px 18px}
+.stats b{display:block;font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--brand);line-height:1.1}
+.stats span{font-size:.82rem;color:var(--ink-dim)}
+@media (max-width:860px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* 段落 */
+.section{padding:56px 0 20px;border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:end;margin-bottom:22px}
+@media (max-width:860px){.sec-head{grid-template-columns:1fr}}
+h2{font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.2;margin:.4rem 0 0}
+.sec-head p{margin:0;color:var(--ink-soft);font-size:.98rem}
+.points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 8px}
+@media (max-width:860px){.points{grid-template-columns:1fr}}
+.point{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.point h3{font-family:var(--sans);font-size:1rem;font-weight:650;margin:0 0 .3rem;color:var(--ink-strong)}
+.point p{margin:0;font-size:.9rem;color:var(--ink-soft)}
+.point .n{font-family:var(--mono);font-size:.68rem;color:var(--accent-deep);letter-spacing:.12em}
+
+/* 图版细节栏 */
+.fk-detail{border-top:1px solid rgba(236,224,200,.08);padding:.85rem 1rem;min-height:4.6rem;background:rgba(255,255,255,.012);
+  font-family:var(--sans);color:#d6ccb4;font-size:.86rem}
+.fk-detail p{margin:.25rem 0 .5rem;color:#bdb29a;max-width:90ch}
+.fk-hint{color:#857d69 !important;font-family:var(--mono);font-size:.72rem !important}
+.fk-dhead{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.fk-dhead i{width:8px;height:8px;border-radius:2px}
+.fk-dhead code{font-family:var(--mono);font-size:.7rem;color:#f4eee2;background:rgba(236,224,200,.08);padding:.05rem .4rem;border-radius:4px}
+.fk-dhead strong{color:#f4eee2;font-weight:600;font-size:.98rem}
+.fk-dhead em{font-style:normal;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em}
+.fk-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 1.4rem}
+.fk-row{display:flex;justify-content:space-between;gap:1rem;padding:.22rem 0;border-bottom:1px dashed rgba(236,224,200,.09);font-size:.8rem}
+.fk-row span{color:#958c77;white-space:nowrap}
+.fk-row b{color:#f4eee2;font-weight:500;text-align:right}
+.fk-leg{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.66rem;color:#bdb29a;margin-right:.6rem}
+.fk-leg i{width:9px;height:9px;border-radius:2px}
+
+/* 图集 */
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.gallery{grid-template-columns:1fr}}
+.gallery a{display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;color:var(--ink)}
+.gallery img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top;background:#fbfaf7}
+.gallery span{display:block;padding:10px 14px;font-size:.86rem;color:var(--ink-soft)}
+.gallery a:hover{border-color:var(--accent);text-decoration:none}
+
+/* 演示路线 */
+.routes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.route{display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ink)}
+.route:hover{border-color:var(--accent);text-decoration:none}
+.route b{display:block;font-weight:650;color:var(--ink-strong)}
+.route code{font-family:var(--mono);font-size:.7rem;color:var(--accent-deep)}
+.route p{margin:.3rem 0 0;font-size:.86rem;color:var(--ink-soft)}
+.route .no{font-family:var(--mono);font-size:.66rem;color:var(--ink-dim);letter-spacing:.1em}
+.note-box{border:1px dashed var(--line-strong);border-radius:12px;padding:14px 18px;color:var(--ink-soft);font-size:.9rem;background:var(--surface-2)}
+.note-box b{color:var(--ink-strong)}
+
+/* 卡片网格（首页） */
+.tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:960px){.tracks{grid-template-columns:1fr}}
+.track{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;color:var(--ink);overflow:hidden;transition:all .25s var(--ease)}
+.track:hover{border-color:var(--accent);transform:translateY(-2px);text-decoration:none;box-shadow:0 18px 40px -28px rgba(60,40,10,.45)}
+.track .tk{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--accent-deep);text-transform:uppercase}
+.track h3{font-size:1.45rem;margin:.4rem 0 .5rem}
+.track p{margin:0 0 .8rem;color:var(--ink-soft);font-size:.92rem}
+.track ul{margin:0 0 1rem;padding-left:1.1rem;color:var(--ink-soft);font-size:.88rem}
+.track .go{margin-top:auto;font-family:var(--mono);font-size:.74rem;color:var(--accent-deep)}
+.track canvas{display:block;width:100%;height:120px;border-radius:10px;margin:0 0 14px;background:#0f0d0a}
+
+/* 表 */
+table.plain{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+table.plain th,table.plain td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+table.plain th{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--ink-dim);font-weight:500;background:var(--surface-2)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#9a917b;margin-right:.4rem;vertical-align:1px}
+.dot.ok{background:#1f9e78;box-shadow:0 0 0 3px rgba(31,158,120,.18)}.dot.bad{background:#c8423b}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips b{font-family:var(--mono);font-weight:400;font-size:.72rem;padding:.25rem .6rem;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink-soft)}
+
+footer.foot{border-top:1px solid var(--line);margin-top:60px;padding:28px 0 48px;color:var(--ink-dim);font-size:.84rem}
+footer.foot a{color:var(--ink-soft)}
+.tv-fig{scroll-margin-top:80px}
+.theme-toggle{border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:8px;font-family:var(--mono);font-size:.7rem;padding:.3rem .55rem;cursor:pointer}
+
+/* ---------------- 浅色图版（覆盖 techviz.css 的深色外框，和静态大图同一套纸面） ---------------- */
+.tv-fig{background:#FBFAF7;color:var(--ink);border:1px solid var(--line);
+  box-shadow:0 24px 60px -40px rgba(60,40,10,.35),0 1px 0 rgba(255,255,255,.8) inset}
+.tv-fig::before{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--dl,#a85518) 55%,transparent),transparent)}
+.tv-head{border-bottom:1px solid var(--line);background:#fff}
+.tv-kicker{color:var(--ink-soft)}
+.tv-kicker::before{box-shadow:none}
+.tv-status{color:var(--ink-dim)}
+.tv-controls{border-top:1px solid var(--line);background:#fff}
+.tv-glab{color:var(--ink-dim)}
+.tv-btn{color:var(--ink-soft);background:#fff;border:1px solid var(--line-strong)}
+.tv-btn:hover{color:var(--ink-strong);border-color:var(--dl,#a85518)}
+.tv-btn.is-on{color:#fff;background:var(--dl,#a85518);border-color:var(--dl,#a85518)}
+.tv-range{color:var(--ink-soft)}.tv-range output{color:var(--ink-strong)}
+.tv-foot{border-top:1px solid var(--line);background:#fff}
+.tv-stack b{color:var(--ink-soft);border:1px solid var(--line);background:var(--surface-2)}
+.tv-note{color:var(--ink-dim)}
+.fk-detail{border-top:1px solid var(--line);background:#fff;color:var(--ink-soft)}
+.fk-detail p{color:var(--ink-soft)}
+.fk-hint{color:var(--ink-dim) !important}
+.fk-dhead code{color:var(--ink-strong);background:var(--surface-2)}
+.fk-dhead strong{color:var(--ink-strong)}
+.fk-row{border-bottom:1px dashed var(--line)}
+.fk-row span{color:var(--ink-dim)}
+.fk-row b{color:var(--ink-strong)}
+.fk-leg{color:var(--ink-soft)}
+.track canvas{background:#FBFAF7;border:1px solid var(--line)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tv-fig{border-color:#3d362b}}
+/* 图版永远是浅色纸面：在图版内部把颜色变量固定为浅色主题的值，深色模式下也可读 */
+.tv-fig{--ink:#211d15;--ink-soft:#4f4a3e;--ink-dim:#756e5d;--ink-strong:#16130c;--line:#e1dccf;--line-strong:#ccc6b5;--surface-2:#f3f1ea}

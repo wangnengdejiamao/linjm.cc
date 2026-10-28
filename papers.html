@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Papers · Jiamao Lin</title>
+<meta name="description" content="Two manuscripts on turning relational databases into checkable structure: risk-controlled foreign-key discovery (RefSel) and a pre-registered study of LLM-based ontology learning. Target venue: IEEE TKDE (CCF-A).">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='30' fill='%23a85518'/><circle cx='62' cy='40' r='22' fill='%23140f08'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/work.css">
+<style>
+  .paper{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start;margin-bottom:18px}
+  @media (max-width:900px){.paper{grid-template-columns:1fr}}
+  .paper h3{font-size:1.5rem;line-height:1.3;margin:.3rem 0 .6rem}
+  .authors{font-family:var(--sans);color:var(--ink-soft);margin:0 0 .4rem}
+  .venue{display:inline-flex;gap:.5rem;align-items:center;font-family:var(--mono);font-size:.74rem;color:var(--accent-deep);
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:.25rem .6rem;margin:.2rem 0 1rem}
+  .abs{color:var(--ink-soft);margin:0 0 1rem}
+  .side{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:.9rem}
+  .side h4{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin:0 0 .5rem;font-weight:500}
+  .side ul{margin:0 0 .8rem;padding-left:1.1rem;color:var(--ink-soft)}
+  .side li{margin:.2rem 0}
+  .side b{color:var(--ink-strong)}
+  figure.pf{margin:12px 0 18px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+  figure.pf.wide{margin-top:4px}
+  figure.pf a{display:block}
+  figure.pf img{display:block;width:100%;height:auto}
+  figure.pf figcaption{font-size:.84rem;color:var(--ink-dim);margin-top:8px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:900px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><i></i>Jiamao Lin <small>林佳茂</small></a>
+  <nav class="nav-links">
+    <a href="index.html">Home</a><a href="research.html">Research</a><a href="ai.html">AI</a><a href="papers.html" class="on">AI Papers</a>
+    <a class="ext" href="https://work.linjm.cc/">Portfolio ↗</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+<section class="hero">
+  <div class="kicker">AI research · data management × language models</div>
+  <h1>Structure you can <em>check</em>:<br>keys and ontologies from real databases</h1>
+  <p class="lead">Both manuscripts grew out of building an enterprise ontology platform. They ask the same question from two sides: when a relational database is turned into keys, relations and concepts, <b>which part of the result can be trusted, and at what cost in model calls?</b> Both are first-author manuscripts with Weisong Sun (Nanyang Technological University) as corresponding author, prepared for <b>IEEE TKDE (CCF-A)</b>.</p>
+  <div class="cta">
+    <a class="btn pri" href="#refsel">RefSel</a>
+    <a class="btn" href="#burr">Ontology-learning study</a>
+    <a class="btn" href="https://work.linjm.cc/onto.html">Where it runs: the ontology platform</a>
+    <a class="btn" href="https://work.linjm.cc/status.html">Live deployments</a>
+  </div>
+</section>
+
+<section class="section" id="refsel">
+  <div class="paper">
+    <div>
+      <div class="kicker">Manuscript 1 · foreign-key discovery</div>
+      <h3>RefSel: Risk-Controlled Foreign-Key Discovery with Bounded Language-Model Evidence</h3>
+      <p class="authors"><b>Jiamao Lin</b>, Weisong Sun*  <small>(* corresponding author, Nanyang Technological University)</small></p>
+      <div class="venue">CCF-A · IEEE TKDE · manuscript in preparation for submission</div>
+      <p class="abs">Many production databases leave foreign keys undeclared, and inferring them from value inclusion alone is unreliable: across 259 public databases, 64% of declared keys that target an integer key have a competing key that also contains every source value. RefSel scores candidates with a chance model for inclusion, decodes a whole database jointly with an exact solver, and calibrates a retention threshold so that the expected share of wrong keys stays below a requested level. Language-model evidence is allowed in only as a bounded prior and a veto. On 60 previously unseen databases it raised macro F1 from 0.402 to 0.476 with about one-seventh of the model calls of a comparable LLM-based method; the difference to that method was not statistically significant.</p>
+    </div>
+    <aside class="side">
+      <h4>At a glance</h4>
+      <ul>
+        <li>Internal 5-fold macro F1 <b>0.897</b> (GBDT 0.876)</li>
+        <li>Three independent rounds, <b>110</b> new databases</li>
+        <li>Round 3 LLM calls: <b>1,769</b> vs 13,332</li>
+        <li>Bounded LLM evidence: <b>+0.074</b> F1, CI [0.025, 0.121]</li>
+      </ul>
+      <h4>Honest limits</h4>
+      <ul><li>No significant gain over LLM-FK</li><li>Risk guarantee fails on synthetic distractor tables and sparse ERP samples</li></ul>
+    </aside>
+  </div>
+    <figure class="pf wide"><a href="assets/papers/refsel_overview.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/refsel_overview.png" alt="Fig. 1 (manuscript). The RefSel pipeline: candidate generation, context scoring, joint decoding, confidence and risk, output. Language-model evidence enters as a bounded prior before decoding and a verifier after it; the lower band is the independent learn–calibrate–seal–test protocol."></a><figcaption>Fig. 1 (manuscript). The RefSel pipeline: candidate generation, context scoring, joint decoding, confidence and risk, output. Language-model evidence enters as a bounded prior before decoding and a verifier after it; the lower band is the independent learn–calibrate–seal–test protocol.</figcaption></figure>
+  <div class="two">
+    <figure class="pf"><a href="assets/papers/refsel_coincidence.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/refsel_coincidence.png" alt="Why value inclusion is not enough: score distributions of true foreign keys and false candidates by key type, and the chance of picking the right target as value-equivalent targets grow."></a><figcaption>Why value inclusion is not enough: score distributions of true foreign keys and false candidates by key type, and the chance of picking the right target as value-equivalent targets grow.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/refsel_names.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/refsel_names.png" alt="Robustness to names on 274 BIRD/Spider databases: macro F1 as column names are degraded, and with 1–3 distractor tables."></a><figcaption>Robustness to names on 274 BIRD/Spider databases: macro F1 as column names are degraded, and with 1–3 distractor tables.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/refsel_round3.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/refsel_round3.png" alt="Round 3 on 60 unseen databases: decoded macro F1 by method and subset, and threshold calibration on two calibration pools."></a><figcaption>Round 3 on 60 unseen databases: decoded macro F1 by method and subset, and threshold calibration on two calibration pools.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/refsel_cost.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/refsel_cost.png" alt="F1 against language-model calls per database on the five LLM-FK benchmarks: RefSel with and without the bounded prior versus LLM-FK."></a><figcaption>F1 against language-model calls per database on the five LLM-FK benchmarks: RefSel with and without the bounded prior versus LLM-FK.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/refsel_risk.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/refsel_risk.png" alt="Risk control: correct foreign keys kept per database and group-mean false-discovery proportion against the requested level α."></a><figcaption>Risk control: correct foreign keys kept per database and group-mean false-discovery proportion against the requested level α.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/refsel_sakila.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/refsel_sakila.png" alt="Sakila case study: final predictions of four methods on two ambiguous columns, with original and anonymised names."></a><figcaption>Sakila case study: final predictions of four methods on two ambiguous columns, with original and anonymised names.</figcaption></figure>
+  </div>
+</section>
+
+<section class="section" id="burr">
+  <div class="paper">
+    <div>
+      <div class="kicker">Manuscript 2 · ontology learning</div>
+      <h3>What Matters in LLM-Based Ontology Learning from Relational Databases? A Pre-Registered Study</h3>
+      <p class="authors"><b>Jiamao Lin</b>, Weisong Sun*</p>
+      <div class="venue">CCF-A · IEEE TKDE · manuscript in preparation for submission</div>
+      <p class="abs">Large language models now write ontologies and database mappings fluently, so it is tempting to conclude that model choice decides quality. In a pre-registered study of 25 configurations on the Burr benchmark, five added databases and RODI, we find it does not: the models we compared on eight databases span only 0.59–0.64 F1. Calling the model once per table, rather than once per schema, brought no systematic gain when both regimes saw the complete schema, at about eleven times the input tokens. Rules driven by data profiling come within 0.03 of the best language-model configuration without any model call. We also report a prompt-construction bug that first suggested the opposite, and a direction-blind relation score in the benchmark.</p>
+    </div>
+    <aside class="side">
+      <h4>Design</h4>
+      <ul>
+        <li>Dev: 54 micro-scenarios; held-out: 4 Burr databases, scored only by the grader</li>
+        <li>Frozen code, then 5 added databases + RODI</li>
+        <li>Re-implemented scorer agrees with the official one on <b>640</b> units</li>
+      </ul>
+      <h4>Honest limits</h4>
+      <ul><li>Two models in the paired experiment; effective n = 8 databases</li><li>Gold standard not yet manually re-checked</li></ul>
+    </aside>
+  </div>
+    <figure class="pf wide"><a href="assets/papers/burr_overview.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_overview.png" alt="Fig. 1 (manuscript). Study overview: an evidence route (profiling and rules, no model calls) and a model route (whole-schema or per-table calls), merged and certified, then scored three ways."></a><figcaption>Fig. 1 (manuscript). Study overview: an evidence route (profiling and rules, no model calls) and a model route (whole-schema or per-table calls), merged and certified, then scored three ways.</figcaption></figure>
+  <div class="two">
+    <figure class="pf"><a href="assets/papers/burr_framework.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_framework.png" alt="Pre-registered design: benchmarks and protocol, the systems compared, the measurements, and the four research questions."></a><figcaption>Pre-registered design: benchmarks and protocol, the systems compared, the measurements, and the four research questions.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/burr_heatmap.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_heatmap.png" alt="Ten systems on eight held-out databases (three-way mean F1); databases on the right were added after the code was frozen."></a><figcaption>Ten systems on eight held-out databases (three-way mean F1); databases on the right were added after the code was frozen.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/burr_ladder.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_ladder.png" alt="Model ladder: nine models from open weights to API, development set versus held-out databases."></a><figcaption>Model ladder: nine models from open weights to API, development set versus held-out databases.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/burr_paired.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_paired.png" alt="Paired experiment with complete DDL: per-table minus whole-schema F1 per database, and the input-token multiple."></a><figcaption>Paired experiment with complete DDL: per-table minus whole-schema F1 per database, and the input-token multiple.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/burr_cost.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_cost.png" alt="Quality against tokens per database: profiling rules reach the frontier with zero model tokens."></a><figcaption>Quality against tokens per database: profiling rules reach the frontier with zero model tokens.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/burr_defect.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_defect.png" alt="A bug we found in our own first draft: only 4 of 70 CREATE statements reached the per-table prompt; fixing it removed the apparent advantage."></a><figcaption>A bug we found in our own first draft: only 4 of 70 CREATE statements reached the per-table prompt; fixing it removed the apparent advantage.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/burr_mechanism.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_mechanism.png" alt="Where per-table calls help or hurt: precision and recall differences by element type, mean of both models."></a><figcaption>Where per-table calls help or hurt: precision and recall differences by element type, mean of both models.</figcaption></figure>
+    <figure class="pf"><a href="assets/papers/burr_extent.png" target="_blank" rel="noopener"><img loading="lazy" src="assets/papers/burr_extent.png" alt="Extent F1 minus the benchmark’s mapping F1: the relation score ignores direction and overrates rule systems."></a><figcaption>Extent F1 minus the benchmark’s mapping F1: the relation score ignores direction and overrates rule systems.</figcaption></figure>
+  </div>
+</section>
+
+<section class="section">
+  <div class="sec-head"><div><div class="kicker">From paper to product</div><h2>Where the methods run</h2></div>
+    <p>The same ideas are wired into the ontology platform I built: RefSel's veto sits in the relation-discovery stage, and the profiling rules (unique column combinations, inclusion dependencies) are the platform's data-ontology branch.</p></div>
+  <div class="routes">
+    <a class="route" href="https://work.linjm.cc/onto.html#pipeline"><span class="no">01</span><b>Ontology build pipeline</b><code>work.linjm.cc/onto.html</code><p>Eleven stages; stage 03 uses the bounded veto.</p></a>
+    <a class="route" href="https://work.linjm.cc/onto.html#data"><span class="no">02</span><b>Data ontology on real tables</b><code>work.linjm.cc/onto.html#data</code><p>Keys, relations and broken links on a 1.3-million-row ERP export.</p></a>
+    <a class="route" href="https://work.linjm.cc/status.html"><span class="no">03</span><b>Live deployments</b><code>work.linjm.cc/status.html</code><p>Demo instances on my own server (passcode on request).</p></a>
+    <a class="route" href="research.html"><span class="no">04</span><b>Astronomy publications</b><code>www.linjm.cc/research.html</code><p>My first-author papers in ApJ, A&amp;A, ApJL and ApJS.</p></a>
+  </div>
+</section>
+</main>
+
+<footer class="foot"><div class="wrap">Jiamao Lin · School of Physics and Astronomy, Sun Yat-sen University · <a href="https://www.linjm.cc/">www.linjm.cc</a> · All figures are reproduced from my own manuscripts.</div></footer>
+</body>
+</html>
