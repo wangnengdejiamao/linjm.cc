@@ -1,0 +1,92 @@
+{
+  "page_updated": "2026-11-01",
+  "manuscript_revision": "2026-10-29",
+  "note": "Existing manuscript results; no experiments were rerun for this page. PDFs are unchanged working manuscripts. The RefSel manuscript first-author affiliation still has an editorial placeholder.",
+  "documents": [
+    {
+      "file": "refsel-manuscript.pdf",
+      "source_filename": "01b_RefSel_正文_12页无备注纯净版.pdf",
+      "sha256": "843bc224d4f3a15fd58e9a27622426639d62825868cc17049feff8dbf42a4254"
+    },
+    {
+      "file": "refsel-appendix.pdf",
+      "source_filename": "02_RefSel_在线附录_GitHub.pdf",
+      "sha256": "4f17f1777af0a02dbb83cc62153e14125c65ee7372799b09a0c32d2fea6b9aca"
+    },
+    {
+      "file": "ontology-manuscript.pdf",
+      "source_filename": "01_Burr_正文12页.pdf",
+      "sha256": "7b1d246e31654a6b49b135025c27447b4bc5b5b67a83112a9ee72a5c852bfcef"
+    },
+    {
+      "file": "ontology-extended-results.pdf",
+      "source_filename": "02_Burr_扩展报告_GitHub.pdf",
+      "sha256": "efd94f028016044dd81ffa5acbb411c7f622c62ae16a69539e7b6c6e13d6f7cd"
+    }
+  ],
+  "figures": [
+    {
+      "file": "refsel-overview.webp",
+      "source_filename": "fig01_overview.pdf",
+      "source_sha256": "be8cd17cd6e51978bb8cf17ee67608b054d6f0323ff3d3df5a7f2ae1666f22ad",
+      "width": 2400,
+      "height": 1023
+    },
+    {
+      "file": "ontology-overview.webp",
+      "source_filename": "overview.pdf",
+      "source_sha256": "1e39e8c77a0975e5906ff672c9055fae26723316ea3a7ac7d0dea940736a8cc9",
+      "width": 2400,
+      "height": 928
+    },
+    {
+      "file": "ontology-models.webp",
+      "source_filename": "fig_models.pdf",
+      "source_sha256": "365d04b76e773b6463dc50526ba0a531ed5873ab3d5c2585107cc40161ffcd7d",
+      "width": 2400,
+      "height": 756
+    },
+    {
+      "file": "ontology-completeness.webp",
+      "source_filename": "fig_complete.pdf",
+      "source_sha256": "a8ea4a60fb20103d4ae9d24e9184727bf22886b4b1fdf1f4ff8683ecf2cca2dd",
+      "width": 2400,
+      "height": 725
+    },
+    {
+      "file": "ontology-paired.webp",
+      "source_filename": "fig_paired.pdf",
+      "source_sha256": "6ff7fa226e7cf56e797c580f057d52a8e4e9cf891bbb2858e5bba95129068b6a",
+      "width": 2400,
+      "height": 720
+    },
+    {
+      "file": "ontology-guard.webp",
+      "source_filename": "fig_guard.pdf",
+      "source_sha256": "9783343348b7df18a5732c88d5f3f15ef2e6942e054bf65f549730d2b5c257ee",
+      "width": 2400,
+      "height": 757
+    },
+    {
+      "file": "ontology-transfer.webp",
+      "source_filename": "fig_transfer.pdf",
+      "source_sha256": "4d4d6edefe403d2bdf65b767817132b4c40fa7d4150a5d58929305bc5ba1ec78",
+      "width": 2400,
+      "height": 670
+    },
+    {
+      "file": "ontology-measurement.webp",
+      "source_filename": "fig_measure.pdf",
+      "source_sha256": "00e640ad73bb9614d4a5f33107c650a9e429ca0be1f5f8527dcbb5b7599dfb40",
+      "width": 2400,
+      "height": 684
+    },
+    {
+      "file": "ontology-heatmap.webp",
+      "source_filename": "fig_heatmap.pdf",
+      "source_sha256": "f9fd435f24b21f8b911b535a3065b0434f7f3860d0c67acb50c5afa69d1e0db9",
+      "width": 2400,
+      "height": 999
+    }
+  ]
+}

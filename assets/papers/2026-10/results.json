@@ -1,0 +1,614 @@
+{
+  "revision": "2026-10-29",
+  "pageUpdated": "2026-11-01",
+  "sources": {
+    "refsel": "assets/papers/2026-10/refsel-manuscript.pdf",
+    "refselDetailed": "assets/papers/2026-10/refsel-appendix.pdf",
+    "burr": "assets/papers/2026-10/ontology-manuscript.pdf"
+  },
+  "notes": [
+    "RefSel: main Table I, Section 5.7, and online appendix Round-3 table.",
+    "Burr: Table II and Section VI-B3. Three runs per model, eight databases; complete-DDL schema-only paired track.",
+    "Burr deltas are the rounded reported three-way means. Recomputing from separately rounded class/relation/attribute scores may differ by 0.01.",
+    "The paired experiment used fixed plans before scoring and was not pre-registered. The selective guard was evaluated on this paired archive."
+  ],
+  "refsel": {
+    "round3": {
+      "label": "Round 3 · all 60 databases",
+      "rows": [
+        {
+          "label": "RefSel + LLM",
+          "f1": 0.476,
+          "kind": "llm",
+          "detail": "bounded prior + veto"
+        },
+        {
+          "label": "RefSel",
+          "f1": 0.402,
+          "kind": "",
+          "detail": "data only"
+        },
+        {
+          "label": "LLM-FK",
+          "f1": 0.43,
+          "kind": "baseline",
+          "detail": "same backbone"
+        },
+        {
+          "label": "RefSel-base + LLM",
+          "f1": 0.465,
+          "kind": "ablation",
+          "detail": "internal ablation"
+        },
+        {
+          "label": "RefSel-base",
+          "f1": 0.37,
+          "kind": "ablation",
+          "detail": "internal ablation"
+        }
+      ],
+      "note": "All 60 test databases; macro F1 against every declared foreign key. The two databases that LLM-FK could not process are counted as empty predictions. Use “Shared 58” for the matched comparison. Bounded LLM evidence improves RefSel by +0.074 (95% CI 0.025–0.121)."
+    },
+    "conventional": {
+      "label": "Round 3 · 13 conventional databases",
+      "rows": [
+        {
+          "label": "RefSel + LLM",
+          "f1": 0.819,
+          "kind": "llm",
+          "detail": "bounded prior + veto"
+        },
+        {
+          "label": "RefSel",
+          "f1": 0.63,
+          "kind": "",
+          "detail": "data only"
+        },
+        {
+          "label": "LLM-FK",
+          "f1": 0.688,
+          "kind": "baseline",
+          "detail": "same backbone"
+        },
+        {
+          "label": "RefSel-base + LLM",
+          "f1": 0.806,
+          "kind": "ablation",
+          "detail": "internal ablation"
+        },
+        {
+          "label": "RefSel-base",
+          "f1": 0.575,
+          "kind": "ablation",
+          "detail": "internal ablation"
+        }
+      ],
+      "note": "The conventional subset of Round 3: RefSel gains +0.189 with bounded LLM evidence (11 wins, 0 losses) and has a +0.131 point-estimate lead over LLM-FK. This is a 13-database subset, not the 60-database aggregate."
+    },
+    "wikidbs": {
+      "label": "Round 3 · 47 WikiDBs databases",
+      "rows": [
+        {
+          "label": "RefSel + LLM",
+          "f1": 0.381,
+          "kind": "llm",
+          "detail": "bounded prior + veto"
+        },
+        {
+          "label": "RefSel",
+          "f1": 0.339,
+          "kind": "",
+          "detail": "data only"
+        },
+        {
+          "label": "LLM-FK",
+          "f1": 0.359,
+          "kind": "baseline",
+          "detail": "same backbone"
+        },
+        {
+          "label": "RefSel-base + LLM",
+          "f1": 0.37,
+          "kind": "ablation",
+          "detail": "internal ablation"
+        },
+        {
+          "label": "RefSel-base",
+          "f1": 0.313,
+          "kind": "ablation",
+          "detail": "internal ablation"
+        }
+      ],
+      "note": "Noisy WikiDBs snapshots constrain every unique-target method: only 4% of 8,385 label-mined keys target columns that are unique in these data. Candidate coverage and benchmark definitions limit whole-database F1."
+    },
+    "shared58": {
+      "label": "Round 3 · shared 58 databases",
+      "rows": [
+        {
+          "label": "RefSel + LLM",
+          "f1": 0.467,
+          "kind": "llm",
+          "detail": "bounded prior + veto"
+        },
+        {
+          "label": "LLM-FK",
+          "f1": 0.445,
+          "kind": "baseline",
+          "detail": "same backbone"
+        }
+      ],
+      "note": "Matched comparison on the 58 license-permitting test databases: ΔF1 +0.022, 95% CI [−0.012, +0.063], p = 0.19. The difference is not statistically significant. RefSel uses 1,769 model calls versus 13,332 for LLM-FK."
+    },
+    "anonymous": {
+      "label": "Round 3 · anonymous names",
+      "rows": [
+        {
+          "label": "RefSel",
+          "f1": 0.362,
+          "kind": "",
+          "detail": "data only · 0 calls"
+        },
+        {
+          "label": "RefSel-base",
+          "f1": 0.352,
+          "kind": "ablation",
+          "detail": "internal ablation · 0 calls"
+        },
+        {
+          "label": "LLM-FK",
+          "f1": 0.27,
+          "kind": "baseline",
+          "detail": "16,275 calls"
+        }
+      ],
+      "note": "Anonymous naming condition across all 60 test databases. RefSel uses no LLM evidence and exceeds LLM-FK by +0.092 F1 (p = 0.003). This condition is separate from the 1,769-versus-13,332 named comparison."
+    },
+    "internal": {
+      "label": "Internal · BIRD/Spider with names",
+      "rows": [
+        {
+          "label": "RefSel",
+          "f1": 0.897,
+          "kind": "",
+          "detail": "5 outer folds"
+        },
+        {
+          "label": "RefSel-base",
+          "f1": 0.876,
+          "kind": "ablation",
+          "detail": "internal Stage-2 ablation"
+        },
+        {
+          "label": "Fast-FK",
+          "f1": 0.827,
+          "kind": "baseline",
+          "detail": ""
+        },
+        {
+          "label": "Rostin-style",
+          "f1": 0.806,
+          "kind": "baseline",
+          "detail": ""
+        },
+        {
+          "label": "Auto-BI-lite",
+          "f1": 0.769,
+          "kind": "baseline",
+          "detail": ""
+        },
+        {
+          "label": "HoPF-style",
+          "f1": 0.759,
+          "kind": "baseline",
+          "detail": ""
+        },
+        {
+          "label": "MC-FK",
+          "f1": 0.617,
+          "kind": "baseline",
+          "detail": ""
+        }
+      ],
+      "note": "BIRD/Spider internal evaluation, original names, whole-database protocol. All methods share Stage-1 candidates. RefSel exceeds the strongest external baseline, Fast-FK, by +0.070 macro F1; RefSel-base is an internal ablation, not an external method."
+    }
+  },
+  "burr": {
+    "models": {
+      "qwen": {
+        "label": "Qwen3.8-Max",
+        "meanDelta": 0,
+        "ci": [
+          -0.03,
+          0.03
+        ],
+        "rows": [
+          {
+            "database": "Bgee",
+            "tables": 6,
+            "whole": [
+              0.57,
+              0.63,
+              0.57
+            ],
+            "perTable": [
+              0.57,
+              0.63,
+              0.58
+            ],
+            "delta": 0
+          },
+          {
+            "database": "ODH",
+            "tables": 8,
+            "whole": [
+              0.35,
+              0.45,
+              0.78
+            ],
+            "perTable": [
+              0.35,
+              0.39,
+              0.75
+            ],
+            "delta": -0.03
+          },
+          {
+            "database": "ISWC",
+            "tables": 9,
+            "whole": [
+              0.73,
+              0.62,
+              0.52
+            ],
+            "perTable": [
+              0.69,
+              0.61,
+              0.51
+            ],
+            "delta": -0.02
+          },
+          {
+            "database": "BSBM",
+            "tables": 10,
+            "whole": [
+              1,
+              0.76,
+              0.95
+            ],
+            "perTable": [
+              1,
+              0.57,
+              0.96
+            ],
+            "delta": -0.06
+          },
+          {
+            "database": "GTFS",
+            "tables": 10,
+            "whole": [
+              0.87,
+              0.83,
+              0.98
+            ],
+            "perTable": [
+              0.87,
+              0.86,
+              0.97
+            ],
+            "delta": 0.01
+          },
+          {
+            "database": "LUBM",
+            "tables": 14,
+            "whole": [
+              0.07,
+              0.26,
+              0.11
+            ],
+            "perTable": [
+              0.08,
+              0.24,
+              0.11
+            ],
+            "delta": 0
+          },
+          {
+            "database": "Mondial",
+            "tables": 46,
+            "whole": [
+              0.56,
+              0.26,
+              0.52
+            ],
+            "perTable": [
+              0.58,
+              0.38,
+              0.69
+            ],
+            "delta": 0.11
+          },
+          {
+            "database": "NPD",
+            "tables": 70,
+            "whole": [
+              0.87,
+              0.83,
+              0.5
+            ],
+            "perTable": [
+              0.87,
+              0.77,
+              0.49
+            ],
+            "delta": -0.02
+          }
+        ]
+      },
+      "deepseek": {
+        "label": "DeepSeek-V4.1-Flash",
+        "meanDelta": -0.03,
+        "ci": [
+          -0.09,
+          0.03
+        ],
+        "rows": [
+          {
+            "database": "Bgee",
+            "tables": 6,
+            "whole": [
+              0.57,
+              0.63,
+              0.6
+            ],
+            "perTable": [
+              0.57,
+              0.63,
+              0.6
+            ],
+            "delta": 0
+          },
+          {
+            "database": "ODH",
+            "tables": 8,
+            "whole": [
+              0.35,
+              0.45,
+              0.79
+            ],
+            "perTable": [
+              0.35,
+              0.41,
+              0.76
+            ],
+            "delta": -0.03
+          },
+          {
+            "database": "ISWC",
+            "tables": 9,
+            "whole": [
+              0.73,
+              0.62,
+              0.53
+            ],
+            "perTable": [
+              0.53,
+              0.43,
+              0.51
+            ],
+            "delta": -0.13
+          },
+          {
+            "database": "BSBM",
+            "tables": 10,
+            "whole": [
+              1,
+              0.76,
+              0.95
+            ],
+            "perTable": [
+              0.84,
+              0.36,
+              0.95
+            ],
+            "delta": -0.19
+          },
+          {
+            "database": "GTFS",
+            "tables": 10,
+            "whole": [
+              0.87,
+              0.77,
+              0.99
+            ],
+            "perTable": [
+              0.79,
+              0.84,
+              0.96
+            ],
+            "delta": -0.01
+          },
+          {
+            "database": "LUBM",
+            "tables": 14,
+            "whole": [
+              0.08,
+              0.26,
+              0.11
+            ],
+            "perTable": [
+              0.07,
+              0.24,
+              0.11
+            ],
+            "delta": -0.01
+          },
+          {
+            "database": "Mondial",
+            "tables": 46,
+            "whole": [
+              0.56,
+              0.31,
+              0.51
+            ],
+            "perTable": [
+              0.56,
+              0.44,
+              0.8
+            ],
+            "delta": 0.14
+          },
+          {
+            "database": "NPD",
+            "tables": 70,
+            "whole": [
+              0.87,
+              0.72,
+              0.5
+            ],
+            "perTable": [
+              0.8,
+              0.76,
+              0.49
+            ],
+            "delta": -0.01
+          }
+        ]
+      },
+      "kimi": {
+        "label": "Kimi-K3",
+        "meanDelta": -0.01,
+        "ci": [
+          -0.04,
+          0.01
+        ],
+        "rows": [
+          {
+            "database": "Bgee",
+            "tables": 6,
+            "whole": [
+              0.57,
+              0.63,
+              0.6
+            ],
+            "perTable": [
+              0.57,
+              0.63,
+              0.58
+            ],
+            "delta": -0.01
+          },
+          {
+            "database": "ODH",
+            "tables": 8,
+            "whole": [
+              0.35,
+              0.45,
+              0.81
+            ],
+            "perTable": [
+              0.35,
+              0.45,
+              0.77
+            ],
+            "delta": -0.01
+          },
+          {
+            "database": "ISWC",
+            "tables": 9,
+            "whole": [
+              0.73,
+              0.67,
+              0.52
+            ],
+            "perTable": [
+              0.73,
+              0.67,
+              0.51
+            ],
+            "delta": 0
+          },
+          {
+            "database": "BSBM",
+            "tables": 10,
+            "whole": [
+              1,
+              0.76,
+              0.95
+            ],
+            "perTable": [
+              1,
+              0.66,
+              0.95
+            ],
+            "delta": -0.04
+          },
+          {
+            "database": "GTFS",
+            "tables": 10,
+            "whole": [
+              0.87,
+              0.79,
+              0.99
+            ],
+            "perTable": [
+              0.92,
+              0.78,
+              0.98
+            ],
+            "delta": 0.01
+          },
+          {
+            "database": "LUBM",
+            "tables": 14,
+            "whole": [
+              0.08,
+              0.26,
+              0.11
+            ],
+            "perTable": [
+              0.08,
+              0.26,
+              0.1
+            ],
+            "delta": 0
+          },
+          {
+            "database": "Mondial",
+            "tables": 46,
+            "whole": [
+              0.68,
+              0.55,
+              0.84
+            ],
+            "perTable": [
+              0.58,
+              0.45,
+              0.78
+            ],
+            "delta": -0.09
+          },
+          {
+            "database": "NPD",
+            "tables": 70,
+            "whole": [
+              0.79,
+              0.75,
+              0.49
+            ],
+            "perTable": [
+              0.86,
+              0.82,
+              0.5
+            ],
+            "delta": 0.05
+          }
+        ]
+      }
+    },
+    "relativeInputTokens": {
+      "wholeSchema": 1,
+      "selectiveGuard": 1.12,
+      "perTable": 11.6
+    }
+  }
+}

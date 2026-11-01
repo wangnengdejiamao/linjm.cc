@@ -3,6 +3,32 @@
 Personal academic site for Jiamao Lin, School of Physics and Astronomy,
 Sun Yat-sen University. Static HTML/CSS/JS — **no build step, no dependencies**.
 
+## AI papers reader (2026-11-01)
+
+`papers.html` presents the available 2026-10-29 RefSel and ontology-learning
+manuscripts with methods, native MathML equations, result comparisons and full
+PDF reading copies. It retains the shared `css/work.css` design tokens; page
+styles and progressive enhancement live in `css/papers.css` and `js/papers.js`.
+
+The RefSel chart separates internal evaluation, Round-3 subsets and the shared
+58-database comparison. The ontology chart reproduces Table II's reported
+paired deltas, with component scores in an expandable table. The confidence
+slider is an illustrative calculation under the stated symmetry assumptions.
+Keyboard controls and a native dialog support figure enlargement. Without
+JavaScript, the default charts, equations, paper links and original images are
+still available.
+
+`assets/papers/2026-10/results.json` contains the displayed chart values and
+source references; keep it in sync with the embedded `paper-results-data` JSON
+when updating results. `sources.json` records PDF and original-figure hashes.
+The four PDFs are unchanged working manuscripts; the RefSel PDF still contains
+an editorial placeholder in the first-author affiliation. This page update
+does not rerun or resume any research experiment.
+
+Validation: local links and PDF checksums; the paired table's 144 component
+values checked against the source; all six RefSel cohorts and three models;
+slider endpoints; keyboard dialog close/focus return; desktop/mobile layouts.
+
 ## Contents
 - Interactive **cyclotron emission** animation of a polar (AM Her star), with a
   live, geometry-driven beaming light curve.
